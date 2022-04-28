@@ -1,0 +1,17 @@
+ul{
+    display: inline-block;
+}
+li{
+    display: inline-block;
+    padding: 0px;
+    font-size: larger;
+}
+nav{
+    background-color: #e3e1e1;
+}
+a{
+    margin: 10px;
+}
+.Swapy{
+    font-size: 30px;
+}
