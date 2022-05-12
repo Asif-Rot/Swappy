@@ -8,9 +8,7 @@ require('dotenv/config')
 const userRoutes = require('./api/routes/user');
 
 mongoose.connect(process.env.DB_CONNECT,
-    {
-
-    }
+    {}
 );
 mongoose.connection.on('connected', () => {
     console.log('connected to mongoDB');
