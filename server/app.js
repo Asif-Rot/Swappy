@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 require('dotenv/config')
 
 const userRoutes = require('./api/routes/user');
+const bookRoutes = require('./api/routes/books');
 
 mongoose.connect(process.env.DB_CONNECT,
     {}
@@ -34,7 +35,7 @@ app.use((req, res, next) => {
 
 
 // Routers
-app.use("/user", userRoutes);
+app.use("/user", userRoutes, bookRoutes);
 
 
 app.use((req, res, next) => {
