@@ -1,24 +1,33 @@
-
 import './App.css';
-import Login from './components/SignIn'
-import Register from "./components/SignUp";
+import Login from './routes/SignIn'
+import Register from "./routes/SignUp";
 import {Component} from "react";
-import { Route, Switch} from 'react-router-dom';
-import Home from './components/Home'
-
+import {Route, Switch, Redirect} from 'react-router-dom';
+import Home from './routes/Home'
+import {useState} from 'react'
+import react from 'react'
+import NotFound from './routes/NotFound'
+import PrivateRoute from './routes/PrivateRoute';
+import PublicRoute from './routes/PublicRoute';
+import Profile from './routes/Profile'
 class App extends Component {
     render() {
         return (
-            <div>
+            <Route>
                 <Switch>
-                    <Route exact path='/' component={Login}/>
-                    <Route exact path='/signup' component={Register}/>
-                    <Route exact path='/login' component={Login}/>
-                    <Route exact path='/home' component={Home}/>
+                    <PublicRoute restricted={true} component={Login} path="/login" exact />
+                    <PrivateRoute component={Home} path="/home" exact />
+                    <PrivateRoute component={Profile} path="/profile" exact/>
+                    <PublicRoute restricted={true} component={Register} path="/signup" exact />
+                    <Route component={NotFound}/>
                 </Switch>
-            </div>
+            </Route>
         );
     }
 }
 
+
 export default App;
+
+
+
