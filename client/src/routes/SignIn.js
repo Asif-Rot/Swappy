@@ -18,10 +18,14 @@ import Home from './Home';
 import {Route, useHistory} from 'react-router-dom';
 import App from '../App'
 const theme = createTheme();
-
+/**
+ * User login page
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function SignIn() {
     const history=useHistory();
-
+    // Withdrawing data from the database and moving to the home page via mail
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -44,7 +48,7 @@ export default function SignIn() {
             })
                 .then(function (user) {
                     if (user.message === "Auth successful" && user.token!==null) {
-                        login(user.token);
+                        login(user.token,data.get('email'));
                         history.push('/home');
                     } else
                         alert("Please check your login information.");

@@ -19,15 +19,16 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {browserHistory} from 'react-router';
 import {useState} from 'react'
 import Stack from '@mui/material/Stack';
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
+import {StaticDatePicker} from '@mui/x-date-pickers/StaticDatePicker';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 
 
 const theme = createTheme();
-
+/**
+ * New user registration page and entry into the database via post
+**/
 export default function SignUp() {
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -149,8 +150,8 @@ export default function SignUp() {
                                             onChange={handleChange}
                                             sx={{width: 220}}
                                         >
-                                            <MenuItem value={'זכר'}>זכר</MenuItem>
-                                            <MenuItem value={'נקבה'}>נקבה</MenuItem>
+                                            <MenuItem value={'men'}>זכר</MenuItem>
+                                            <MenuItem value={'women'}>נקבה</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Box>

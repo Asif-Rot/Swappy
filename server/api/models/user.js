@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-
+/**
+ * Schema of user in mongodb
+ */
 const userSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     email: {

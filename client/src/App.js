@@ -10,12 +10,18 @@ import NotFound from './routes/NotFound'
 import PrivateRoute from './routes/PrivateRoute';
 import PublicRoute from './routes/PublicRoute';
 import Profile from './routes/Profile'
+
+/**
+ * Open start app
+ */
+
 class App extends Component {
     render() {
         return (
             <Route>
                 <Switch>
-                    <PublicRoute restricted={true} component={Login} path="/login" exact />
+                    <PublicRoute component={Login} restricted={true}  path="/" exact />
+                    <PublicRoute component={Login} restricted={true}  path="/login" exact />
                     <PrivateRoute component={Home} path="/home" exact />
                     <PrivateRoute component={Profile} path="/profile" exact/>
                     <PublicRoute restricted={true} component={Register} path="/signup" exact />

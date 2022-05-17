@@ -20,7 +20,11 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import {logout,isLogin} from '../utils'
 import {Route, useHistory} from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
 
+/**
+ * Nav Bar
+ */
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -73,7 +77,7 @@ export default function PrimarySearchAppBar() {
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
-
+    // close menu
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
     };
@@ -90,6 +94,7 @@ export default function PrimarySearchAppBar() {
             logout();
             history.push('/login')
     }
+    // after click on profile icon go to profile page
     const handleMyProfile=()=>{
         if(isLogin){
             history.push('/profile')
@@ -97,6 +102,11 @@ export default function PrimarySearchAppBar() {
         else{
             console.log('no')
         }
+    }
+    // after click on home icon go to home pag
+    const handelHome=()=>{
+
+        history.push('/home')
     }
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
@@ -196,12 +206,17 @@ export default function PrimarySearchAppBar() {
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
+                        <IconButton size="large" color="inherit" onClick={handelHome}>
+                            <Badge  color="error">
+                                <Tooltip title="עמוד הבית">
+                                    <HomeIcon />
+                                </Tooltip>
+                            </Badge>
+                        </IconButton>
+                        <IconButton size="large" aria-label="show 4 new mails" color="inherit" o>
                                 <Tooltip title="הודעות">
                                     <MailIcon />
                                 </Tooltip>
-                            </Badge>
                         </IconButton>
                         <Tooltip title="המשתמש שלי">
                             <IconButton
