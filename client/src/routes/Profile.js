@@ -36,6 +36,8 @@ export default function Profile() {
             if (user) {
                 setProfile(user['sendUser']);
                 setIsLoading(false);
+                console.log({profile})
+
                 return ;
             } else {
                 console.log('no user');
@@ -95,9 +97,11 @@ export default function Profile() {
                                 margin="normal"
                                 id="input-with-icon-textfield"
                                 label="שם פרטי "
+
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">
+
                                         </InputAdornment>
                                     ),
                                 }}

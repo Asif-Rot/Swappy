@@ -16,7 +16,7 @@ function Home(){
             <NavBar/>
             <Container component="main" maxWidth="xs" >
                 <CssBaseline/>
-                home page
+                 <h2>Home Page</h2>
             </Container>
         </ThemeProvider>
     )
