@@ -3,7 +3,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
-
+/**
+ * SingUp for new user and save in mongoDb
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.user_signup = (req, res, next) => {
     User.find({email: req.body.email})
         .exec()
@@ -47,7 +52,13 @@ exports.user_signup = (req, res, next) => {
             }
         });
 };
-
+/**
+ * Login user ,
+ * Find user in mongoDb an check if exists and login
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.user_login = (req, res, next) => {
     User.find({email: req.body.email})
         .exec()
@@ -91,7 +102,12 @@ exports.user_login = (req, res, next) => {
             });
         });
 };
-
+/**
+ * If we want delete user from mongoDB
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.user_delete = (req, res, next) => {
     const idUser = req.params.userId;
     console.log(idUser);
@@ -112,4 +128,31 @@ exports.user_delete = (req, res, next) => {
             })
         });
     })
+};
+
+/**
+ * Get user by Id/email to take info about user
+ * @param req
+ * @param res
+ */
+exports.user_getUser = (req, res) => {
+    const userId = req.params.userId;
+    User.find({email: userId}).exec().then(user => {
+        if(user.length===1){
+            const sendUser={
+                "id":user[0]._id.toString() ,
+                "email":user[0].email,
+                "firstName":user[0].firstName,
+                "lastName": user[0].lastName,
+                "birth": user[0].birth
+            }
+            return res.status(200).json({
+                sendUser
+            })
+        }
+    }).catch(error => {
+        res.status(500).json({
+            error
+        })
+    });
 };

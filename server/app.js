@@ -4,10 +4,16 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 require('dotenv/config')
-
+/**
+ * Require
+ */
 const userRoutes = require('./api/routes/user');
 const bookRoutes = require('./api/routes/books');
 
+
+/**
+ * Connect to mongoDb
+ */
 mongoose.connect(process.env.DB_CONNECT,
     {}
 );
@@ -16,10 +22,13 @@ mongoose.connection.on('connected', () => {
 });
 mongoose.Promise = global.Promise;
 
+
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
+/**
+ * for method Post Put .....
+ */
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
@@ -34,7 +43,9 @@ app.use((req, res, next) => {
 });
 
 
-// Routers
+/**
+ * ROUTERS
+ */
 app.use("/user", userRoutes, bookRoutes);
 
 

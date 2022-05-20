@@ -9,7 +9,6 @@ import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
@@ -19,8 +18,12 @@ import Tooltip from '@mui/material/Tooltip';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import {logout,isLogin} from '../utils'
-import {Route, useHistory} from 'react-router-dom';
-
+import {useHistory} from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+/**
+ * Nav Bar
+ */
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -73,7 +76,7 @@ export default function PrimarySearchAppBar() {
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
-
+    // close menu
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
     };
@@ -90,6 +93,7 @@ export default function PrimarySearchAppBar() {
             logout();
             history.push('/login')
     }
+    // after click on profile icon go to profile page
     const handleMyProfile=()=>{
         if(isLogin){
             history.push('/profile')
@@ -97,6 +101,17 @@ export default function PrimarySearchAppBar() {
         else{
             console.log('no')
         }
+    }
+    // after click on home icon go to home pag
+    const handelHome=()=>{
+
+        history.push('/home')
+    }
+    const handleMsg=()=>{
+        history.push('/message')
+    }
+    const handleSettings=()=>{
+        history.push('/settings')
     }
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
@@ -196,12 +211,24 @@ export default function PrimarySearchAppBar() {
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                            <Badge badgeContent={4} color="error">
+                        <IconButton size="large" color="inherit" onClick={handelHome}>
+                            <Badge  color="error">
+                                <Tooltip title="החלפות">
+                                    <CompareArrowsIcon />
+                                </Tooltip>
+                            </Badge>
+                        </IconButton>
+                        <IconButton size="large" color="inherit" onClick={handelHome}>
+                            <Badge  color="error">
+                                <Tooltip title="עמוד הבית">
+                                    <HomeIcon />
+                                </Tooltip>
+                            </Badge>
+                        </IconButton>
+                        <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={handleMsg}>
                                 <Tooltip title="הודעות">
                                     <MailIcon />
                                 </Tooltip>
-                            </Badge>
                         </IconButton>
                         <Tooltip title="המשתמש שלי">
                             <IconButton
@@ -224,6 +251,7 @@ export default function PrimarySearchAppBar() {
                                 aria-controls={menuId}
                                 aria-haspopup="true"
                                 color="inherit"
+                                onClick={handleSettings}
                             >
                                 <SettingsIcon/>
                             </IconButton>
