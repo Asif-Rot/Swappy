@@ -109,26 +109,28 @@ exports.user_login = (req, res, next) => {
  * @param next
  */
 exports.user_delete = (req, res, next) => {
-    const idUser = req.params.userId;
-    console.log(idUser);
-    User.findById(idUser).then((user) => {
+    const emailId = req.params.emailId;
+    User.find({email: emailId}).then((user) => {
         if (!user) {
             return res.status(404).json({
                 message: 'User not found'
             })
+        } else {
+            User.deleteOne({email: emailId.toString()}).exec().then(() => {
+                res.status(200).json({
+                    message: `user email :  ${emailId} is Deleted`
+                })
+            })
         }
-    }).then(() => {
-        User.deleteOne({_id: idUser.toString()}).then(() => {
-            res.status(200).json({
-                message: `user _id:${idUser} Deleted`
-            })
-        }).catch(error => {
-            res.status(500).json({
-                error
-            })
-        });
-    })
+    }).catch(error => {
+        res.status(500).json({
+            error
+        })
+    });
+
 };
+
+
 
 /**
  * Get user by Id/email to take info about user
@@ -136,13 +138,14 @@ exports.user_delete = (req, res, next) => {
  * @param res
  */
 exports.user_getUser = (req, res) => {
-    const userId = req.params.userId;
-    User.find({email: userId}).exec().then(user => {
-        if(user.length===1){
-            const sendUser={
-                "id":user[0]._id.toString() ,
-                "email":user[0].email,
-                "firstName":user[0].firstName,
+    const emailId = req.params.emailId;
+    console.log(emailId)
+    User.find({email: emailId}).exec().then(user => {
+        if (user.length === 1) {
+            const sendUser = {
+                "id": user[0]._id.toString(),
+                "email": user[0].email,
+                "firstName": user[0].firstName,
                 "lastName": user[0].lastName,
                 "birth": user[0].birth
             }

@@ -46,7 +46,8 @@ app.use((req, res, next) => {
 /**
  * ROUTERS
  */
-app.use("/user", userRoutes, bookRoutes);
+app.use("/user", userRoutes);
+app.use("/book", bookRoutes);
 
 
 app.use((req, res, next) => {
