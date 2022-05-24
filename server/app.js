@@ -9,6 +9,7 @@ require('dotenv/config')
  */
 const userRoutes = require('./api/routes/user');
 const bookRoutes = require('./api/routes/books');
+const tradeRoutes = require('./api/routes/trade');
 
 
 /**
@@ -48,6 +49,7 @@ app.use((req, res, next) => {
  */
 app.use("/user", userRoutes);
 app.use("/book", bookRoutes);
+app.use("/trade",tradeRoutes);
 
 
 app.use((req, res, next) => {
