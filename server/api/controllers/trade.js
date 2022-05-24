@@ -37,7 +37,8 @@ exports.createTrade = (req,res) => {
 exports.getOneTrade = (req, res) => {
     const tradeID = req.params.tradeID;
 
-    Trade.findById(tradeID).then(trade => {
+    Trade.findById(tradeID).populate("offered_by_id",'firstName lastName')
+    .populate("offered_to_id",'firstName lastName').then(trade => {
         res.status(200).json(trade)
     }).catch(err => {
         res.status(500).json({
@@ -50,7 +51,9 @@ exports.getOneTrade = (req, res) => {
 exports.getAllUserTrades = (req, res) => {
     const userID = req.params.userID;
 
-    Trade.find({$or: [{offered_by_id : userID},{offered_to_id : userID}]}).then(result =>{
+    Trade.find({$or: [{offered_by_id : userID},{offered_to_id : userID}]})
+    .populate("offered_by_id",'firstName lastName')
+    .populate("offered_to_id",'firstName lastName').then(result =>{
         res.status(200).json(result)
     })
         .catch(err => {
@@ -61,7 +64,8 @@ exports.getAllUserTrades = (req, res) => {
 /** return all trades id the DB */
 exports.getAllTrades = (req, res) => {
 
-    Trade.find().then(result =>{
+    Trade.find().populate("offered_by_id",'firstName lastName')
+    .populate("offered_to_id",'firstName lastName').then(result =>{
         res.status(200).json(result)
     })
         .catch(err => {
