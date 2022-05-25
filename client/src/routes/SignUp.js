@@ -60,7 +60,7 @@ export default function SignUp() {
             })
                 .then(function (user) {
                     if (user.message === "User created") {
-                        alert("connect sucss");
+                        alert("registarion succeeded");
                     } else
                         alert(user.message);
                 });
@@ -150,8 +150,9 @@ export default function SignUp() {
                                             onChange={handleChange}
                                             sx={{width: 220}}
                                         >
-                                            <MenuItem value={'men'}>זכר</MenuItem>
-                                            <MenuItem value={'women'}>נקבה</MenuItem>
+                                            <MenuItem value={'man'}>זכר</MenuItem>
+                                            <MenuItem value={'woman'}>נקבה</MenuItem>
+                                            <MenuItem value={'other'}>אחר</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Box>

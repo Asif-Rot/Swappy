@@ -13,17 +13,57 @@ exports.all_book =  (req, res) => {
     });
 }
 
+exports.one_book = (req, res) => {
+    const bookId = req.params.bookId;
+    Books.findById(bookId)
+        .then(data => {
+            if (!data)
+                res.status(404).send({ message: "Not found book with id " + bookId });
+            else res.send(data);
+        })
+        .catch(err => {
+            res
+                .status(500)
+                .send({ message: "Error retrieving Book with id=" + bookId });
+        });
+};
+
+exports.update_book = (req, res) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Data to update can not be empty!"
+        });
+    }
+
+    const bookId = req.params.bookId;
+
+    Books.findByIdAndUpdate(bookId, req.body, { useFindAndModify: false })
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: `Cannot update Book with id=${bookId}. Maybe Book was not found!`
+                });
+            } else res.send({ message: "Book was updated successfully." });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error updating Book with id=" + bookId
+            });
+        });
+};
+
+
 exports.delete_book = async (req, res, nex) => {
     const bookId = req.params.bookId;
     Books.find({_id: bookId}).then((book) => {
         if (!book) {
             return res.status(404).json({
-                message: 'Book not found'
+                message: 'Book was not found'
             })
         } else {
             Books.deleteOne({_id: bookId.toString()}).exec().then(() => {
                 res.status(200).json({
-                    message: `book id :  ${bookId} is Deleted`
+                    message: `book id :  ${bookId} deleted`
                 })
             })
         }
@@ -56,7 +96,7 @@ exports.add_newBook = (req, res, next) => {
                 );
                 newBook.save().then(result => {
                     res.status(201).json({
-                        message: "sucss add book"
+                        message: "succeded adding a book"
                     });
                 })
                     .catch(err => {
