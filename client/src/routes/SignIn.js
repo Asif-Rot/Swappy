@@ -29,7 +29,6 @@ export default function SignIn() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-
         if (data.get('email') === '' || data.get('password') === '') {
             console.log('error')
         } else {
@@ -48,7 +47,7 @@ export default function SignIn() {
             })
                 .then(function (user) {
                     if (user.message === "Auth successful" && user.token!==null) {
-                        login(user.token,data.get('email'));
+                        login(user.token,user.id);
                         history.push('/home');
                     } else
                         alert("Please check your login information.");

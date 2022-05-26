@@ -1,17 +1,20 @@
 import React from 'react'
 import {useState, useEffect} from 'react'
-import {getEmail} from '../utils';
+import {getId} from '../utils';
 import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import NavBar from '../components/NavBar'
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
-
+import {InputLabel, FilledInput, TextField, TextInput} from '@mui/material';
+import Grid from '@mui/material/Grid';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 const theme = createTheme();
 /**
  * Profile page for show info about user
@@ -19,13 +22,16 @@ const theme = createTheme();
  * @constructor
  */
 export default function Profile() {
+    const [email, setEmail] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [birth, setBirth] = React.useState('');
 
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState('');
-
     const getUser = async () => {
-        const mail = getEmail();
-        await fetch("http://localhost:3001/user/" + mail, {
+        const id = getId();
+        await fetch("http://localhost:3001/user/" + id, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -36,9 +42,11 @@ export default function Profile() {
             if (user) {
                 setProfile(user['sendUser']);
                 setIsLoading(false);
-                console.log({profile})
-
-                return ;
+                setEmail(user['sendUser'].email)
+                setFirstName(user['sendUser'].firstName)
+                setLastName(user['sendUser'].lastName)
+                setBirth(user['sendUser'].birth)
+                return;
             } else {
                 console.log('no user');
             }
@@ -46,22 +54,34 @@ export default function Profile() {
     }
     useEffect(() => {
         getUser()
+
     }, [])
 
 
-
+    const handleChangeEmail = (event) => {
+        setEmail(event.target.value);
+    };
+    const handleChangeFirstName = (event) => {
+        setFirstName(event.target.value);
+    };
+    const handleChangeLastName = (event) => {
+        setLastName(event.target.value);
+    };
+    const handleChangeBirth = (event) => {
+        setBirth(event.target.value);
+    };
     return (
         <ThemeProvider theme={theme}>
             <NavBar/>
-            <Container component="main" maxWidth="xs" >
+            <Container component="main" maxWidth="xs">
                 <CssBaseline/>
                 <div>
                     {/* load spinner */}
                     <Backdrop
-                        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                        sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
                         open={isLoading}
                     >
-                        <CircularProgress color="inherit" />
+                        <CircularProgress color="inherit"/>
                     </Backdrop>
 
                     <Box
@@ -86,53 +106,48 @@ export default function Profile() {
                              }}>
 
                             <TextField
-                                id="filled-number"
+                                id="outlined-multiline-flexible"
+                                margin="normal"
+
                                 label="אימייל"
-                                type="object"
-                                defaultValue={profile.id}
+                                multiline
+                                maxRows={4}
+                                value={email}
+                                onChange={handleChangeEmail}
+                            />
+                            <TextField
+                                id="outlined-multiline-flexible"
+                                margin="normal"
+                                label="שם פרטי"
+                                multiline
+                                maxRows={4}
+                                value={firstName}
+                                onChange={handleChangeFirstName}
+                            />
+                            <TextField
+                                id="outlined-multiline-flexible"
+                                margin="normal"
+                                label="שם משפחה"
+                                multiline
+                                maxRows={4}
+                                value={lastName}
+                                onChange={handleChangeLastName}
                             />
 
+                            <Grid item xs={12} margin="normal">
+                                <LocalizationProvider dateAdapter={AdapterDateFns} >
+                                    <DatePicker
 
-                            <TextField
-                                margin="normal"
-                                id="input-with-icon-textfield"
-                                label="שם פרטי "
+                                        label="תאריך לידה"
+                                        value={birth}
+                                        onChange={(newValue) => {
+                                            setBirth(newValue);
+                                        }}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                </LocalizationProvider>
 
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                variant="standard"
-                            /><TextField
-                            margin="normal"
-                            id="input-with-icon-textfield"
-                            label="שם משפחה "
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-
-                                    </InputAdornment>
-                                ),
-                            }}
-                            variant="standard"
-                        />
-                            <TextField
-                                margin="normal"
-                                id="input-with-icon-textfield"
-                                label="יום הולדת"
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                variant="standard"
-                            />
-
+                            </Grid>
                         </Box>
                     </Box>
                 </div>

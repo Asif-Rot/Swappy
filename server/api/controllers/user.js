@@ -68,6 +68,7 @@ exports.user_login = (req, res, next) => {
                     message: "Auth failed"
                 });
             }
+            console.log(user[0]._id)
             bcrypt.compare(req.body.password, user[0].password, (err, result) => {
                 if (err) {
                     return res.status(401).json({
@@ -87,7 +88,8 @@ exports.user_login = (req, res, next) => {
                     );
                     return res.status(200).json({
                         message: "Auth successful",
-                        token: token
+                        token: token,
+                        id:user[0]._id
                     });
                 }
                 res.status(401).json({
@@ -109,16 +111,16 @@ exports.user_login = (req, res, next) => {
  * @param next
  */
 exports.user_delete = (req, res, next) => {
-    const emailId = req.params.emailId;
-    User.find({email: emailId}).then((user) => {
+    const userId = req.params.userId;
+    User.find({_id: userId}).then((user) => {
         if (!user) {
             return res.status(404).json({
                 message: 'User not found'
             })
         } else {
-            User.deleteOne({email: emailId.toString()}).exec().then(() => {
+            User.deleteOne({_id: userId.toString()}).exec().then(() => {
                 res.status(200).json({
-                    message: `user email :  ${emailId} is Deleted`
+                    message: `user email :  ${userId} is Deleted`
                 })
             })
         }
@@ -138,9 +140,8 @@ exports.user_delete = (req, res, next) => {
  * @param res
  */
 exports.user_getUser = (req, res) => {
-    const emailId = req.params.emailId;
-    console.log(emailId)
-    User.find({email: emailId}).exec().then(user => {
+    const userId = req.params.userId;
+    User.find({_id: userId}).exec().then(user => {
         if (user.length === 1) {
             const sendUser = {
                 "id": user[0]._id.toString(),
