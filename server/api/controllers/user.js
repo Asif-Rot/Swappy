@@ -139,7 +139,6 @@ exports.user_delete = (req, res, next) => {
  */
 exports.user_getUser = (req, res) => {
     const emailId = req.params.emailId;
-    console.log(emailId)
     User.find({email: emailId}).exec().then(user => {
         if (user.length === 1) {
             const sendUser = {
