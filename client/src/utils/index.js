@@ -4,14 +4,14 @@ const TOKEN_KEY = 'jwt';
  * @param token
  * @param mail
  */
-export const login = (token,mail) => {
+export const login = (token,id) => {
     localStorage.setItem(TOKEN_KEY, token);
-    localStorage.setItem('email',mail);
+    localStorage.setItem('id',id);
 }
 
 export const logout = () => {
     localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem('email')
+    localStorage.removeItem('id')
 }
 
 export const isLogin = () => {
@@ -21,6 +21,6 @@ export const isLogin = () => {
     return false;
 }
 
-export const getEmail = ()=>{
-    return localStorage.getItem('email');
+export const getId = ()=>{
+    return localStorage.getItem('id');
 }

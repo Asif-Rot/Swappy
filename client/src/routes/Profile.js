@@ -1,6 +1,6 @@
 import React from 'react'
 import {useState, useEffect} from 'react'
-import {getEmail} from '../utils';
+import {getId} from '../utils';
 import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
@@ -30,8 +30,8 @@ export default function Profile() {
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState('');
     const getUser = async () => {
-        const mail = getEmail();
-        await fetch("http://localhost:3001/user/" + mail, {
+        const id = getId();
+        await fetch("http://localhost:3001/user/" + id, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
