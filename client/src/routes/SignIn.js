@@ -17,6 +17,8 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import Home from './Home';
 import {Route, useHistory} from 'react-router-dom';
 import App from '../App'
+import logo from '../swapy.jpeg'
+import { CardMedia } from '@mui/material';
 const theme = createTheme();
 /**
  * User login page
@@ -61,18 +63,28 @@ export default function SignIn() {
                 <CssBaseline/>
                 <Box
                     sx={{
+
                         marginTop: 8,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                     }}
                 >
+                    <CardMedia
+                        component="img"
+                        height="125"
+                        image={logo}
+                        alt="green iguana"
+                    />
+                    <Typography component="h1" variant="h5" align='center' sx={{width: 550}}>
+                        ברוכים הבאים לאתר החברתי
+                        להחלפת משחקים וספרים בין אנשים
+                        על מנת להיכנס יש להתחבר / להירשם
+                    </Typography>
                     <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
                         <LockOutlinedIcon/>
                     </Avatar>
-                    <Typography component="h1" variant="h5">
-                        התחברות
-                    </Typography>
+
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
                         <TextField
                             margin="normal"
@@ -94,7 +106,7 @@ export default function SignIn() {
                             id="password"
                             autoComplete="current-password"
                         />
-                        <FormControlLabel
+                        <FormControlLabel align='center'
                             control={<Checkbox value="remember" color="primary"/>}
                             label="זכור אותי"
                         />
@@ -109,7 +121,7 @@ export default function SignIn() {
                         <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">
-                                    שכחת סיסמה?
+                                    ?שכחת סיסמה
                                 </Link>
                             </Grid>
                             <Grid item>

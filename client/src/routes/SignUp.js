@@ -23,6 +23,8 @@ import Grid from '@mui/material/Grid';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import logo from '../swapy.jpeg'
+import { CardMedia } from '@mui/material';
 
 
 const theme = createTheme();
@@ -82,12 +84,18 @@ export default function SignUp() {
                 <CssBaseline/>
                 <Box
                     sx={{
-                        marginTop: 3,
+                        marginTop: 2,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                     }}
                 >
+                    <CardMedia
+                        component="img"
+                        height="125"
+                        image={logo}
+                        alt="green iguana"
+                    />
                     <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
                         <LockOutlinedIcon/>
                     </Avatar>
