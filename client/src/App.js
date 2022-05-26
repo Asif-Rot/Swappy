@@ -10,6 +10,7 @@ import PublicRoute from './routes/PublicRoute';
 import Profile from './routes/Profile'
 import Settings from './routes/Settings'
 import Message from './routes/Message'
+import Trades from './routes/MyTrades'
 /**
  * Open start app
  */
@@ -26,6 +27,7 @@ class App extends Component {
                     <PublicRoute restricted={true} component={Register} path="/signup" exact />
                     <PrivateRoute component={Settings} path="/settings" exact/>
                     <PrivateRoute component={Message} path="/message" exact/>
+                    <PrivateRoute component={Trades} path="/mytrades" exact/>
                     <Route component={NotFound}/>
                 </Switch>
             </Route>

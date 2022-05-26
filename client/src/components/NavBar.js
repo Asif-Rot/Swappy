@@ -102,7 +102,8 @@ export default function PrimarySearchAppBar() {
             console.log('no')
         }
     }
-    // after click on home icon go to home pag
+
+    // after click on icon go to... functions
     const handelHome=()=>{
 
         history.push('/home')
@@ -110,9 +111,14 @@ export default function PrimarySearchAppBar() {
     const handleMsg=()=>{
         history.push('/message')
     }
+    const handleTrades=()=>{
+        history.push('/mytrades')
+    }
     const handleSettings=()=>{
         history.push('/settings')
     }
+
+
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
         <Menu
@@ -201,11 +207,11 @@ export default function PrimarySearchAppBar() {
                         Swapy
                     </Typography>
                     <Search>
-                        <SearchIconWrapper>
+                        <SearchIconWrapper >
                             <SearchIcon />
                         </SearchIconWrapper>
                         <StyledInputBase
-                            placeholder="Search…"
+                            placeholder="חיפוש..."
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </Search>
@@ -213,15 +219,15 @@ export default function PrimarySearchAppBar() {
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton size="large" color="inherit" onClick={handelHome}>
                             <Badge  color="error">
-                                <Tooltip title="החלפות">
-                                    <CompareArrowsIcon />
+                                <Tooltip title="עמוד הבית">
+                                    <HomeIcon />
                                 </Tooltip>
                             </Badge>
                         </IconButton>
-                        <IconButton size="large" color="inherit" onClick={handelHome}>
+                        <IconButton size="large" color="inherit" onClick={handleTrades}>
                             <Badge  color="error">
-                                <Tooltip title="עמוד הבית">
-                                    <HomeIcon />
+                                <Tooltip title="החלפות">
+                                    <CompareArrowsIcon />
                                 </Tooltip>
                             </Badge>
                         </IconButton>
