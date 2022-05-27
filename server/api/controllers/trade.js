@@ -61,6 +61,34 @@ exports.getAllUserTrades = (req, res) => {
         });
 }
 
+/** return all trades user sent  by  given userID */
+exports.getUserSendTrades = (req, res) => {
+    const userID = req.params.userID;
+
+    Trade.find({offered_by_id : userID})
+    .populate("offered_by_id",'firstName lastName')
+    .populate("offered_to_id",'firstName lastName').then(result =>{
+        res.status(200).json(result)
+    })
+        .catch(err => {
+            res.status(500).json(err)
+        });
+}
+
+/** return all trades user got by  given userID */
+exports.getUserGotTrades = (req, res) => {
+    const userID = req.params.userID;
+
+    Trade.find({offered_to_id : userID})
+    .populate("offered_by_id",'firstName lastName')
+    .populate("offered_to_id",'firstName lastName').then(result =>{
+        res.status(200).json(result)
+    })
+        .catch(err => {
+            res.status(500).json(err)
+        });
+}
+
 /** return all trades id the DB */
 exports.getAllTrades = (req, res) => {
 
