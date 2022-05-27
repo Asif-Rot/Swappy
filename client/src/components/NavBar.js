@@ -21,6 +21,8 @@ import {logout,isLogin} from '../utils'
 import {useHistory} from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+
+    
 /**
  * Nav Bar
  */
@@ -210,9 +212,9 @@ export default function PrimarySearchAppBar() {
                         <SearchIconWrapper >
                             <SearchIcon />
                         </SearchIconWrapper>
-                        <StyledInputBase
+                        <StyledInputBase 
                             placeholder="חיפוש..."
-                            inputProps={{ 'aria-label': 'search' }}
+                            inputProps={{ 'aria-label': 'search' ,style: {marginRight: '5ch'}}}
                         />
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
