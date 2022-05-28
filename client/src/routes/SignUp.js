@@ -25,9 +25,22 @@ import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import logo from '../swapy.jpeg'
 import { CardMedia } from '@mui/material';
+import rtlPlugin from 'stylis-plugin-rtl';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
+import { prefixer } from 'stylis';
+
+// Create rtl cache
+const cacheRtl = createCache({
+    key: 'muirtl',
+    stylisPlugins: [prefixer, rtlPlugin],
+  });
+
+const theme = createTheme({
+    direction: 'rtl',
+  });
 
 
-const theme = createTheme();
 /**
  * New user registration page and entry into the database via post
 **/
@@ -79,6 +92,7 @@ export default function SignUp() {
 
 
     return (
+        <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline/>
@@ -111,10 +125,10 @@ export default function SignUp() {
                                     required
                                     fullWidth
                                     id="firstName"
-                                    label="שם"
+                                    label="שם פרטי"
                                     autoFocus
                                 />
-                            </Grid>
+                            </Grid>                          
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     required
@@ -135,7 +149,7 @@ export default function SignUp() {
                                     autoComplete="email"
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12}> 
                                 <TextField
                                     required
                                     fullWidth
@@ -149,12 +163,12 @@ export default function SignUp() {
                             <Grid item xs={12}>
                                 <Box sx={{minWidth: 120}}>
                                     <FormControl fullWidth>
-                                        <InputLabel id="select-label">זכר / נקבה</InputLabel>
+                                        <InputLabel id="select-label">מין</InputLabel>
                                         <Select
                                             labelId="select-label"
                                             id="simple-select"
                                             value={sex}
-                                            label="זכר/נקבה"
+                                            label="מין"
                                             onChange={handleChange}
                                             sx={{width: 220}}
                                         >
@@ -199,5 +213,6 @@ export default function SignUp() {
                 </Box>
             </Container>
         </ThemeProvider>
+        </CacheProvider>
     );
 }
