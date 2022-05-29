@@ -31,7 +31,6 @@ function LinkTab(props) {
   }
 
 
-
 /**
  * MyTrades page
  * @returns {JSX.Element}
@@ -41,15 +40,36 @@ function LinkTab(props) {
 
     const [trades, setTrades] = useState([]);
     const [value, setValue] = useState(0);
+    const [toRender, needRender] = useState(false);
+    const userID = getId();
 
     // to handle with tab change
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
    
+    const handleDecline =  (tradeID) => {
+        needRender(!toRender)
+         fetch('http://localhost:3001/trade/decline/' + tradeID,{
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+      };
+
+      const handleApprove =  (tradeID) => {
+        needRender(!toRender)
+         fetch('http://localhost:3001/trade/approve/' + tradeID,{
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+      };
+
     const getAllTrades = async () => {
-        const userID = getId();
-        await fetch('http://localhost:3001/trade/userTrade/' + userID)
+        await fetch('http://localhost:3001/trade/userTrade/' + userID )
         .then((res) => res.json())
         .then((json) => {
           console.log(json)
@@ -58,7 +78,6 @@ function LinkTab(props) {
     }
 
     const getSendTrades = async () => {
-        const userID = getId();
         await fetch('http://localhost:3001/trade/userSendTrade/' + userID)
         .then((res) => res.json())
         .then((json) => {
@@ -68,7 +87,6 @@ function LinkTab(props) {
     }
 
     const getGotTrades = async () => {
-        const userID = getId();
         await fetch('http://localhost:3001/trade/userGotTrade/' + userID)
         .then((res) => res.json())
         .then((json) => {
@@ -94,23 +112,24 @@ function LinkTab(props) {
     }
     useEffect(() => {
         getFunc()
-    }, [value])
+    }, [value,toRender])
+
 
     return(
         <ThemeProvider theme={theme}>
             <NavBar/>
             <Container component="main" maxWidth="xs"  >
-            {/* <h1> ההצעות שלי</h1> */}
                 <Box sx={{ width: '100%' }} >
                     <Tabs value={value} onChange={handleChange} aria-label="nav tabs example">
-                        <LinkTab label="הצעות שהתקבלו" href="/" />
-                        <LinkTab label="הצעות שנשלחו" href="/trash" />
-                        <LinkTab label="היסטוריית הצעות" href="/spam" />
+                        <LinkTab label="הצעות שהתקבלו" />
+                        <LinkTab label="הצעות שנשלחו"  />
+                        <LinkTab label="היסטוריית הצעות" />
                     </Tabs>
                 </Box>
                 <CssBaseline/>
                 <Grid container spacing={5} paddingBottom='50px' paddingTop='10px'>
-                 { trades.map((trade) => ( 
+                {trades.length? 
+                  trades.map((trade) => ( 
                     <Grid item xs={6} sm={12} key={trade._id}>
                         <Card sx={{ maxWidth: 400 }} 
                         style={{  minWidth: 275,
@@ -128,19 +147,27 @@ function LinkTab(props) {
                                     שם המוצר המבוקש
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    המבקש: { trade.offered_by_id.firstName} { trade.offered_by_id.lastName}<br/> 
-                                    סטטוס: { trade.status}<br/>
-                                    פרטים נוספים: { trade.details } 
+                                    <b>המבקש:</b> { trade.offered_by_id.firstName} { trade.offered_by_id.lastName}<br/> 
+                                    <b>סטטוס:</b> { trade.status}<br/>
+                                    <b>פרטים נוספים:</b> { trade.details } 
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small">קבל הצעה</Button>
-                                <Button size="small">סרב להצעה </Button>
+                                <Button size="small" 
+                                disabled={(trade.status == 'הצעה חדשה') &&
+                                          (trade.offered_by_id._id != userID)? false : true }
+                                onClick={handleApprove.bind(this,trade._id)}>קבל הצעה</Button>
+
+                                <Button size="small"
+                                disabled={trade.status == 'הצעה חדשה'? false : true }
+                                onClick={handleDecline.bind(this,trade._id)}>סרב להצעה </Button>
+                                
                                 <Button size="small">פרטים נוספים</Button>
+                                {/* <Button size="small">שלח הודעה</Button> */}
                             </CardActions>
                         </Card>
                     </Grid>
-                ))}                
+                ))  : <p><br/>אין הצעות נוספות..</p>}             
                 </Grid>
             </Container>
         </ThemeProvider>

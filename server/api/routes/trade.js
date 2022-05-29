@@ -11,6 +11,8 @@ router.get("/userGotTrade/:userID",  tradeController.getUserGotTrades);
 router.get("/userTrade/:userID",  tradeController.getAllUserTrades);
 router.get("/allTrade",  tradeController.getAllTrades);
 router.get("/oneTrade/:tradeID",  tradeController.getOneTrade);
+router.put("/decline/:tradeID",  tradeController.updateTradeDeclined);
+router.put("/approve/:tradeID",  tradeController.updateTradeApproved);
 router.delete("/:tradeID",  tradeController.deleteTrade);
 
 
