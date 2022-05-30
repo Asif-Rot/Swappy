@@ -50,8 +50,9 @@ exports.getOneTrade = (req, res) => {
 /** return all user trades by  given userID */
 exports.getAllUserTrades = (req, res) => {
     const userID = req.params.userID;
-
+    console.log(req.params.test)
     Trade.find({$or: [{offered_by_id : userID},{offered_to_id : userID}]})
+    .find({$or : [{status :"ההצעה התקבלה"},{status :"ההצעה נדחתה"}]})
     .populate("offered_by_id",'firstName lastName')
     .populate("offered_to_id",'firstName lastName').then(result =>{
         res.status(200).json(result)
@@ -65,7 +66,7 @@ exports.getAllUserTrades = (req, res) => {
 exports.getUserSendTrades = (req, res) => {
     const userID = req.params.userID;
 
-    Trade.find({offered_by_id : userID})
+    Trade.find({$and : [{offered_by_id : userID},{status :"הצעה חדשה"}]})
     .populate("offered_by_id",'firstName lastName')
     .populate("offered_to_id",'firstName lastName').then(result =>{
         res.status(200).json(result)
@@ -79,7 +80,7 @@ exports.getUserSendTrades = (req, res) => {
 exports.getUserGotTrades = (req, res) => {
     const userID = req.params.userID;
 
-    Trade.find({offered_to_id : userID})
+    Trade.find({$and : [{offered_to_id : userID},{status :"הצעה חדשה"}]})
     .populate("offered_by_id",'firstName lastName')
     .populate("offered_to_id",'firstName lastName').then(result =>{
         res.status(200).json(result)
@@ -109,6 +110,30 @@ exports.deleteTrade = (req, res) => {
         res.status(200).json({
             message : `trade id :  ${tradeID} is Deleted`
         })
+    })
+        .catch(err => {
+            res.status(500).json(err)
+        });
+}
+
+/** update trade decline by given tradeID */
+exports.updateTradeDeclined = (req, res) => {
+    const tradeID = req.params.tradeID;
+
+    Trade.findByIdAndUpdate(tradeID,{status : "ההצעה נדחתה"}).then(result =>{
+        res.status(200).json(result)
+    })
+        .catch(err => {
+            res.status(500).json(err)
+        });
+}
+
+/** update trade approve by given tradeID */
+exports.updateTradeApproved = (req, res) => {
+    const tradeID = req.params.tradeID;
+
+    Trade.findByIdAndUpdate(tradeID,{status : "ההצעה התקבלה"}).then(result =>{
+        res.status(200).json(result)
     })
         .catch(err => {
             res.status(500).json(err)
