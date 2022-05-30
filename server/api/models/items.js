@@ -1,18 +1,27 @@
 const mongoose = require('mongoose');
 
-const booksSchema = mongoose.Schema({
+const itemsSchema = mongoose.Schema({
         _id: mongoose.Schema.Types.ObjectId,
+
+        user_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'user'
+        },
+        item_type: {
+            type: String,
+            required: true
+        },
         name: {
             type: String,
             required: true
         },
-        book_condition: {
+        item_condition: {
             type: String,
             required: true
         },
         author: {
             type: String,
-            required: true
         },
         genre: {
             type: String,
@@ -21,9 +30,10 @@ const booksSchema = mongoose.Schema({
         description: {
             type: String,
         },
-
+        // image: {
+        //     type:
+        // },
     },
-
 );
 
-module.exports = mongoose.model('books', booksSchema);
+module.exports = mongoose.model('items', itemsSchema);

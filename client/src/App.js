@@ -11,6 +11,7 @@ import Profile from './routes/Profile'
 import Settings from './routes/Settings'
 import Message from './routes/Message'
 import Trades from './routes/MyTrades'
+import Items from './routes/MyItems'
 /**
  * Open start app
  */
@@ -28,6 +29,7 @@ class App extends Component {
                     <PrivateRoute component={Settings} path="/settings" exact/>
                     <PrivateRoute component={Message} path="/message" exact/>
                     <PrivateRoute component={Trades} path="/mytrades" exact/>
+                    <PrivateRoute component={Items} path="/myitems" exact/>
                     <Route component={NotFound}/>
                 </Switch>
             </Route>

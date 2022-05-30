@@ -21,6 +21,7 @@ import {logout,isLogin} from '../utils'
 import {useHistory} from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
     
 /**
@@ -115,6 +116,9 @@ export default function PrimarySearchAppBar() {
     }
     const handleTrades=()=>{
         history.push('/mytrades')
+    }
+    const handleItems=()=>{
+        history.push('/myitems')
     }
     const handleSettings=()=>{
         history.push('/settings')
@@ -230,6 +234,13 @@ export default function PrimarySearchAppBar() {
                             <Badge  color="error">
                                 <Tooltip title="החלפות">
                                     <CompareArrowsIcon />
+                                </Tooltip>
+                            </Badge>
+                        </IconButton>
+                        <IconButton size="large" color="inherit" onClick={handleItems}>
+                            <Badge  color="error">
+                                <Tooltip title="הספריה שלי">
+                                    <LibraryBooksIcon />
                                 </Tooltip>
                             </Badge>
                         </IconButton>
