@@ -39,6 +39,17 @@ exports.item_bytype = (req, res) => {
     });
 }
 
+exports.item_byuser = (req, res) => {
+    const userId = req.params.userId;
+    Items.find({user_id: userId}).then((itembyuser) => {
+        res.status(200).json(itembyuser);
+    }).catch(error => {
+        res.status(500).json({
+            error
+        });
+    });
+}
+
 exports.update_item = (req, res) => {
     if (!req.body) {
         return res.status(400).send({

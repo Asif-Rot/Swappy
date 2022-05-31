@@ -24,15 +24,15 @@ const itemsSchema = mongoose.Schema({
             type: String,
         },
         genre: {
-            type: String,
-            required: true
+            type: Array,
         },
         description: {
             type: String,
         },
-        // image: {
-        //     type:
-        // },
+        img: {
+            data: Buffer,
+            contentType: String
+        }
     },
 );
 
