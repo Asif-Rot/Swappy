@@ -21,6 +21,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import FormHelperText from '@mui/material/FormHelperText';
 
 const userID = getId();
 
@@ -81,14 +82,28 @@ export default function AddNewItem() {
     const [genre, setgenre] = useState([]);
     const [description, setdescription] = useState('');
 
+    // state for error
+    const [inputInvalidtype, setInputInvalidtype] = useState();
+    const [inputerrortype, setInputerrortype] = useState(false);
+    const [inputInvalidname, setInputInvalidname] = useState();
+    const [inputerrorname, setInputerrorname] = useState(false);
+    const [inputInvalidcond, setInputInvalidcond] = useState();
+    const [inputerrorcond, setInputerrorcond] = useState(false);
+
     const typeUpdate=(event)=>{ // Dealing with type field changes to update our state
-        setItemType(event.target.value)
+        setItemType(event.target.value);
+        setInputInvalidtype('');
+        setInputerrortype(false);
     }
     const nameUpdate=(event)=>{ // Dealing with name field changes to update our state
         setItemName(event.target.value)
+        setInputInvalidname('');
+        setInputerrorname(false);
     }
     const conditionUpdate=(event)=>{ // Dealing with condition field changes to update our state
         setItemCondition(event.target.value)
+        setInputInvalidcond('');
+        setInputerrorcond(false);
     }
     const authorUpdate=(event)=>{ // Dealing with author field changes to update our state
         setauthor(event.target.value)
@@ -106,36 +121,63 @@ export default function AddNewItem() {
     const descriptionUpdate=(event)=>{ // Dealing with description field changes to update our state
         setdescription(event.target.value)
     }
-
+    function validation(jsonreq) {
+        if(jsonreq.item_type === ""){
+            console.log('empty item_type');
+            setInputInvalidtype("דרוש סוג מוצר");
+            setInputerrortype(true);
+            return false;
+        }
+        if(jsonreq.name === ""){
+            console.log('empty name');
+            setInputInvalidname("דרוש שם");
+            setInputerrorname(true);
+            return false;
+        }
+        if(jsonreq.item_condition === ""){
+            console.log('empty item_condition');
+            setInputInvalidcond("דרוש מצב מוצר");
+            setInputerrorcond(true);
+            return false;
+        }
+        console.log(jsonreq);
+        return true;
+    }
     const handleSubmit = () => {
         debugger;
+        let bodyjson = { // We should keep the fields consistent for managing this data later
+            item_type: itemType,
+            name: itemName,
+            item_condition: itemCondition,
+            author: author,
+            genre: genre,
+            description: description
+        }
 
-
+        let flag =  validation(bodyjson);
+        if (flag) {
         fetch('http://localhost:3001/item/additem/' + userID, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ // We should keep the fields consistent for managing this data later
-                item_type: itemType,
-                name: itemName,
-                item_condition: itemCondition,
-                author: author,
-                genre: genre,
-                description: description
-            })
+            body: JSON.stringify({bodyjson})
         })
             .then(res => res.json())
             .then(data => console.log(data))
             .then(()=>{
                 // Once posted, the user will be notified
-                alert('You have been added to the system!');
+                alert('You have been added a product to the system!');
             })
+    } else {
+            console.log('You have missing ardguments!');
     }
+}
+
 
     return (
         <div>
-            <Fab
+            <Fab m={150}
                 color="primary"
                 aria-label="add"
                 onClick={handleClickOpen} >
@@ -152,10 +194,13 @@ export default function AddNewItem() {
 
 
                         <FormControl fullWidth>
-                            <InputLabel required id="itemtype-select-label">סוג מוצר</InputLabel>
+                            <InputLabel required id="itemtype-select-label" >סוג מוצר</InputLabel>
                             <Select
                                 labelId="itemtype-select-label"
                                 id="itemtype-select"
+                                // className = {`input ${inputInvalid ? "input-invalid" : ""}`}
+                                error={inputerrortype}
+                                // helperText="דרוש סוג מוצר"{`input ${inputInvalid ? "דרוש סוג מוצר" : ""}
                                 value={itemType}
                                 label="itemType"
                                 onChange={typeUpdate}
@@ -163,10 +208,13 @@ export default function AddNewItem() {
                                 <MenuItem value="book">ספר</MenuItem>
                                 <MenuItem value="video game">משחק וידאו</MenuItem>
                            </Select>
+                            <FormHelperText error>{inputInvalidtype}</FormHelperText>
                         </FormControl><br/><br/>
 
                         <TextField fullWidth id="ProductName"
                                    required onChange={nameUpdate}
+                                   error={inputerrorname}
+                                   helperText={inputInvalidname}
                                    label="שם מוצר"
                                    variant="outlined"/><br/><br/>
 
@@ -177,12 +225,14 @@ export default function AddNewItem() {
                                 id="itemCondition-select"
                                 value={itemCondition}
                                 label="itemCondition"
+                                error={inputerrorcond}
                                 onChange={conditionUpdate}
                             >
                                 <MenuItem value="as new">כמו חדש</MenuItem>
                                 <MenuItem value="used">משומש</MenuItem>
                                 <MenuItem value="bad">לא טוב</MenuItem>
                             </Select>
+                            <FormHelperText error>{inputInvalidcond}</FormHelperText>
                         </FormControl><br/><br/>
 
                         <TextField fullWidth id="author"
@@ -216,7 +266,7 @@ export default function AddNewItem() {
                                    label="פרטים נוספים"
                                    variant="outlined"/><br/><br/>
 
-                        <Stack direction="row" alignItems="center" spacing={2}>
+                        <Stack direction="row" spacing={2}>
                             <label htmlFor="contained-button-file">
                                 <Input accept="image/*" id="contained-button-file" multiple type="file" />
                                 <Button variant="contained" component="span">

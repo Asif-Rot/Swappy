@@ -19,7 +19,7 @@ function Home(){
             <NavBar/>
             <Container component="main" maxWidth="xs" >
                 <CssBaseline/>
-                 <h2>Home Page</h2>
+                <br/><br/>
                 <NewItem />
                 <br/><br/>
                 <h2>ספרים פופולריים</h2>
