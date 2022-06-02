@@ -11,10 +11,11 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from '@mui/material/Grid';
-
+import {useHistory} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+
 
 const theme = createTheme();
 
@@ -39,9 +40,11 @@ function LinkTab(props) {
  export default function MyTrades(){
 
     const [trades, setTrades] = useState([]);
+    const [myTrade, setTrade] = useState([]);
     const [value, setValue] = useState(0);
     const [toRender, needRender] = useState(false);
     const userID = getId();
+    const history=useHistory();
 
     // to handle with tab change
     const handleChange = (event, newValue) => {
@@ -58,16 +61,12 @@ function LinkTab(props) {
         })
       };
 
-      const handleApprove =  (tradeID) => {
-        needRender(!toRender)
-         fetch('http://localhost:3001/trade/approve/' + tradeID,{
-            method: "PUT",
-            headers: {
-                'Content-Type': 'application/json',
-            }
+    const handleDetails =  (tradeID) => {
+        setTrade(tradeID)
+        history.push('/tradedetails',{
+            trade: tradeID
         })
-      };
-
+    }
     const getAllTrades = async () => {
         await fetch('http://localhost:3001/trade/userTrade/' + userID )
         .then((res) => res.json())
@@ -129,7 +128,7 @@ function LinkTab(props) {
                 <CssBaseline/>
                 <Grid container spacing={5} paddingBottom='50px' paddingTop='10px'>
                 {trades.length? 
-                  trades.map((trade) => ( 
+                  trades.map((trade) => (
                     <Grid item xs={6} sm={12} key={trade._id}>
                         <Card sx={{ maxWidth: 400 }} 
                         style={{  minWidth: 275,
@@ -144,7 +143,7 @@ function LinkTab(props) {
                             />
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div">
-                                    שם המוצר המבוקש
+                                   {trade.item_id.name}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
                                     <b>המבקש:</b> { trade.offered_by_id.firstName} { trade.offered_by_id.lastName}<br/> 
@@ -156,14 +155,13 @@ function LinkTab(props) {
                                 <Button size="small" 
                                 disabled={(trade.status == 'הצעה חדשה') &&
                                           (trade.offered_by_id._id != userID)? false : true }
-                                onClick={handleApprove.bind(this,trade._id)}>קבל הצעה</Button>
+                                onClick={handleDetails.bind(this,trade)}>פרטי ההצעה</Button>
 
                                 <Button size="small"
                                 disabled={trade.status == 'הצעה חדשה'? false : true }
                                 onClick={handleDecline.bind(this,trade._id)}>סרב להצעה </Button>
                                 
-                                <Button size="small">פרטים נוספים</Button>
-                                {/* <Button size="small">שלח הודעה</Button> */}
+                                <Button size="small"> שלח הודעה </Button>
                             </CardActions>
                         </Card>
                     </Grid>

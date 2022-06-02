@@ -37,8 +37,12 @@ exports.createTrade = (req,res) => {
 exports.getOneTrade = (req, res) => {
     const tradeID = req.params.tradeID;
 
-    Trade.findById(tradeID).populate("offered_by_id",'firstName lastName')
-    .populate("offered_to_id",'firstName lastName').then(trade => {
+    Trade.findById(tradeID)
+    .populate("offered_by_id",'firstName lastName')
+    .populate("offered_to_id",'firstName lastName')
+    .populate("items_to_trade")
+    .populate("item_id")
+    .then(trade => {
         res.status(200).json(trade)
     }).catch(err => {
         res.status(500).json({
@@ -54,7 +58,10 @@ exports.getAllUserTrades = (req, res) => {
     Trade.find({$or: [{offered_by_id : userID},{offered_to_id : userID}]})
     .find({$or : [{status :"ההצעה התקבלה"},{status :"ההצעה נדחתה"}]})
     .populate("offered_by_id",'firstName lastName')
-    .populate("offered_to_id",'firstName lastName').then(result =>{
+    .populate("offered_to_id",'firstName lastName')
+    .populate("items_to_trade")
+    .populate("item_id")
+    .then(result =>{
         res.status(200).json(result)
     })
         .catch(err => {
@@ -68,7 +75,9 @@ exports.getUserSendTrades = (req, res) => {
 
     Trade.find({$and : [{offered_by_id : userID},{status :"הצעה חדשה"}]})
     .populate("offered_by_id",'firstName lastName')
-    .populate("offered_to_id",'firstName lastName').then(result =>{
+    .populate("offered_to_id",'firstName lastName')
+    .populate("items_to_trade")
+    .populate("item_id").then(result =>{
         res.status(200).json(result)
     })
         .catch(err => {
@@ -82,7 +91,9 @@ exports.getUserGotTrades = (req, res) => {
 
     Trade.find({$and : [{offered_to_id : userID},{status :"הצעה חדשה"}]})
     .populate("offered_by_id",'firstName lastName')
-    .populate("offered_to_id",'firstName lastName').then(result =>{
+    .populate("offered_to_id",'firstName lastName')
+    .populate("items_to_trade")
+    .populate("item_id").then(result =>{
         res.status(200).json(result)
     })
         .catch(err => {
@@ -94,7 +105,9 @@ exports.getUserGotTrades = (req, res) => {
 exports.getAllTrades = (req, res) => {
 
     Trade.find().populate("offered_by_id",'firstName lastName')
-    .populate("offered_to_id",'firstName lastName').then(result =>{
+    .populate("offered_to_id",'firstName lastName')
+    .populate("items_to_trade")
+    .populate("item_id").then(result =>{
         res.status(200).json(result)
     })
         .catch(err => {

@@ -15,12 +15,12 @@ const tradeSchema = mongoose.Schema({
     item_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'books'
+        ref: 'items'
     },
     items_to_trade : [{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'books'
+        ref: 'items'
     }],
     status: {
         type: String,
