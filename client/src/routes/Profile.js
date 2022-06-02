@@ -7,10 +7,9 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import NavBar from '../components/NavBar'
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import InputAdornment from '@mui/material/InputAdornment';
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
-import {InputLabel, FilledInput, TextField, TextInput} from '@mui/material';
+import {TextField} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
