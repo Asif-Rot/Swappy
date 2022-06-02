@@ -50,6 +50,18 @@ exports.item_byuser = (req, res) => {
     });
 }
 
+exports.item_byusertype = (req, res) => {
+    const userId = req.params.userId;
+    const itemType = req.params.itemType;
+    Items.find({$and : [{user_id : userId},{item_type :itemType}]}).then((itembyusertype) => {
+        res.status(200).json(itembyusertype);
+    }).catch(error => {
+        res.status(500).json({
+            error
+        });
+    });
+}
+
 exports.update_item = (req, res) => {
     if (!req.body) {
         return res.status(400).send({
