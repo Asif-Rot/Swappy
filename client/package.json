@@ -41,7 +41,6 @@
     "styled-components": "^5.3.5",
     "stylis": "^4.1.1",
     "stylis-plugin-rtl": "^2.0.2",
-    "swipeable-react": "^2.0.0",
     "universal-cookie": "^4.0.4",
     "web-vitals": "^2.1.4"
   },

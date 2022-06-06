@@ -13,6 +13,8 @@ router.get("/getitembytype/:itemType", itemsController.item_bytype);
 
 router.get("/getitembyuser/:userId", itemsController.item_byuser);
 
+router.get("/getitembyuser/:userId/:itemType", itemsController.item_byusertype);
+
 router.get("/:itemId", itemsController.one_item);
 
 router.delete("/:itemId", itemsController.delete_item);

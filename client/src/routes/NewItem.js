@@ -25,6 +25,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 
 const userID = getId();
 
+// for genre field
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -36,11 +37,20 @@ const MenuProps = {
     },
 };
 
+const fabStyle = {
+    margin: 'center',
+    top: 1,
+    center: 20,
+    position: 'absoulte',
+};
+
+// for image upload
 const Input = styled('input')({
     display: 'none',
 });
 
 const genres = [
+    'ילדים',
     'רומן',
     'מותחן',
     'דרמה',
@@ -53,20 +63,6 @@ const genres = [
     'ספרות זולה',
     'צ\'ק ליט'
 ];
-
-// const style = {
-//     font: 'Sans-serif',
-//     position: 'absolute',
-//     top: '50%',
-//     left: '50%',
-//     transform: 'translate(-50%, -50%)',
-//     width: 600,
-//     height: 750,
-//     bgcolor: 'white',
-//     border: '2px solid #000',
-//     boxShadow: 24,
-//     p: 4,
-// };
 
 export default function AddNewItem() {
     // Handling '+' button
@@ -85,11 +81,14 @@ export default function AddNewItem() {
     // state for error
     const [inputInvalidtype, setInputInvalidtype] = useState();
     const [inputerrortype, setInputerrortype] = useState(false);
+
     const [inputInvalidname, setInputInvalidname] = useState();
     const [inputerrorname, setInputerrorname] = useState(false);
+
     const [inputInvalidcond, setInputInvalidcond] = useState();
     const [inputerrorcond, setInputerrorcond] = useState(false);
 
+    // update fields
     const typeUpdate=(event)=>{ // Dealing with type field changes to update our state
         setItemType(event.target.value);
         setInputInvalidtype('');
@@ -117,10 +116,11 @@ export default function AddNewItem() {
             typeof value === 'string' ? value.split(',') : value,
         );
     }
-
     const descriptionUpdate=(event)=>{ // Dealing with description field changes to update our state
         setdescription(event.target.value)
     }
+
+    // validate rquiered fields
     function validation(jsonreq) {
         if(jsonreq.item_type === ""){
             console.log('empty item_type');
@@ -143,6 +143,7 @@ export default function AddNewItem() {
         console.log(jsonreq);
         return true;
     }
+
     const handleSubmit = () => {
         debugger;
         let bodyjson = { // We should keep the fields consistent for managing this data later
@@ -161,14 +162,15 @@ export default function AddNewItem() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({bodyjson})
+            body: JSON.stringify(bodyjson)
         })
             .then(res => res.json())
             .then(data => console.log(data))
             .then(()=>{
                 // Once posted, the user will be notified
-                alert('You have been added a product to the system!');
-            })
+                alert('You have been added an item to the system!');
+            },
+            setOpen(false))
     } else {
             console.log('You have missing ardguments!');
     }
@@ -177,7 +179,7 @@ export default function AddNewItem() {
 
     return (
         <div>
-            <Fab m={150}
+            <Fab style={fabStyle}
                 color="primary"
                 aria-label="add"
                 onClick={handleClickOpen} >
@@ -198,9 +200,7 @@ export default function AddNewItem() {
                             <Select
                                 labelId="itemtype-select-label"
                                 id="itemtype-select"
-                                // className = {`input ${inputInvalid ? "input-invalid" : ""}`}
                                 error={inputerrortype}
-                                // helperText="דרוש סוג מוצר"{`input ${inputInvalid ? "דרוש סוג מוצר" : ""}
                                 value={itemType}
                                 label="itemType"
                                 onChange={typeUpdate}
@@ -247,6 +247,7 @@ export default function AddNewItem() {
                                 id="genre-multiple-checkbox"
                                 multiple
                                 value={genre}
+                                hidden={true}
                                 onChange={genreUpdate}
                                 input={<OutlinedInput label="genre" />}
                                 renderValue={(selected) => selected.join(', ')}
