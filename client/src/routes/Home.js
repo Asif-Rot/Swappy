@@ -1,10 +1,12 @@
 import NavBar from '../components/NavBar'
-import Carousel from '../components/Carousel'
+import BestBook from '../components/BestBook'
 import NewItem from './NewItem'
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import React from "react";
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+
 const theme = createTheme();
 
 
@@ -13,22 +15,14 @@ const theme = createTheme();
  * @returns {JSX.Element}
  * @constructor
  */
-function Home(){
-    return(
+function Home() {
+    return (
         <ThemeProvider theme={theme}>
             <NavBar/>
-            <Container component="main" maxWidth="xs" >
-                <CssBaseline/>
-                <br/><br/>
-                <NewItem />
-                <br/><br/>
-                <h2>ספרים פופולריים</h2>
-                <Carousel />
-            </Container>
+            <BestBook/>
         </ThemeProvider>
     )
 }
-
 
 
 export default Home;
