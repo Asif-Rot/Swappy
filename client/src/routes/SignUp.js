@@ -23,8 +23,7 @@ import rtlPlugin from 'stylis-plugin-rtl';
 import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 import { prefixer } from 'stylis';
-import {login} from '../utils/index';
-import {Route, useHistory} from 'react-router-dom';
+
 // Create rtl cache
 const cacheRtl = createCache({
     key: 'muirtl',
@@ -40,8 +39,6 @@ const theme = createTheme({
  * New user registration page and entry into the database via post
 **/
 export default function SignUp() {
-    const history=useHistory();
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -51,7 +48,7 @@ export default function SignUp() {
             console.log('error')
             alert('Everything has to be filled')
         } else {
-            const user2 = {
+            const user = {
                 "email": data.get('email'),
                 "password": data.get('password'),
                 "firstName": data.get('firstName'),
@@ -60,46 +57,25 @@ export default function SignUp() {
                 "sex": sex.toString()
 
             }
+            console.log(user)
             await fetch("http://localhost:3001/user/signup", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(user2)
+                body: JSON.stringify(user)
             }).then(function (response) {
                 return response.json();
             })
                 .then(function (user) {
                     if (user.message === "User created") {
-                       log(user2)
-
+                        alert("registarion succeeded");
                     } else
                         alert(user.message);
                 });
         }
     };
-    const log = async (us)=>{
-        const user = {
-            "email": us.email,
-            "password": us.password
-        }
-        return await fetch("http://localhost:3001/user/login", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(user)
-        }).then(function (response) {
-            return response.json();
-        })
-            .then(function (user) {
-                if (user.message === "Auth successful" && user.token!==null) {
-                    login(user.token,user.id);
-                    history.push('/home');
-                } else
-                    alert("Please check your login information.");
-            });
-    }
+
     const [sex, setSex] = React.useState('');
 
     const handleChange = (event: SelectChangeEvent) => {
