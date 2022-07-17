@@ -18,6 +18,7 @@ const theme = createTheme();
 function Home() {
     return (
         <ThemeProvider theme={theme}>
+            <CssBaseline/>
             <NavBar/>
             <BestBook/>
         </ThemeProvider>

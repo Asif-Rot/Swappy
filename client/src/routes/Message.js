@@ -1,22 +1,27 @@
 import React from 'react'
+import {useContext, useEffect, useRef, useState} from 'react';
 import NavBar from '../components/NavBar'
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
+import Conv from '../components/chat/Conversation'
+import Msg from '../components/chat/Message'
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
 const theme = createTheme();
 
 
-export default function Message(){
-    return(
-        <div>
-            <ThemeProvider theme={theme}>
-                <NavBar/>
-                <Container component="main" maxWidth="xs" >
-                    <CssBaseline/>
-                    <h2>Message Page</h2>
-                </Container>
-            </ThemeProvider>
-        </div>
+export default function Message() {
+    return (
+
+
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+            <NavBar/>
+            Message Page
+        </ThemeProvider>
+
+
     );
 }

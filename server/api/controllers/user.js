@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
+const path = require("path");
 /**
  * SingUp for new user and save in mongoDb
  * @param req
@@ -13,11 +14,13 @@ exports.user_signup = (req, res, next) => {
     User.find({email: req.body.email})
         .exec()
         .then(user => {
+
             if (user.length >= 1) {
                 return res.status(409).json({
                     message: "Mail exists"
                 });
             } else {
+                console.log(req)
                 bcrypt.hash(req.body.password, 10, (err, hash) => {
                     if (err) {
                         return res.status(500).json({
@@ -31,14 +34,26 @@ exports.user_signup = (req, res, next) => {
                             firstName: req.body.firstName,
                             lastName: req.body.lastName,
                             birth: req.body.birth,
-                            sex: req.body.sex
+                            sex: req.body.sex,
+                            image: req.body.image,
                         });
                         user
                             .save()
                             .then(result => {
-                                console.log(result);
+                                const token = jwt.sign(
+                                    {
+                                        email: user.email,
+                                        userId: user._id
+                                    },
+                                    process.env.JWT_KEY,
+                                    {
+                                        expiresIn: "1h"
+                                    }
+                                );
                                 res.status(201).json({
-                                    message: "User created"
+                                    message: "User created",
+                                    token: token,
+                                    id:user._id
                                 });
                             })
                             .catch(err => {
@@ -68,7 +83,6 @@ exports.user_login = (req, res, next) => {
                     message: "Auth failed"
                 });
             }
-            console.log(user[0]._id)
             bcrypt.compare(req.body.password, user[0].password, (err, result) => {
                 if (err) {
                     return res.status(401).json({
@@ -143,16 +157,33 @@ exports.user_getUser = (req, res) => {
     const userId = req.params.userId;
     User.find({_id: userId}).exec().then(user => {
         if (user.length === 1) {
-            const sendUser = {
-                "id": user[0]._id.toString(),
-                "email": user[0].email,
-                "firstName": user[0].firstName,
-                "lastName": user[0].lastName,
-                "birth": user[0].birth
+            if(user[0].image != null ){
+                const sendUser = {
+                    "id": user[0]._id.toString(),
+                    "email": user[0].email,
+                    "firstName": user[0].firstName,
+                    "lastName": user[0].lastName,
+                    "birth": user[0].birth,
+                    "image": user[0].image,
+                }
+                return res.status(200).json({
+                    sendUser
+                })
             }
-            return res.status(200).json({
-                sendUser
-            })
+            else{
+                const sendUser = {
+                    "id": user[0]._id.toString(),
+                    "email": user[0].email,
+                    "firstName": user[0].firstName,
+                    "lastName": user[0].lastName,
+                    "birth": user[0].birth,
+                    "image": "",
+                }
+                return res.status(200).json({
+                    sendUser
+                })
+            }
+
         }
     }).catch(error => {
         res.status(500).json({

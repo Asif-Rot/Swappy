@@ -15,6 +15,7 @@ import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 const theme = createTheme();
+
 /**
  * Profile page for show info about user
  * @returns {JSX.Element}
@@ -25,7 +26,7 @@ export default function Profile() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [birth, setBirth] = React.useState('');
-
+    const [imgProfile, setImgProfile] = React.useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState('');
     const getUser = async () => {
@@ -40,11 +41,14 @@ export default function Profile() {
         }).then(function (user) {
             if (user) {
                 setProfile(user['sendUser']);
-                setIsLoading(false);
+
                 setEmail(user['sendUser'].email)
                 setFirstName(user['sendUser'].firstName)
                 setLastName(user['sendUser'].lastName)
                 setBirth(user['sendUser'].birth)
+                setImgProfile(user['sendUser'].image)
+                setIsLoading(false);
+                getImage(user['sendUser'].image)
                 return;
             } else {
                 console.log('no user');
@@ -56,7 +60,24 @@ export default function Profile() {
 
     }, [])
 
-
+    const getImage = async (imgId) =>{
+        console.log(imgId)
+        await fetch("http://localhost:3001/image/getImages/" + imgId, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (image) {
+            if (image) {
+                setImgProfile(image.urlImage)
+                return;
+            } else {
+                console.log('no user');
+            }
+        });
+    }
     const handleChangeEmail = (event) => {
         setEmail(event.target.value);
     };
@@ -69,6 +90,9 @@ export default function Profile() {
     const handleChangeBirth = (event) => {
         setBirth(event.target.value);
     };
+    const getUrl =()=>{
+        return imgProfile.toString()
+    }
     return (
         <ThemeProvider theme={theme}>
             <NavBar/>
@@ -92,7 +116,7 @@ export default function Profile() {
                         }}>
                         <Avatar
                             alt="Remy Sharp"
-                            src=''
+                            src={imgProfile}
                             sx={{width: 80, height: 80}}
                         />
                         <Box component="form"
