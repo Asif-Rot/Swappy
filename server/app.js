@@ -14,6 +14,8 @@ const tradeRoutes = require('./api/routes/trade');
 const convRoutes = require('./api/routes/converstion');
 const msgRoutes = require('./api/routes/message');
 const imageProfile = require('./api/routes/imageProfile');
+const imageBook = require('./api/routes/imageBook');
+
 /**
  * Connect to mongoDb
  */
@@ -62,6 +64,7 @@ app.use("/trade",tradeRoutes);
 app.use("/message",msgRoutes);
 app.use("/converstion",convRoutes);
 app.use("/image",imageProfile)
+app.use("/imageBook",imageBook);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');

@@ -41,7 +41,6 @@ export default function Profile() {
         }).then(function (user) {
             if (user) {
                 setProfile(user['sendUser']);
-
                 setEmail(user['sendUser'].email)
                 setFirstName(user['sendUser'].firstName)
                 setLastName(user['sendUser'].lastName)
@@ -61,7 +60,6 @@ export default function Profile() {
     }, [])
 
     const getImage = async (imgId) =>{
-        console.log(imgId)
         await fetch("http://localhost:3001/image/getImages/" + imgId, {
             method: "GET",
             headers: {
@@ -74,7 +72,7 @@ export default function Profile() {
                 setImgProfile(image.urlImage)
                 return;
             } else {
-                console.log('no user');
+                console.log('Not found Img');
             }
         });
     }

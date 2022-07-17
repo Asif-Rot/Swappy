@@ -81,7 +81,6 @@ export default function SignUp() {
                 return response.json();
             }).then(function (result) {
                 if(result.message="Image Upload sucsses"){
-                    console.log("ok upload")
                     user = { ...user , image : result.public_id}
                     signUpUser(user);
                     setFileInputState('');
