@@ -61,8 +61,8 @@ app.use((req, res, next) => {
 app.use("/user", userRoutes);
 app.use("/item", itemRoutes);
 app.use("/trade",tradeRoutes);
-app.use("/message",msgRoutes);
-app.use("/converstion",convRoutes);
+//app.use("/message",msgRoutes);
+//app.use("/converstion",convRoutes);
 app.use("/image",imageProfile)
 app.use("/imageBook",imageBook);
 
