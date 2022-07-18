@@ -11,8 +11,8 @@ require('dotenv/config')
 const userRoutes = require('./api/routes/user');
 const itemRoutes = require('./api/routes/items');
 const tradeRoutes = require('./api/routes/trade');
-const convRoutes = require('./api/routes/converstion');
-const msgRoutes = require('./api/routes/message');
+//const convRoutes = require('./api/routes/converstion');
+//const msgRoutes = require('./api/routes/message');
 const imageProfile = require('./api/routes/imageProfile');
 const imageBook = require('./api/routes/imageBook');
 
