@@ -29,6 +29,8 @@ export default function Profile() {
     const [imgProfile, setImgProfile] = React.useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState('');
+    const [city, setCity] = useState('');
+
     const getUser = async () => {
         const id = getId();
         await fetch("http://localhost:3001/user/" + id, {
@@ -48,6 +50,7 @@ export default function Profile() {
                 setImgProfile(user['sendUser'].image)
                 setIsLoading(false);
                 getImage(user['sendUser'].image)
+                setCity(user['sendUser'].city)
                 return;
             } else {
                 console.log('no user');
@@ -154,7 +157,15 @@ export default function Profile() {
                                 value={lastName}
                                 onChange={handleChangeLastName}
                             />
-
+                              <TextField
+                                id="outlined-multiline-flexible"
+                                margin="normal"
+                                label="עיר מגורים"
+                                multiline
+                                maxRows={4}
+                                value={city}
+                            />
+                            
                             <Grid item xs={12} margin="normal">
                                 <LocalizationProvider dateAdapter={AdapterDateFns} >
                                     <DatePicker

@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+        match: /[a-z0-9A-Z!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9A-Z!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9A-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?/
     },
     password: {
         type: String,
@@ -33,8 +33,11 @@ const userSchema = mongoose.Schema({
     image: {
         type: String,
         required:false
+    },
+    city: {
+        type: String,
+        required: true
     }
-
 });
 
 module.exports = mongoose.model('user', userSchema);

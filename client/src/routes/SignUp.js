@@ -32,6 +32,8 @@ import Upload from '../components/upload'
 import Profile from '../components/image'
 import Alert from '../components/Alert';
 
+import Autocomplete from '@mui/material/Autocomplete';
+
 // Create rtl cache
 const cacheRtl = createCache({
     key: 'muirtl',
@@ -53,6 +55,21 @@ export default function SignUp() {
     const [successMsg, setSuccessMsg] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [asset_id,setAsset] = useState('')
+    const [cities,setCities] = useState([])
+    const [city,setCity] = useState('')
+
+
+    const  getCitiesList =  async () => {
+        await fetch('https://raw.githubusercontent.com/royts/israel-cities/master/israel-cities.json')
+        .then((res) => res.json())
+        .then((json) => {
+            setCities(json)
+        })
+    }
+
+    useEffect(() => {
+        getCitiesList()
+    }, [])
 
     const handleFileInputChange = (e) => {
         const file = e.target.files[0];
@@ -116,56 +133,46 @@ export default function SignUp() {
     }
     const history = useHistory();
     const handleSubmit = async (event) => {
-
-            event.preventDefault();
-            if (!selectedFile) return;
+            event.preventDefault();          
             const reader = new FileReader();
-            reader.readAsDataURL(selectedFile);
+            if (selectedFile){   
+                reader.readAsDataURL(selectedFile);
+            }
+
             const data = new FormData(event.currentTarget);
             if (data.get('email') === '' || data.get('password') === '' || data.get('firstName') === '' ||
-                data.get('lastName') === '' || data.get('sex') === '' || data.get('birth') === ''
+                data.get('lastName') === '' || data.get('sex') === '' || data.get('birth') === '' 
+                || city.toString() === '' || sex.toString() === '' || birth.toString() === '' 
             ) {
                 console.log('error')
                 alert('Everything has to be filled')
             } else {
 
+                
                 const user = {
                     "email": data.get('email'),
                     "password": data.get('password'),
                     "firstName": data.get('firstName'),
                     "lastName": data.get('lastName'),
                     "birth": birth.toString(),
-                    "sex": sex.toString()
+                    "sex": sex.toString(),
+                    "city":city.toString(),
+                    "image": 'AVATAR_lhyz0n'
                 }
-                reader.onloadend = () => {
-                    uploadImage(reader.result , user);
-                   // signUpUser(user)
-                };
+
+                if (selectedFile){
+                    reader.onloadend = () => {
+                        uploadImage(reader.result , user);
+                    };
+                }
+                else{
+                    signUpUser(user);
+                }
+
                 reader.onerror = () => {
                     console.error('AHHHHHHHH!!');
                     setErrMsg('something went wrong!');
                 };
-                // await fetch("http://localhost:3001/user/signup", {
-                //     method: "POST",
-                //     headers: {
-                //         'Content-Type': 'application/json',
-                //     },
-                //     body: JSON.stringify(user),
-                // }).then(function (response) {
-                //     return response.json();
-                // })
-                //     .then(function (user) {
-                //
-                //         if (user.message === "User created") {
-                //             alert("registarion succeeded");
-                //             login(user.token, user.id);
-                //             history.push('/home');
-                //         } else
-                //             alert(user.message);
-                //     });
-                // let formObject = Object.fromEntries(formData.entries());
-
-
             }
         }
     ;
@@ -248,6 +255,33 @@ export default function SignUp() {
                                         autoComplete="new-password"
                                     />
                                 </Grid>
+                                <Grid item xs={12}> 
+                                    <Autocomplete
+                                        id="city-select"
+                                        sx={{ width: 300 }}
+                                        options={cities}
+                                        autoHighlight
+                                        onChange={(event, value) => setCity(value.name)}
+                                        getOptionLabel={(option) => option.name}
+                                        renderOption={(props, option) => (
+                                            <Box component="li"  {...props}>
+                                                {option.name} 
+                                            </Box>
+                                        )}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                {...params}
+                                                label="בחר עיר"
+                                                inputProps={{
+                                                    ...params.inputProps,
+                                                    autoComplete: 'new-password', // disable autocomplete and autofill
+                                                }}
+                                            />
+                                        )}
+                                        />  
+                                </Grid>
                                 <Grid item xs={12}>
                                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                                         <DatePicker
@@ -256,7 +290,7 @@ export default function SignUp() {
                                             onChange={(newValue) => {
                                                 setBirth(newValue);
                                             }}
-                                            renderInput={(params) => <TextField {...params} />}
+                                            renderInput={(params) => <TextField  required {...params} />}
                                         />
                                     </LocalizationProvider>
 
@@ -264,7 +298,7 @@ export default function SignUp() {
 
                                 <Grid item xs={12} sm={4}>
                                     <Box>
-                                        <FormControl fullWidth>
+                                        <FormControl fullWidth  required>
                                             <InputLabel id="select-label">מין</InputLabel>
                                             <Select
                                                 labelId="select-label"

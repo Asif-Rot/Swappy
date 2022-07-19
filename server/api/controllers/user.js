@@ -36,6 +36,7 @@ exports.user_signup = (req, res, next) => {
                             birth: req.body.birth,
                             sex: req.body.sex,
                             image: req.body.image,
+                            city : req.body.city,
                         });
                         user
                             .save()
@@ -165,6 +166,7 @@ exports.user_getUser = (req, res) => {
                     "lastName": user[0].lastName,
                     "birth": user[0].birth,
                     "image": user[0].image,
+                    "city": user[0].city,
                 }
                 return res.status(200).json({
                     sendUser
@@ -178,6 +180,7 @@ exports.user_getUser = (req, res) => {
                     "lastName": user[0].lastName,
                     "birth": user[0].birth,
                     "image": "",
+                    "city": user[0].city,
                 }
                 return res.status(200).json({
                     sendUser
