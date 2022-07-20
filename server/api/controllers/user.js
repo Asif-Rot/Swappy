@@ -35,7 +35,8 @@ exports.user_signup = (req, res, next) => {
                             lastName: req.body.lastName,
                             birth: req.body.birth,
                             sex: req.body.sex,
-                            image: req.body.image,
+                            imageProfile: req.body.image,
+                            city : req.body.city,
                         });
                         user
                             .save()
@@ -157,14 +158,15 @@ exports.user_getUser = (req, res) => {
     const userId = req.params.userId;
     User.find({_id: userId}).exec().then(user => {
         if (user.length === 1) {
-            if(user[0].image != null ){
+            if(user[0].imageProfile != null ){
                 const sendUser = {
                     "id": user[0]._id.toString(),
                     "email": user[0].email,
                     "firstName": user[0].firstName,
                     "lastName": user[0].lastName,
                     "birth": user[0].birth,
-                    "image": user[0].image,
+                    "imageProfile": user[0].imageProfile,
+                    "city": user[0].city,
                 }
                 return res.status(200).json({
                     sendUser
@@ -177,7 +179,7 @@ exports.user_getUser = (req, res) => {
                     "firstName": user[0].firstName,
                     "lastName": user[0].lastName,
                     "birth": user[0].birth,
-                    "image": "",
+                    "imageProfile": "AVATAR_lhyz0n",
                 }
                 return res.status(200).json({
                     sendUser

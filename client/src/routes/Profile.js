@@ -24,7 +24,6 @@ const theme = createTheme();
  * @constructor
  */
 export default function Profile() {
-    const [user, setUser] = useState("Jesse Hall");
     const [email, setEmail] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -32,6 +31,10 @@ export default function Profile() {
     const [imgProfile, setImgProfile] = React.useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState('');
+    const [city, setCity] = useState('');
+
+
+
     const getUser = async () => {
         const id = getId();
         await fetch("http://localhost:3001/user/" + id, {
@@ -50,7 +53,8 @@ export default function Profile() {
                 setBirth(user['sendUser'].birth)
                 setImgProfile(user['sendUser'].imageProfile)
                 setIsLoading(false);
-                getImage(user['sendUser'].image)
+                getImage(user['sendUser'].imageProfile)
+                setCity(user['sendUser'].city)
                 return;
             } else {
                 console.log('no user');
