@@ -48,7 +48,7 @@ export default function SignIn() {
             })
                 .then(function (user) {
                     if (user.message === "Auth successful" && user.token!==null) {
-                        login(user.token,user.id);
+                        console.log(login(user.token,user.id));
                         history.push('/home');
                     } else
                         alert("Please check your login information.");

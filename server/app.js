@@ -11,11 +11,10 @@ require('dotenv/config')
 const userRoutes = require('./api/routes/user');
 const itemRoutes = require('./api/routes/items');
 const tradeRoutes = require('./api/routes/trade');
-//const convRoutes = require('./api/routes/converstion');
-//const msgRoutes = require('./api/routes/message');
 const imageProfile = require('./api/routes/imageProfile');
 const imageBook = require('./api/routes/imageBook');
-
+const messages = require('./api/routes/messages');
+const conversations = require('./api/routes/conversations');
 /**
  * Connect to mongoDb
  */
@@ -61,10 +60,12 @@ app.use((req, res, next) => {
 app.use("/user", userRoutes);
 app.use("/item", itemRoutes);
 app.use("/trade",tradeRoutes);
-//app.use("/message",msgRoutes);
-//app.use("/converstion",convRoutes);
+
 app.use("/image",imageProfile)
 app.use("/imageBook",imageBook);
+
+app.use("/messages",messages)
+app.use("/conversations",conversations);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');

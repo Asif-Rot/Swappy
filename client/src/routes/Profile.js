@@ -1,5 +1,6 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {useState, useEffect} from 'react'
+
 import {getId} from '../utils';
 import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
@@ -16,12 +17,14 @@ import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 const theme = createTheme();
 
+
 /**
  * Profile page for show info about user
  * @returns {JSX.Element}
  * @constructor
  */
 export default function Profile() {
+    const [user, setUser] = useState("Jesse Hall");
     const [email, setEmail] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -45,9 +48,9 @@ export default function Profile() {
                 setFirstName(user['sendUser'].firstName)
                 setLastName(user['sendUser'].lastName)
                 setBirth(user['sendUser'].birth)
-                setImgProfile(user['sendUser'].image)
+                setImgProfile(user['sendUser'].imageProfile)
                 setIsLoading(false);
-                getImage(user['sendUser'].image)
+                getImage(user['sendUser'].imageProfile)
                 return;
             } else {
                 console.log('no user');
@@ -92,7 +95,9 @@ export default function Profile() {
         return imgProfile.toString()
     }
     return (
+
         <ThemeProvider theme={theme}>
+
             <NavBar/>
             <Container component="main" maxWidth="xs">
                 <CssBaseline/>

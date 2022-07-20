@@ -52,7 +52,7 @@ export default function SignUp() {
     const [selectedFile, setSelectedFile] = useState();
     const [successMsg, setSuccessMsg] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [asset_id,setAsset] = useState('')
+    const [asset_id, setAsset] = useState('')
 
     const handleFileInputChange = (e) => {
         const file = e.target.files[0];
@@ -68,7 +68,7 @@ export default function SignUp() {
         };
     };
 
-    const uploadImage = async (base64EncodedImage , user ) => {
+    const uploadImage = async (base64EncodedImage, user) => {
         try {
             const img = JSON.stringify({data: base64EncodedImage})
             await fetch("http://localhost:3001/image/upload", {
@@ -80,8 +80,8 @@ export default function SignUp() {
             }).then(function (response) {
                 return response.json();
             }).then(function (result) {
-                if(result.message="Image Upload sucsses"){
-                    user = { ...user , image : result.public_id}
+                if (result.message = "Image Upload sucsses") {
+                    user = {...user, image: result.public_id}
                     signUpUser(user);
                     setFileInputState('');
                     setPreviewSource('');
@@ -96,27 +96,26 @@ export default function SignUp() {
         }
     };
     const signUpUser = async (user) => {
-         await fetch("http://localhost:3001/user/signup", {
-             method: "POST",
-             headers: {
-                 'Content-Type': 'application/json',
-             },
+        await fetch("http://localhost:3001/user/signup", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(user),
-         }).then(function (response) {
-             return response.json();
-         })
-             .then(function (user) {
-                 if (user.message === "User created") {
-                     alert("registarion succeeded");
-                     login(user.token, user.id);
-                     history.push('/home');
-                 } else
-                     alert(user.message);
-             });
+        }).then(function (response) {
+            return response.json();
+        })
+            .then(function (user) {
+                if (user.message === "User created") {
+                    alert("registarion succeeded");
+                    login(user.token, user.id);
+                    history.push('/home');
+                } else
+                    alert(user.message);
+            });
     }
     const history = useHistory();
     const handleSubmit = async (event) => {
-
             event.preventDefault();
             if (!selectedFile) return;
             const reader = new FileReader();
@@ -128,7 +127,6 @@ export default function SignUp() {
                 console.log('error')
                 alert('Everything has to be filled')
             } else {
-
                 const user = {
                     "email": data.get('email'),
                     "password": data.get('password'),
@@ -138,34 +136,12 @@ export default function SignUp() {
                     "sex": sex.toString()
                 }
                 reader.onloadend = () => {
-                    uploadImage(reader.result , user);
-                   // signUpUser(user)
+                    uploadImage(reader.result, user);
                 };
                 reader.onerror = () => {
                     console.error('AHHHHHHHH!!');
                     setErrMsg('something went wrong!');
                 };
-                // await fetch("http://localhost:3001/user/signup", {
-                //     method: "POST",
-                //     headers: {
-                //         'Content-Type': 'application/json',
-                //     },
-                //     body: JSON.stringify(user),
-                // }).then(function (response) {
-                //     return response.json();
-                // })
-                //     .then(function (user) {
-                //
-                //         if (user.message === "User created") {
-                //             alert("registarion succeeded");
-                //             login(user.token, user.id);
-                //             history.push('/home');
-                //         } else
-                //             alert(user.message);
-                //     });
-                // let formObject = Object.fromEntries(formData.entries());
-
-
             }
         }
     ;
@@ -178,6 +154,13 @@ export default function SignUp() {
 
     const [birth, setBirth] = React.useState(null);
 
+    const findMyState = () =>{
+        const status = document.querySelector('.status');
+
+        const success =(position)=>{
+            console.log()
+        }
+    }
 
     return (
         <CacheProvider value={cacheRtl}>
@@ -204,6 +187,8 @@ export default function SignUp() {
                         <Typography component="h1" variant="h5">
                             הרשמה
                         </Typography>
+
+
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
@@ -248,7 +233,8 @@ export default function SignUp() {
                                         autoComplete="new-password"
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
+
+                                <Grid item xs={7}>
                                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                                         <DatePicker
                                             label="תאריך לידה"
@@ -259,61 +245,73 @@ export default function SignUp() {
                                             renderInput={(params) => <TextField {...params} />}
                                         />
                                     </LocalizationProvider>
-
                                 </Grid>
 
-                                <Grid item xs={12} sm={4}>
-                                    <Box>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="select-label">מין</InputLabel>
-                                            <Select
-                                                labelId="select-label"
-                                                id="simple-select"
-                                                value={sex}
-                                                label="מין"
-                                                onChange={handleChange}
-                                                sx={{width: 120}}
-                                            >
-                                                <MenuItem value={'man'}>זכר</MenuItem>
-                                                <MenuItem value={'woman'}>נקבה</MenuItem>
-                                                <MenuItem value={'other'}>אחר</MenuItem>
-                                            </Select>
 
-
-                                        </FormControl>
-
-                                    </Box>
-
+                                <Grid item xs={5} sm={4}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="select-label">מין</InputLabel>
+                                        <Select
+                                            labelId="select-label"
+                                            id="simple-select"
+                                            value={sex}
+                                            label="מין"
+                                            onChange={handleChange}
+                                            sx={{width: 155}}
+                                        >
+                                            <MenuItem value={'man'}>זכר</MenuItem>
+                                            <MenuItem value={'woman'}>נקבה</MenuItem>
+                                            <MenuItem value={'other'}>אחר</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <Box>
-                                        <div>
-                                            <h1 className="title">Upload an Image</h1>
-                                            <Alert msg={errMsg} type="danger"/>
-                                            <Alert msg={successMsg} type="success"/>
-                                            <div className="form">
-                                                <input
-                                                    id="fileInput"
-                                                    type="file"
-                                                    name="image"
-                                                    onChange={handleFileInputChange}
-                                                    value={fileInputState}
-                                                    className="form-input"
-                                                />
 
-                                            </div>
-                                            {previewSource && (
-                                                <img
-                                                    src={previewSource}
-                                                    alt="chosen"
-                                                    style={{height: '300px'}}
-                                                />
-                                            )}
+                                <Grid item xs={12} >
+                                    <FormControl fullWidth>
+                                        <InputLabel id="select-label">מיקום</InputLabel>
+                                        <Select
+                                            labelId="select-label"
+                                            id="simple-select"
+                                            value=""
+                                            label="מיקום"
+                                            onChange={handleChange}
+                                            sx={{width: 225}}
+                                        >
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+
+                                <Grid item  xs={12}>
+                                    <div>
+                                        <Typography className="title">
+                                            <h3>
+                                                העלאת תמונת פרופיל
+                                            </h3>
+                                        </Typography>
+
+                                        <Alert msg={errMsg} type="danger"/>
+                                        <Alert msg={successMsg} type="success"/>
+                                        <div className="form">
+                                            <input
+                                                id="fileInput"
+                                                type="file"
+                                                name="image"
+                                                onChange={handleFileInputChange}
+                                                value={fileInputState}
+                                                className="form-input"
+                                            />
                                         </div>
-                                    </Box>
+                                        {previewSource && (
+                                            <img
+                                                src={previewSource}
+                                                alt="chosen"
+                                                style={{height: '200px'}}
+                                            />
+                                        )}
+                                    </div>
                                 </Grid>
-
                             </Grid>
+
 
                             <Button
                                 type="submit"
@@ -324,6 +322,8 @@ export default function SignUp() {
                             >
                                 הירשם
                             </Button>
+
+
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
                                     <Link href="/login" variant="body2">
@@ -331,7 +331,11 @@ export default function SignUp() {
                                     </Link>
                                 </Grid>
                             </Grid>
+
+
                         </Box>
+
+
                     </Box>
                 </Container>
             </ThemeProvider>
