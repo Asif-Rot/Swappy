@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+        match: /[a-z0-9A-Z!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9A-Z!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9A-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?/
     },
     password: {
         type: String,
@@ -32,37 +32,12 @@ const userSchema = mongoose.Schema({
     },
     imageProfile: {
         type: String,
-        required: false
-    },
-    followers: {
-        type: Array,
-        default: [],
-    },
-    followings: {
-        type: Array,
-        default: [],
-    },
-    isAdmin: {
-        type: Boolean,
-        default: false,
-    },
-    desc: {
-        type: String,
-        max: 50,
+        required:false
     },
     city: {
         type: String,
-        max: 50,
-    },
-    from: {
-        type: String,
-        max: 50,
-    },
-    relationship: {
-        type: Number,
-        enum: [1, 2, 3],
-    },
-
+        required: true
+    }
 });
 
 module.exports = mongoose.model('user', userSchema);

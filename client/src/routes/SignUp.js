@@ -32,6 +32,8 @@ import Upload from '../components/upload'
 import Profile from '../components/image'
 import Alert from '../components/Alert';
 
+import Autocomplete from '@mui/material/Autocomplete';
+
 // Create rtl cache
 const cacheRtl = createCache({
     key: 'muirtl',
@@ -52,7 +54,7 @@ export default function SignUp() {
     const [selectedFile, setSelectedFile] = useState();
     const [successMsg, setSuccessMsg] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [asset_id, setAsset] = useState('')
+    const [asset_id,setAsset] = useState('')
 
     const handleFileInputChange = (e) => {
         const file = e.target.files[0];
@@ -68,7 +70,7 @@ export default function SignUp() {
         };
     };
 
-    const uploadImage = async (base64EncodedImage, user) => {
+    const uploadImage = async (base64EncodedImage , user ) => {
         try {
             const img = JSON.stringify({data: base64EncodedImage})
             await fetch("http://localhost:3001/image/upload", {
@@ -80,8 +82,8 @@ export default function SignUp() {
             }).then(function (response) {
                 return response.json();
             }).then(function (result) {
-                if (result.message = "Image Upload sucsses") {
-                    user = {...user, image: result.public_id}
+                if(result.message="Image Upload sucsses"){
+                    user = { ...user , image : result.public_id}
                     signUpUser(user);
                     setFileInputState('');
                     setPreviewSource('');
@@ -96,47 +98,56 @@ export default function SignUp() {
         }
     };
     const signUpUser = async (user) => {
-        await fetch("http://localhost:3001/user/signup", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
+         await fetch("http://localhost:3001/user/signup", {
+             method: "POST",
+             headers: {
+                 'Content-Type': 'application/json',
+             },
             body: JSON.stringify(user),
-        }).then(function (response) {
-            return response.json();
-        })
-            .then(function (user) {
-                if (user.message === "User created") {
-                    alert("registarion succeeded");
-                    login(user.token, user.id);
-                    history.push('/home');
-                } else
-                    alert(user.message);
-            });
+         }).then(function (response) {
+             return response.json();
+         })
+             .then(function (user) {
+                 if (user.message === "User created") {
+                     alert("registarion succeeded");
+                     login(user.token, user.id);
+                     history.push('/home');
+                 } else
+                     alert(user.message);
+             });
     }
     const history = useHistory();
     const handleSubmit = async (event) => {
+
             event.preventDefault();
             if (!selectedFile) return;
             const reader = new FileReader();
-            reader.readAsDataURL(selectedFile);
+            if (selectedFile){
+                reader.readAsDataURL(selectedFile);
+            }
+
             const data = new FormData(event.currentTarget);
             if (data.get('email') === '' || data.get('password') === '' || data.get('firstName') === '' ||
                 data.get('lastName') === '' || data.get('sex') === '' || data.get('birth') === ''
+                || city.toString() === '' || sex.toString() === '' || birth.toString() === ''
             ) {
                 console.log('error')
                 alert('Everything has to be filled')
             } else {
+
                 const user = {
                     "email": data.get('email'),
                     "password": data.get('password'),
                     "firstName": data.get('firstName'),
                     "lastName": data.get('lastName'),
                     "birth": birth.toString(),
-                    "sex": sex.toString()
+                    "sex": sex.toString(),
+                    "city":city.toString(),
+                    "image": 'AVATAR_lhyz0n'
                 }
                 reader.onloadend = () => {
-                    uploadImage(reader.result, user);
+                    uploadImage(reader.result , user);
+                   // signUpUser(user)
                 };
                 reader.onerror = () => {
                     console.error('AHHHHHHHH!!');
@@ -154,13 +165,6 @@ export default function SignUp() {
 
     const [birth, setBirth] = React.useState(null);
 
-    const findMyState = () =>{
-        const status = document.querySelector('.status');
-
-        const success =(position)=>{
-            console.log()
-        }
-    }
 
     return (
         <CacheProvider value={cacheRtl}>
@@ -187,8 +191,6 @@ export default function SignUp() {
                         <Typography component="h1" variant="h5">
                             הרשמה
                         </Typography>
-
-
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
@@ -233,8 +235,34 @@ export default function SignUp() {
                                         autoComplete="new-password"
                                     />
                                 </Grid>
-
-                                <Grid item xs={7}>
+                                <Grid item xs={12}>
+                                    <Autocomplete
+                                        id="city-select"
+                                        sx={{ width: 300 }}
+                                        options={cities}
+                                        autoHighlight
+                                        onChange={(event, value) => setCity(value.name)}
+                                        getOptionLabel={(option) => option.name}
+                                        renderOption={(props, option) => (
+                                            <Box component="li"  {...props}>
+                                                {option.name}
+                                            </Box>
+                                        )}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                required
+                                                fullWidth
+                                                {...params}
+                                                label="בחר עיר"
+                                                inputProps={{
+                                                    ...params.inputProps,
+                                                    autoComplete: 'new-password', // disable autocomplete and autofill
+                                                }}
+                                            />
+                                        )}
+                                        />
+                                </Grid>
+                                <Grid item xs={12}>
                                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                                         <DatePicker
                                             label="תאריך לידה"
@@ -242,76 +270,64 @@ export default function SignUp() {
                                             onChange={(newValue) => {
                                                 setBirth(newValue);
                                             }}
-                                            renderInput={(params) => <TextField {...params} />}
+                                            renderInput={(params) => <TextField  required {...params} />}
                                         />
                                     </LocalizationProvider>
+
                                 </Grid>
 
+                                <Grid item xs={12} sm={4}>
+                                    <Box>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="select-label">מין</InputLabel>
+                                            <Select
+                                                labelId="select-label"
+                                                id="simple-select"
+                                                value={sex}
+                                                label="מין"
+                                                onChange={handleChange}
+                                                sx={{width: 120}}
+                                            >
+                                                <MenuItem value={'man'}>זכר</MenuItem>
+                                                <MenuItem value={'woman'}>נקבה</MenuItem>
+                                                <MenuItem value={'other'}>אחר</MenuItem>
+                                            </Select>
 
-                                <Grid item xs={5} sm={4}>
-                                    <FormControl fullWidth>
-                                        <InputLabel id="select-label">מין</InputLabel>
-                                        <Select
-                                            labelId="select-label"
-                                            id="simple-select"
-                                            value={sex}
-                                            label="מין"
-                                            onChange={handleChange}
-                                            sx={{width: 155}}
-                                        >
-                                            <MenuItem value={'man'}>זכר</MenuItem>
-                                            <MenuItem value={'woman'}>נקבה</MenuItem>
-                                            <MenuItem value={'other'}>אחר</MenuItem>
-                                        </Select>
-                                    </FormControl>
+
+                                        </FormControl>
+
+                                    </Box>
+
                                 </Grid>
+                                <Grid item xs={12}>
+                                    <Box>
+                                        <div>
+                                            <h1 className="title">Upload an Image</h1>
+                                            <Alert msg={errMsg} type="danger"/>
+                                            <Alert msg={successMsg} type="success"/>
+                                            <div className="form">
+                                                <input
+                                                    id="fileInput"
+                                                    type="file"
+                                                    name="image"
+                                                    onChange={handleFileInputChange}
+                                                    value={fileInputState}
+                                                    className="form-input"
+                                                />
 
-                                <Grid item xs={12} >
-                                    <FormControl fullWidth>
-                                        <InputLabel id="select-label">מיקום</InputLabel>
-                                        <Select
-                                            labelId="select-label"
-                                            id="simple-select"
-                                            value=""
-                                            label="מיקום"
-                                            onChange={handleChange}
-                                            sx={{width: 225}}
-                                        >
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-
-                                <Grid item  xs={12}>
-                                    <div>
-                                        <Typography className="title">
-                                            <h3>
-                                                העלאת תמונת פרופיל
-                                            </h3>
-                                        </Typography>
-
-                                        <Alert msg={errMsg} type="danger"/>
-                                        <Alert msg={successMsg} type="success"/>
-                                        <div className="form">
-                                            <input
-                                                id="fileInput"
-                                                type="file"
-                                                name="image"
-                                                onChange={handleFileInputChange}
-                                                value={fileInputState}
-                                                className="form-input"
-                                            />
+                                            </div>
+                                            {previewSource && (
+                                                <img
+                                                    src={previewSource}
+                                                    alt="chosen"
+                                                    style={{height: '300px'}}
+                                                />
+                                            )}
                                         </div>
-                                        {previewSource && (
-                                            <img
-                                                src={previewSource}
-                                                alt="chosen"
-                                                style={{height: '200px'}}
-                                            />
-                                        )}
-                                    </div>
+                                    </Box>
                                 </Grid>
-                            </Grid>
 
+                            </Grid>
 
                             <Button
                                 type="submit"
@@ -322,8 +338,6 @@ export default function SignUp() {
                             >
                                 הירשם
                             </Button>
-
-
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
                                     <Link href="/login" variant="body2">
@@ -331,11 +345,7 @@ export default function SignUp() {
                                     </Link>
                                 </Grid>
                             </Grid>
-
-
                         </Box>
-
-
                     </Box>
                 </Container>
             </ThemeProvider>

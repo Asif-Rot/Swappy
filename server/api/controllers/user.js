@@ -20,6 +20,7 @@ exports.user_signup = (req, res, next) => {
                     message: "Mail exists"
                 });
             } else {
+                console.log(req)
                 bcrypt.hash(req.body.password, 10, (err, hash) => {
                     if (err) {
                         return res.status(500).json({
@@ -34,8 +35,7 @@ exports.user_signup = (req, res, next) => {
                             lastName: req.body.lastName,
                             birth: req.body.birth,
                             sex: req.body.sex,
-                            imageProfile: req.body.imageProfile,
-
+                            image: req.body.image,
                         });
                         user
                             .save()
@@ -157,15 +157,14 @@ exports.user_getUser = (req, res) => {
     const userId = req.params.userId;
     User.find({_id: userId}).exec().then(user => {
         if (user.length === 1) {
-            if(user[0].imageProfile != null ){
+            if(user[0].image != null ){
                 const sendUser = {
                     "id": user[0]._id.toString(),
                     "email": user[0].email,
                     "firstName": user[0].firstName,
                     "lastName": user[0].lastName,
                     "birth": user[0].birth,
-                    "imageProfile": user[0].imageProfile,
-                    "location": "",
+                    "image": user[0].image,
                 }
                 return res.status(200).json({
                     sendUser
@@ -178,49 +177,7 @@ exports.user_getUser = (req, res) => {
                     "firstName": user[0].firstName,
                     "lastName": user[0].lastName,
                     "birth": user[0].birth,
-                    "imageProfile": "",
-
-                }
-                return res.status(200).json({
-                    sendUser
-                })
-            }
-
-        }
-    }).catch(error => {
-        res.status(500).json({
-            error
-        })
-    });
-};
-
-exports.user_getUser = (req, res) => {
-    const userId = req.params.userId;
-    User.find({_id: userId}).exec().then(user => {
-        if (user.length === 1) {
-            if(user[0].imageProfile != null ){
-                const sendUser = {
-                    "id": user[0]._id.toString(),
-                    "email": user[0].email,
-                    "firstName": user[0].firstName,
-                    "lastName": user[0].lastName,
-                    "birth": user[0].birth,
-                    "imageProfile": user[0].imageProfile,
-                }
-                return res.status(200).json({
-                    sendUser
-                })
-            }
-            else{
-                const sendUser = {
-                    "id": user[0]._id.toString(),
-                    "email": user[0].email,
-                    "firstName": user[0].firstName,
-                    "lastName": user[0].lastName,
-                    "birth": user[0].birth,
-                    "imageProfile": "",
-                    "location": "",
-
+                    "image": "",
                 }
                 return res.status(200).json({
                     sendUser

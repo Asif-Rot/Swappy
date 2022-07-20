@@ -50,7 +50,7 @@ export default function Profile() {
                 setBirth(user['sendUser'].birth)
                 setImgProfile(user['sendUser'].imageProfile)
                 setIsLoading(false);
-                getImage(user['sendUser'].imageProfile)
+                getImage(user['sendUser'].image)
                 return;
             } else {
                 console.log('no user');
