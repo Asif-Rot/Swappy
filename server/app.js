@@ -13,8 +13,8 @@ const itemRoutes = require('./api/routes/items');
 const tradeRoutes = require('./api/routes/trade');
 const imageProfile = require('./api/routes/imageProfile');
 const imageBook = require('./api/routes/imageBook');
-const messages = require('./api/routes/messages');
-const conversations = require('./api/routes/conversations');
+//const messages = require('./api/routes/messages');
+//const conversations = require('./api/routes/conversations');
 /**
  * Connect to mongoDb
  */
@@ -64,8 +64,8 @@ app.use("/trade",tradeRoutes);
 app.use("/image",imageProfile)
 app.use("/imageBook",imageBook);
 
-app.use("/messages",messages)
-app.use("/conversations",conversations);
+//app.use("/messages",messages)
+//app.use("/conversations",conversations);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
