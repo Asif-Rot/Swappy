@@ -33,12 +33,12 @@ export default function ItemDetails(props) {
     return (
           <ThemeProvider theme={theme}>
               <NavBar/>
-              <div>
-            <h1>{oneItem.name}</h1>
-            <img src={oneItem.image}
-                 alt='item_img'
-                 width={200}
-            />
+              <div style={{fontFamily: 'Tahoma'}}>
+                  <h1>{oneItem.name}</h1>
+                  <img src={oneItem.image}
+                       alt='item_img'
+                       width={200}
+                  />
                   <br/><br/>
                   <Button variant="contained"
                           disabled={(oneItem.user_id === userID) ? true : false }
