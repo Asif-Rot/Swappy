@@ -6,7 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Messenger from '../components/chat/messenger/Messenger'
+// import Messenger from '../components/chat/messenger/Messenger'
 const theme = createTheme();
 
 
@@ -17,7 +17,7 @@ export default function Message() {
         <ThemeProvider theme={theme}>
             <CssBaseline/>
             <NavBar/>
-            <Messenger/>
+            {/*<Messenger/>*/}
         </ThemeProvider>
 
 

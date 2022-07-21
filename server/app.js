@@ -12,7 +12,7 @@ const userRoutes = require('./api/routes/user');
 const itemRoutes = require('./api/routes/items');
 const tradeRoutes = require('./api/routes/trade');
 const imageProfile = require('./api/routes/imageProfile');
-const imageBook = require('./api/routes/imageBook');
+const imageItem = require('./api/routes/imageItem');
 //const messages = require('./api/routes/messages');
 //const conversations = require('./api/routes/conversations');
 /**
@@ -62,7 +62,7 @@ app.use("/item", itemRoutes);
 app.use("/trade",tradeRoutes);
 
 app.use("/image",imageProfile)
-app.use("/imageBook",imageBook);
+app.use("/imageItem",imageItem);
 
 //app.use("/messages",messages)
 //app.use("/conversations",conversations);

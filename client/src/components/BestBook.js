@@ -10,6 +10,8 @@ import Stack from '@mui/material/Stack';
 import React, {useEffect, useState} from "react";
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
+import {useHistory} from 'react-router-dom';
+import Button from "@mui/material/Button";
 
 export default function SpringCarousel() {
 
@@ -17,29 +19,38 @@ export default function SpringCarousel() {
     //           style={{maxHeight: '100%', overflow: 'auto', maxWidth: '100%'}}
     // >
     const [imgBook, setImgBook] = React.useState('');
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [items, setItems] = useState([]);
+    const history=useHistory();
 
-    const getImage = async (imgId) =>{
-        await fetch("http://localhost:3001/imageBook/getImageBook/" + "media_178ebed46ae02d6f3284c7886e9b28c5bb9046a02_rszee2", {
+    const handleDetails =  async (itemID) => {
+        await fetch('http://localhost:3001/item/' + itemID,{
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
             }
-        }).then(function (response) {
-            return response.json();
-        }).then(function (image) {
-            if (image) {
-                setImgBook(image.urlImage)
-                setIsLoading(false);
-                return;
-            } else {
-                console.log('Not found Img');
-            }
-        });
+        })
+            .then((res) => res.json())
+            .then((json) => {
+                console.log(json)
+            })
+        history.push('/itemdetails/'+itemID,{
+            item: itemID
+        })
     }
+
+    const getAllItems = async () => {
+            await fetch('http://localhost:3001/item/allitem')
+                .then((res) => res.json())
+                .then((json) => {
+                    setItems(json)
+                })
+    }
+
     useEffect(() => {
-        getImage()
+        getAllItems()
     }, [])
+
     return (
         <Grid container>
             {/* load spinner */}
@@ -69,55 +80,19 @@ export default function SpringCarousel() {
 
                 }}
             >
+                {items.length?
+                    items.map((item) => (
                 <Grid item mx={1}>
                     <Card>
-                        <img alt="harry poter"
-                            // src="https://res.cloudinary.com/dt9z5k8rs/image/upload/v1658053447/book_img/media_178ebed46ae02d6f3284c7886e9b28c5bb9046a02_rszee2.jpg"
-                            src={imgBook}
+                        <Button onClick={handleDetails.bind(this,item._id)}>
+                        <img src={item.image}
+                             alt='item_img'
                              width={200}
                         />
+                        </Button>
                     </Card>
                 </Grid>
-                <Grid item mx={1}>
-                    <Card>
-                        <img alt="harry poter"
-                             src="https://www.e-vrit.co.il/Images/Products/YediotMasters/HarryPottter2_Master.jpg"
-                             width={200}
-                        />
-                    </Card>
-                </Grid>
-                <Grid item mx={1}>
-                    <Card>
-                        <img alt="harry poter"
-                             src="https://www.e-vrit.co.il/Images/Products/YediotMasters/HarryPottter2_Master.jpg"
-                             width={200}
-                        />
-                    </Card>
-                </Grid>
-                <Grid item mx={1}>
-                    <Card>
-                        <img alt="harry poter"
-                             src="https://www.e-vrit.co.il/Images/Products/YediotMasters/HarryPottter2_Master.jpg"
-                             width={200}
-                        />
-                    </Card>
-                </Grid>
-                <Grid item mx={1}>
-                    <Card>
-                        <img alt="harry poter"
-                             src="https://www.e-vrit.co.il/Images/Products/YediotMasters/HarryPottter2_Master.jpg"
-                             width={200}
-                        />
-                    </Card>
-                </Grid>
-                <Grid item mx={1}>
-                    <Card>
-                        <img alt="harry poter"
-                             src="https://www.e-vrit.co.il/Images/Products/YediotMasters/HarryPottter2_Master.jpg"
-                             width={200}
-                        />
-                    </Card>
-                </Grid>
+                    )) : <p><br/>אין פריטים עדיין...</p>}
             </Box>
 
             {/**
