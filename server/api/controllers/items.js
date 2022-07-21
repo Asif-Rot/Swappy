@@ -129,7 +129,8 @@ exports.add_newItem = (req, res, next) => {
                         item_condition: req.body.item_condition,
                         author: req.body.author,
                         genre: req.body.genre,
-                        description: req.body.description
+                        description: req.body.description,
+                        image: req.body.image
                     }
                 );
                 newItem.save().then(result => {

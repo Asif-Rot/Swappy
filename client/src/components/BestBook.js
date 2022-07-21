@@ -17,29 +17,29 @@ export default function SpringCarousel() {
     //           style={{maxHeight: '100%', overflow: 'auto', maxWidth: '100%'}}
     // >
     const [imgBook, setImgBook] = React.useState('');
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const getImage = async (imgId) =>{
-        await fetch("http://localhost:3001/imageBook/getImageBook/" + "media_178ebed46ae02d6f3284c7886e9b28c5bb9046a02_rszee2", {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).then(function (response) {
-            return response.json();
-        }).then(function (image) {
-            if (image) {
-                setImgBook(image.urlImage)
-                setIsLoading(false);
-                return;
-            } else {
-                console.log('Not found Img');
-            }
-        });
-    }
-    useEffect(() => {
-        getImage()
-    }, [])
+    // const getImage = async (imgId) =>{
+    //     await fetch("http://localhost:3001/imageBook/getImageBook/" + "media_178ebed46ae02d6f3284c7886e9b28c5bb9046a02_rszee2", {
+    //         method: "GET",
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         }
+    //     }).then(function (response) {
+    //         return response.json();
+    //     }).then(function (image) {
+    //         if (image) {
+    //             setImgBook(image.urlImage)
+    //             setIsLoading(false);
+    //             return;
+    //         } else {
+    //             console.log('Not found Img');
+    //         }
+    //     });
+    // }
+    // useEffect(() => {
+    //     getImage()
+    // }, [])
     return (
         <Grid container>
             {/* load spinner */}
@@ -72,8 +72,8 @@ export default function SpringCarousel() {
                 <Grid item mx={1}>
                     <Card>
                         <img alt="harry poter"
-                            // src="https://res.cloudinary.com/dt9z5k8rs/image/upload/v1658053447/book_img/media_178ebed46ae02d6f3284c7886e9b28c5bb9046a02_rszee2.jpg"
-                            src={imgBook}
+                            src="https://res.cloudinary.com/dt9z5k8rs/image/upload/v1658053447/book_img/media_178ebed46ae02d6f3284c7886e9b28c5bb9046a02_rszee2.jpg"
+                            // src={imgBook}
                              width={200}
                         />
                     </Card>

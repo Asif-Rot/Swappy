@@ -13,6 +13,7 @@ import Message from './routes/Message'
 import Trades from './routes/MyTrades'
 import Items from './routes/MyItems'
 import TradeDetails from './routes/TradeDetails'
+import ItemDetails from './routes/ItemDetails'
 
 import { useState, createContext, useContext } from "react";
 /**
@@ -33,6 +34,7 @@ class App extends Component {
                     <PrivateRoute component={Message} path="/message" exact/>
                     <PrivateRoute component={Trades} path="/mytrades" exact/>
                     <PrivateRoute component={TradeDetails} path="/tradedetails" exact/>
+                    <PrivateRoute component={ItemDetails} path="/itemdetails/:id" exact/>
                     <PrivateRoute component={Items} path="/myitems" exact/>
                     <Route component={NotFound}/>
                 </Switch>
