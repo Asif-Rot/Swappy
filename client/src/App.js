@@ -13,30 +13,35 @@ import Message from './routes/Message'
 import Trades from './routes/MyTrades'
 import Items from './routes/MyItems'
 import TradeDetails from './routes/TradeDetails'
-
+import { UserContext,UserContextProvider } from "./context/userContext";
 import { useState, createContext, useContext } from "react";
 /**
  * Open start app
  */
 
 class App extends Component {
+
     render() {
         return (
-            <Route>
-                <Switch>
-                    <PublicRoute component={Login} restricted={true}  path="/" exact />
-                    <PublicRoute component={Login} restricted={true}  path="/login" exact />
-                    <PrivateRoute component={Home} path="/home" exact />
-                    <PrivateRoute component={Profile} path="/profile" exact/>
-                    <PublicRoute restricted={true} component={Register} path="/signup" exact />
-                    <PrivateRoute component={Settings} path="/settings" exact/>
-                    <PrivateRoute component={Message} path="/message" exact/>
-                    <PrivateRoute component={Trades} path="/mytrades" exact/>
-                    <PrivateRoute component={TradeDetails} path="/tradedetails" exact/>
-                    <PrivateRoute component={Items} path="/myitems" exact/>
-                    <Route component={NotFound}/>
-                </Switch>
-            </Route>
+            <UserContextProvider>
+                <Route>
+                    <Switch>
+                        <PublicRoute component={Login} restricted={true}  path="/" exact />
+                        <PublicRoute component={Login} restricted={true}  path="/login" exact />
+                        <PrivateRoute component={Home} path="/home" exact />
+                        <PrivateRoute component={Profile} path="/profile" exact/>
+                        <PublicRoute restricted={true} component={Register} path="/signup" exact />
+                        <PrivateRoute component={Settings} path="/settings" exact/>
+                        <PrivateRoute component={Message} path="/message" exact/>
+                        <PrivateRoute component={Trades} path="/mytrades" exact/>
+                        <PrivateRoute component={TradeDetails} path="/tradedetails" exact/>
+                        <PrivateRoute component={Items} path="/myitems" exact/>
+                        <Route component={NotFound}/>
+                    </Switch>
+                </Route>
+            </UserContextProvider>
+
+
         );
     }
 }
