@@ -71,7 +71,6 @@ function LinkTab(props) {
         await fetch('http://localhost:3001/trade/userTrade/' + userID )
         .then((res) => res.json())
         .then((json) => {
-          console.log(json)
           setTrades(json)
         })
     }
@@ -80,7 +79,6 @@ function LinkTab(props) {
         await fetch('http://localhost:3001/trade/userSendTrade/' + userID)
         .then((res) => res.json())
         .then((json) => {
-          console.log(json)
           setTrades(json)
         })
     }
@@ -89,7 +87,6 @@ function LinkTab(props) {
         await fetch('http://localhost:3001/trade/userGotTrade/' + userID)
         .then((res) => res.json())
         .then((json) => {
-          console.log(json)
           setTrades(json)
         })
     }
@@ -137,9 +134,8 @@ function LinkTab(props) {
                             boxShadow: "5px 10px grey"}} >
                             <CardMedia
                                 component="img"
-                                alt="green iguana"
                                 height="140"
-                                image="https://www.e-vrit.co.il/Images/Products/YediotMasters/HarryPottter2_Master.jpg"
+                                image={trade.item_id.image}
                             />
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div">

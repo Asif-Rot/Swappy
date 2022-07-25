@@ -41,7 +41,6 @@ export default function TradeDetails(props){
               <NavBar/>
               <Container component="main" maxWidth="xs" >
                 <CssBaseline/>
-                {console.log(trade)}
                 <h1 style={{textAlign: 'center'}}>פרטי העסקה</h1>
                     <Grid  >
                         <Typography gutterBottom variant="h5" component="div" marginTop={2} >
@@ -64,7 +63,7 @@ export default function TradeDetails(props){
                         </Box>
                         
                         <Typography variant="body2" color="text.secondary">
-                            <b>שם הפריט:</b> {trade.item_id.name}
+                            <b>שם הפריט:</b> {trade._id.name}
                         </Typography>
                     </Grid>
                     

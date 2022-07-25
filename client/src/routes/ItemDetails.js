@@ -4,14 +4,15 @@ import NavBar from '../components/NavBar'
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import {useHistory} from 'react-router-dom';
 
 const userID = getId();
 const theme = createTheme();
 
 export default function ItemDetails(props) {
     const item = props.location.state.item
-    // console.log("item", item);
     const [oneItem, setOneItem] = useState([]);
+       const history=useHistory();
 
     const getOneItem = () => {
         fetch('http://localhost:3001/item/'+ item,{
@@ -25,6 +26,12 @@ export default function ItemDetails(props) {
                 setOneItem(json)
             })
     };
+
+    const handleMakeTrade =  () => {
+        history.push('/newTrade',{
+            item: oneItem
+        })
+    }
 
     useEffect(() => {
         getOneItem();
@@ -42,7 +49,7 @@ export default function ItemDetails(props) {
                   <br/><br/>
                   <Button variant="contained"
                           disabled={(oneItem.user_id === userID) ? true : false }
-                      // onClick={/*do somthing*/}
+                          onClick={handleMakeTrade.bind(this,item)}
                    >הצע החלפה</Button>
                   <br/><br/>
                   <Typography variant="body2" color="text.secondary">
