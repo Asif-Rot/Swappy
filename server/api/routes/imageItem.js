@@ -5,7 +5,7 @@ const itemImg = require('../controllers/imageItem');
 /**
  * Router for profile image
  */
-router.get("/getImageItem/:imgId", itemImg.get_image_item);
 router.post("/uploadItem", itemImg.upload_image_item);
+router.delete("/deleteItem/:publicId", itemImg.delete_image_item);
 
 module.exports = router;

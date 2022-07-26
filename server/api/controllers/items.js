@@ -130,7 +130,8 @@ exports.add_newItem = (req, res, next) => {
                         author: req.body.author,
                         genre: req.body.genre,
                         description: req.body.description,
-                        image: req.body.image
+                        image: req.body.image,
+                        image_public_id: req.body.image_public_id
                     }
                 );
                 newItem.save().then(result => {
