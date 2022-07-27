@@ -56,27 +56,12 @@ export default function SignIn() {
             if(callBackApiUser.message === "Auth successful")
             {
                 dispatch({ type: "LOGIN_SUCCESS", payload: callBackApiUser });
-              //  history.push('/home');
+                 history.push('/home');
             }
             else{
                 alert("Auth faild")
             }
-        //     return await fetch("http://localhost:3001/user/login", {
-        //         method: "POST",
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify(user)
-        //     }).then(function (response) {
-        //         return response.json();
-        //     })
-        //         .then(function (user) {
-        //             if (user.message === "Auth successful" && user.token!==null) {
-        //                 console.log(login(user.token,user.id));
-        //                 history.push('/home');
-        //             } else
-        //                 alert("Please check your login information.");
-        //         });
+
          }
     };
 

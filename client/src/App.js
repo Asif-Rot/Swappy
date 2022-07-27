@@ -13,6 +13,9 @@ import Message from './routes/Message'
 import Trades from './routes/MyTrades'
 import Items from './routes/MyItems'
 import TradeDetails from './routes/TradeDetails'
+import ItemDetails from './routes/ItemDetails'
+import { UserContext,UserContextProvider } from "./context/userContext";
+
 
 import { useState, createContext, useContext } from "react";
 /**
@@ -20,30 +23,10 @@ import { useState, createContext, useContext } from "react";
  */
 
 class App extends Component {
-
     render() {
         return (
             <UserContextProvider>
                 <Route>
-                    <Switch>
-                        <PublicRoute component={Login} restricted={true}  path="/" exact />
-                        <PublicRoute component={Login} restricted={true}  path="/login" exact />
-                        <PrivateRoute component={Home} path="/home" exact />
-                        <PrivateRoute component={Profile} path="/profile" exact/>
-                        <PublicRoute restricted={true} component={Register} path="/signup" exact />
-                        <PrivateRoute component={Settings} path="/settings" exact/>
-                        <PrivateRoute component={Message} path="/message" exact/>
-                        <PrivateRoute component={Trades} path="/mytrades" exact/>
-                        <PrivateRoute component={TradeDetails} path="/tradedetails" exact/>
-                        <PrivateRoute component={ItemDetails} path="/itemdetails/:id" exact/>
-                        <PrivateRoute component={Items} path="/myitems" exact/>
-                        <Route component={NotFound}/>
-                    </Switch>
-                </Route>
-            </UserContextProvider>
-
-
-            <Route>
                 <Switch>
                     <PublicRoute component={Login} restricted={true}  path="/" exact />
                     <PublicRoute component={Login} restricted={true}  path="/login" exact />
@@ -59,7 +42,9 @@ class App extends Component {
                     <Route component={NotFound}/>
                 </Switch>
             </Route>
-        );
+                </UserContextProvider>
+
+                );
     }
 }
 

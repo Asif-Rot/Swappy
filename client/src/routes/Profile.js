@@ -1,7 +1,7 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import {useState, useEffect} from 'react'
 
-import {getId} from '../utils';
+//import {getId} from '../utils';
 import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
@@ -15,6 +15,8 @@ import Grid from '@mui/material/Grid';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import { useContext} from "react";
+import { UserContext } from "../context/userContext";
 const theme = createTheme();
 
 
@@ -32,11 +34,13 @@ export default function Profile() {
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState('');
     const [city, setCity] = useState('');
+    const {user} = useContext(UserContext);
 
 
-
+    //
     const getUser = async () => {
-        const id = getId();
+        //const id = getId();
+        const id = user.id;
         await fetch("http://localhost:3001/user/" + id, {
             method: "GET",
             headers: {
@@ -53,9 +57,10 @@ export default function Profile() {
                 setBirth(user['sendUser'].birth)
                 setImgProfile(user['sendUser'].imageProfile)
                 setIsLoading(false);
-                getImage(user['sendUser'].imageProfile)
+                 getImage(user['sendUser'].imageProfile)
                 setCity(user['sendUser'].city)
                 return;
+
             } else {
                 console.log('no user');
             }
@@ -63,8 +68,10 @@ export default function Profile() {
     }
     useEffect(() => {
         getUser()
-
     }, [])
+
+
+
 
     const getImage = async (imgId) =>{
         await fetch("http://localhost:3001/image/getImages/" + imgId, {
@@ -76,6 +83,7 @@ export default function Profile() {
             return response.json();
         }).then(function (image) {
             if (image) {
+                console.log(image)
                 setImgProfile(image.urlImage)
                 return;
             } else {
@@ -164,10 +172,10 @@ export default function Profile() {
                                 onChange={handleChangeLastName}
                             />
 
-                            <Grid item xs={12} margin="normal">
+                            <Grid item xs={12} margin="normal"
+                                  sx={{ width: 184, mt: 2}}>
                                 <LocalizationProvider dateAdapter={AdapterDateFns} >
                                     <DatePicker
-
                                         label="תאריך לידה"
                                         value={birth}
                                         onChange={(newValue) => {

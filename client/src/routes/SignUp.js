@@ -315,7 +315,6 @@ export default function SignUp() {
 
 
                                         </FormControl>
-
                                     </Box>
 
                                 </Grid>
