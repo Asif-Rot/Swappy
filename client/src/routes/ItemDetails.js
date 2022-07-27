@@ -14,8 +14,8 @@ export default function ItemDetails(props) {
     const [oneItem, setOneItem] = useState([]);
        const history=useHistory();
 
-    const getOneItem = () => {
-        fetch('http://localhost:3001/item/'+ item,{
+    const getOneItem = async () => {
+        await fetch('http://localhost:3001/item/'+ item,{
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export default function ItemDetails(props) {
 
     useEffect(() => {
         getOneItem();
-    });
+    },[]);
 
     return (
           <ThemeProvider theme={theme}>
