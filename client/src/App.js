@@ -1,4 +1,4 @@
-import './App.css';
+import  './App.css';
 import Login from './routes/SignIn'
 import Register from "./routes/SignUp";
 import {Component} from 'react';
@@ -14,6 +14,7 @@ import Trades from './routes/MyTrades'
 import Items from './routes/MyItems'
 import TradeDetails from './routes/TradeDetails'
 import ItemDetails from './routes/ItemDetails'
+import NewTrade from './routes/NewTrade'
 import { UserContext,UserContextProvider } from "./context/userContext";
 
 
