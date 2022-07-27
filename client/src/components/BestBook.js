@@ -32,7 +32,7 @@ export default function SpringCarousel() {
         })
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
             })
         history.push('/itemdetails/'+itemID,{
             item: itemID
@@ -81,8 +81,8 @@ export default function SpringCarousel() {
                 }}
             >
                 {items.length?
-                    items.map((item) => (
-                <Grid item mx={1}>
+                    items.map((item, i) => (
+                <Grid item mx={1} key={i}>
                     <Card>
                         <Button onClick={handleDetails.bind(this,item._id)}>
                         <img src={item.image}

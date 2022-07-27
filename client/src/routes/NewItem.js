@@ -41,6 +41,9 @@ const fabStyle = {
     top: 1,
     center: 20,
     position: 'absoulte',
+    marginRight: 80,
+    marginBlockEnd: -30,
+    // marginTop: 0
 };
 
 // for image upload
@@ -74,6 +77,7 @@ export default function AddNewItem() {
         clearState();
     };
 
+    // Clear all fields after exiting Dialog
     const clearState = () => {
         setItemType('');
         setItemName('');
@@ -160,6 +164,7 @@ export default function AddNewItem() {
         };
     };
 
+    // image upload to cloudinary and add item to mongo after the upload
     const imageUpdate = (base64EncodedImage, bodyjson) => {
         try {
             const img = JSON.stringify({data: base64EncodedImage})
@@ -174,7 +179,7 @@ export default function AddNewItem() {
             }).then(function (result) {
                 if (result.message==="Image Upload success") {
                     console.log("Image here");
-                    bodyjson = { ...bodyjson , image : result.url};
+                    bodyjson = { ...bodyjson , image : result.url, image_public_id : result.public_id};
                     fetch('http://localhost:3001/item/additem/' + userID, {
                         method: 'POST',
                         headers: {
@@ -186,7 +191,8 @@ export default function AddNewItem() {
                         .then(data => console.log(data))
                         .then(() => {
                                 // Once posted, the user will be notified
-                                alert('You have been added an item to the system!');
+                                alert('הוספתי פריט חדש למערכת!');
+                                window.location.reload(false);
                             },
                             setOpen(false))
                     setFileInputState('');

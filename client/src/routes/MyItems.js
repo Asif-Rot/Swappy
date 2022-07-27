@@ -6,8 +6,6 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import Button from "@mui/material/Button";
 import {getId} from '../utils';
 import NewItem from './NewItem'
-import CircularProgress from '@mui/material/CircularProgress';
-import Backdrop from '@mui/material/Backdrop';
 import Card from '@mui/material/Card';
 import {useHistory} from 'react-router-dom';
 
@@ -15,27 +13,10 @@ const theme = createTheme();
 const userID = getId();
 
 export default function MyItems(){
-    // const [items, setItems] = useState([]);
     const [books, setBooks] = useState([]);
     const [games, setGames] = useState([]);
     const history=useHistory();
 
-    // const getAllItems = async () => {
-    //     await fetch('http://localhost:3001/item/allitem')
-    //         .then((res) => res.json())
-    //         .then((json) => {
-    //             // console.log(json)
-    //         })
-    // }
-    //
-    // const getUserItems = async () => {
-    //     await fetch('http://localhost:3001/item/getitembyuser/' + userID)
-    //         .then((res) => res.json())
-    //         .then((json) => {
-    //             // console.log(json)
-    //             setItems(json)
-    //         })
-    // }
     const getUserItemsbybook = async () => {
         await fetch('http://localhost:3001/item/getitembyuser/' + userID + '/book')
             .then((res) => res.json())
@@ -62,7 +43,7 @@ export default function MyItems(){
         })
             .then((res) => res.json())
             .then((json) => {
-                console.log(json)
+                // console.log(json)
             })
         history.push('/itemdetails/'+itemID,{
             item: itemID
@@ -102,14 +83,13 @@ export default function MyItems(){
                         }}
                     >
                         {books.length?
-                            books.map((book) => (
-                        <Grid item mx={1}>
+                            books.map((book, i) => (
+                        <Grid item mx={1} key={i}>
                             <Card>
                                 <Button
                                     onClick={handleDetails.bind(this,book._id)}>
                                 <img src={book.image}
                                      alt='item_img'
-                                    // src={imgBook}
                                      width={200}
                                 />
                                 </Button>
@@ -139,14 +119,13 @@ export default function MyItems(){
                         }}
                     >
                         {games.length?
-                            games.map((game) => (
-                                <Grid item mx={1}>
+                            games.map((game, j) => (
+                                <Grid item mx={1} key={j}>
                                     <Card>
                                         <Button
                                             onClick={handleDetails.bind(this,game._id)}>
                                         <img src={game.image}
                                              alt='item_img'
-                                            // src={imgBook}
                                              width={200}
                                         />
                                         </Button>

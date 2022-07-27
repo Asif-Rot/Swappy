@@ -39,6 +39,7 @@ class App extends Component {
                     <PrivateRoute component={TradeDetails} path="/tradedetails" exact/>
                     <PrivateRoute component={ItemDetails} path="/itemdetails/:id" exact/>
                     <PrivateRoute component={Items} path="/myitems" exact/>
+                    <PrivateRoute component={NewTrade} path="/newTrade" exact/>
                     <Route component={NotFound}/>
                 </Switch>
             </Route>
