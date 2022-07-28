@@ -57,7 +57,6 @@ export default function Profile() {
                 setBirth(user['sendUser'].birth)
                 setImgProfile(user['sendUser'].imageProfile)
                 setIsLoading(false);
-                 getImage(user['sendUser'].imageProfile)
                 setCity(user['sendUser'].city)
                 return;
 
@@ -71,26 +70,6 @@ export default function Profile() {
     }, [])
 
 
-
-
-    const getImage = async (imgId) =>{
-        await fetch("http://localhost:3001/image/getImages/" + imgId, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).then(function (response) {
-            return response.json();
-        }).then(function (image) {
-            if (image) {
-                console.log(image)
-                setImgProfile(image.urlImage)
-                return;
-            } else {
-                console.log('Not found Img');
-            }
-        });
-    }
     const handleChangeEmail = (event) => {
         setEmail(event.target.value);
     };

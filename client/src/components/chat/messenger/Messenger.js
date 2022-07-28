@@ -20,7 +20,8 @@ export default function Messenger() {
             })
                 .then((res) => res.json())
                 .then((json) => {
-                    console.log(json)
+                    //console.log(json)
+                    setConversations(json)
                 })
         }
         catch (err){
@@ -38,10 +39,9 @@ export default function Messenger() {
             <div className="chatMenu">
                 <div className="chatMenuWrapper">
                     <input placeholder="Search for friends" className="chatMenuInput" />
-                    <Conversation/>
-                    <Conversation/>
-                    <Conversation/>
-                    <Conversation/>
+                    {conversations.map((c)=>(
+                        <Conversation conversation={c} currentUser={user}/>
+                    ))}
                 </div>
             </div>
 

@@ -9,10 +9,10 @@ const Conversation = require("../models/Conversation");
  */
 //new conv
 exports.new_conv = async (req, res) => {
-    const newConversation = new Conversation({
-        members: [req.body.senderId, req.body.receiverId],
-    });
 
+    const newConversation = new Conversation({
+        members: [req.body.senderID, req.body.receiverId],
+    });
     try {
         const savedConversation = await newConversation.save();
         res.status(200).json(savedConversation);
@@ -36,7 +36,7 @@ exports.getConvUser = async (req, res) => {
 };
 
 // get conv includes two userId
-exports.getConvUser = async (req, res) => {
+exports.getConvUserOfTwo = async (req, res) => {
     try {
         const conversation = await Conversation.findOne({
             members: { $all: [req.params.firstUserId, req.params.secondUserId] },

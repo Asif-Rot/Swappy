@@ -17,7 +17,7 @@ exports.upload_image_profile =  (req, res) => {
             .then((result)=>{
                 res.status(200).json({
                     message: "Image Upload sucsses",
-                    public_id: result.public_id
+                    url: result.url
                 });
         })
             .catch((error)=>{
