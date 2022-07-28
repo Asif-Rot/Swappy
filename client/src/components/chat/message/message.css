@@ -28,6 +28,8 @@
 .messageBottom{
     font-size: 13px;
     margin-top: auto;
+    margin-left: auto;
+
 }
 
 .message.own{

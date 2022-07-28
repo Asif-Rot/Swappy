@@ -29,7 +29,7 @@ export default function Conversation({conversation, currentUser}) {
         <div className="conversation">
             <img className="conversationImg"
                  src={
-                    user.sendUser["imageProfile"]
+                    user?.sendUser["imageProfile"]
                  }
                  alt=""
             />
