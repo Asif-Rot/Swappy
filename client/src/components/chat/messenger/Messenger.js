@@ -4,6 +4,7 @@ import Conversation from '../conversations/Conversation';
 import Message from '../message/Message';
 import ChatOnline from '../chatOnline/ChatOnline';
 import {UserContext} from '../../../context/userContext'
+import { io } from "socket.io-client";
 
 export default function Messenger() {
     const [conversations, setConversations] = useState([])
@@ -12,9 +13,27 @@ export default function Messenger() {
     const [newMessage, setNewMessage] = useState("");
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
+    const socket = useRef();
     const {user} = useContext(UserContext)
     const scrollRef = useRef();
+    /**
+     * Socket IO for chat
+     */
+    useEffect(() => {
+        socket.current = io("ws://localhost:8900");
+        socket.current.on("getMessage", (data) => {
+            setArrivalMessage({
+                sender: data.senderId,
+                text: data.text,
+                createdAt: Date.now(),
+            });
+        });
+    }, []);
 
+
+    /**
+     * Get converstions
+     */
     const getConversations = async () => {
         try {
             await fetch('http://localhost:3001/conversations/' + user.id, {
@@ -35,7 +54,9 @@ export default function Messenger() {
         getConversations()
     }, [user.id])
 
-
+    /**
+     * Use effect for get current chat from mongodb
+     */
     useEffect(() => {
         const getMessages = async () => {
             try {
@@ -56,7 +77,9 @@ export default function Messenger() {
         getMessages();
     }, [currentChat]);
 
-
+    /**
+     * Handel submit for send msg
+     */
     const handleSubmit = async (e) => {
         e.preventDefault();
         const message = {
@@ -93,7 +116,10 @@ export default function Messenger() {
         }
     };
 
-
+    /**
+     * use Effect for scroll down view auto of chat
+     *
+     */
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);

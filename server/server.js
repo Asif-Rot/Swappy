@@ -1,5 +1,7 @@
 const http = require('http');
-const app = require('./app')
+const app = require('./app');
+const socketIO = require('./socket')
+
 /**
  * Open Server on port 3001
  * @type {string|number}
@@ -7,6 +9,9 @@ const app = require('./app')
 const port = process.env.PORT || 3001;
 
 const server = http.createServer(app);
+
+
+
 
 
 server.listen(port, () => console.log('server run on port %d', port));
