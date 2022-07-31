@@ -10,11 +10,19 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Typography from "@mui/material/Typography";
 import {useHistory} from 'react-router-dom';
+import { useContext} from "react";
+import { UserContext } from "../context/userContext";
 
-const userID = getId();
+
+
+//const userID = getId();
 const theme = createTheme();
 
 export default function ItemDetails(props) {
+
+    const {user} = useContext(UserContext);
+    const userID= user.id
+
     const item = props.location.state.item
     const [oneItem, setOneItem] = useState([]);
     const [openDel, setopenDel] = useState(false);

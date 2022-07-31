@@ -21,8 +21,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormHelperText from '@mui/material/FormHelperText';
 import Grid from '@mui/material/Grid';
+import { useContext} from "react";
+import { UserContext } from "../context/userContext";
 
-const userID = getId();
+//const userID = getId();
 
 // for genre field
 const ITEM_HEIGHT = 48;
@@ -67,6 +69,9 @@ const genres = [
 ];
 
 export default function AddNewItem() {
+    const {user} = useContext(UserContext);
+    const userID = user.id
+
     // Handling '+' button
     const [open, setOpen] = React.useState(false);
     const handleClickOpen = () => {

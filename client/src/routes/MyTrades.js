@@ -3,7 +3,7 @@ import {getId} from '../utils';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
-import React ,{useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -15,7 +15,7 @@ import {useHistory} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-
+import { UserContext } from "../context/userContext";
 
 const theme = createTheme();
 
@@ -43,7 +43,9 @@ function LinkTab(props) {
     const [myTrade, setTrade] = useState([]);
     const [value, setValue] = useState(0);
     const [toRender, needRender] = useState(false);
-    const userID = getId();
+    const {user} = useContext(UserContext);
+    const userID= user.id
+    //const userID = getId();
     const history=useHistory();
 
     // to handle with tab change

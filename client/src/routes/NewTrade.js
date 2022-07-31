@@ -11,6 +11,8 @@ import Button from '@mui/material/Button';
 import {useHistory} from 'react-router-dom';
 import {getId} from '../utils';
 import TextField from '@mui/material/TextField';
+import { useContext} from "react";
+import { UserContext } from "../context/userContext";
 
 //imports for RTL
 import {prefixer} from 'stylis';
@@ -19,7 +21,7 @@ import {CacheProvider} from '@emotion/react';
 import createCache from '@emotion/cache';
 
 // const theme = createTheme();
-const userID = getId();
+//const userID = getId();
 
 // Create rtl cache
 const cacheRtl = createCache({
@@ -34,6 +36,9 @@ const theme = createTheme({
 
 
 export default function TradeDetails(props){
+    const {user} = useContext(UserContext);
+    const userID = user.id
+
     const item = props.location.state.item
     const history=useHistory();
     const [MyItems, setItems] = useState([]);
