@@ -88,6 +88,7 @@ export default function AddNewItem() {
         setItemName('');
         setItemCondition('');
         setauthor('');
+        setconsole('');
         setgenre([]);
         setdescription('');
         setFileInputState('');
@@ -102,6 +103,7 @@ export default function AddNewItem() {
     const [itemCondition, setItemCondition] = useState('');
     const [author, setauthor] = useState('');
     const [genre, setgenre] = useState([]);
+    const [console, setconsole] = useState('');
     const [description, setdescription] = useState('');
     const [fileInputState, setFileInputState] = useState('');
     const [previewSource, setPreviewSource] = useState('');
@@ -148,6 +150,9 @@ export default function AddNewItem() {
             typeof value === 'string' ? value.split(',') : value,
         );
     }
+    const consoleUpdate = (event) => { // Dealing with author field changes to update our state
+        setconsole(event.target.value)
+    }
     const descriptionUpdate = (event) => { // Dealing with description field changes to update our state
         setdescription(event.target.value)
     }
@@ -163,7 +168,7 @@ export default function AddNewItem() {
     const previewFile = (file) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        console.log("reader: " , reader);
+        // console.log("reader: " , reader);
         reader.onloadend = () => {
             setPreviewSource(reader.result);
         };
@@ -183,7 +188,7 @@ export default function AddNewItem() {
                 return response.json();
             }).then(function (result) {
                 if (result.message==="Image Upload success") {
-                    console.log("Image here");
+                    // console.log("Image here");
                     bodyjson = { ...bodyjson , image : result.url, image_public_id : result.public_id};
                     fetch('http://localhost:3001/item/additem/' + userID, {
                         method: 'POST',
@@ -193,10 +198,10 @@ export default function AddNewItem() {
                         body: JSON.stringify(bodyjson)
                     })
                         .then(res => res.json())
-                        .then(data => console.log(data))
+                        // .then(data => console.log(data))
                         .then(() => {
                                 // Once posted, the user will be notified
-                                alert('הוספתי פריט חדש למערכת!');
+                                alert('נוסף פריט חדש למערכת!');
                                 window.location.reload(false);
                             },
                             setOpen(false))
@@ -229,7 +234,7 @@ export default function AddNewItem() {
             setInputerrorcond(true);
             return false;
         }
-        console.log(jsonreq);
+        // console.log(jsonreq);
         return true;
     }
 
@@ -241,6 +246,7 @@ export default function AddNewItem() {
             item_condition: itemCondition,
             author: author,
             genre: genre,
+            console: console,
             description: description
         }
 
@@ -327,12 +333,15 @@ export default function AddNewItem() {
                         </Select>
                         <FormHelperText error>{inputInvalidcond}</FormHelperText>
                     </FormControl><br/><br/>
-
+                    {(itemType === "book") ?
                     <TextField fullWidth id="author"
                                onChange={authorUpdate}
                                label="מחבר"
-                               variant="outlined"/><br/><br/>
-
+                               variant="outlined"/>
+                       : null }
+                    {(itemType === "book") ? <br/> : null }
+                    {(itemType === "book") ? <br/> : null }
+                    {(itemType === "book") ?
                     <FormControl fullWidth>
                         <InputLabel id="genre-multiple-checkbox-label">ז'אנר</InputLabel>
                         <Select
@@ -353,7 +362,18 @@ export default function AddNewItem() {
                                 </MenuItem>
                             ))}
                         </Select>
-                    </FormControl><br/><br/>
+                        <br/><br/>
+                    </FormControl>
+                    : null}
+
+                    {(itemType === "video game") ?
+                        <TextField fullWidth id="console"
+                                   onChange={consoleUpdate}
+                                   label="קונסולה"
+                                   variant="outlined"/>
+                        : null }
+                    {(itemType === "video game") ? <br/> : null }
+                    {(itemType === "video game") ? <br/> : null }
 
                     <TextField fullWidth id="description"
                                onChange={descriptionUpdate}

@@ -26,6 +26,9 @@ const itemsSchema = mongoose.Schema({
         genre: {
             type: Array,
         },
+        console: {
+            type: String
+        },
         description: {
             type: String,
         },
@@ -35,6 +38,9 @@ const itemsSchema = mongoose.Schema({
         },
         image_public_id: {
             type: String
+        },
+        trade_completed: {
+            type: Boolean
         }
     },
 );
