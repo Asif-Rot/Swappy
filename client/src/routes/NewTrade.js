@@ -11,11 +11,8 @@ import Button from '@mui/material/Button';
 import {useHistory} from 'react-router-dom';
 import {getId} from '../utils';
 import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import { useContext} from "react";
+import { UserContext } from "../context/userContext";
 
 //imports for RTL
 import {prefixer} from 'stylis';
@@ -23,7 +20,8 @@ import rtlPlugin from 'stylis-plugin-rtl';
 import {CacheProvider} from '@emotion/react';
 import createCache from '@emotion/cache';
 
-const userID = getId();
+// const theme = createTheme();
+//const userID = getId();
 
 // Create rtl cache
 const cacheRtl = createCache({
@@ -37,7 +35,10 @@ const theme = createTheme({
 
 
 
-export default function NewTrade(props){
+export default function TradeDetails(props){
+    const {user} = useContext(UserContext);
+    const userID = user.id
+
     const item = props.location.state.item
     const history=useHistory();
     const [MyItems, setItems] = useState([]);

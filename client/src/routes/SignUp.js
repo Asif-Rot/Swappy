@@ -31,6 +31,10 @@ import {useEffect, useState} from 'react'
 import Upload from '../components/upload'
 import Profile from '../components/image'
 import Alert from '../components/Alert';
+import { UserContext } from "../context/userContext";
+import { userReducer } from "../context/userReducer";
+import { useContext, useRef ,useReducer} from "react";
+import {loginCall} from '../apiCalls';
 
 import Autocomplete from '@mui/material/Autocomplete';
 
@@ -57,6 +61,7 @@ export default function SignUp() {
     const [asset_id,setAsset] = useState('')
     const [cities,setCities] = useState([])
     const [city,setCity] = useState('')
+    const {isFetching, dispatch}= useContext(UserContext);
 
 
     const  getCitiesList =  async () => {
@@ -98,8 +103,11 @@ export default function SignUp() {
                 return response.json();
             }).then(function (result) {
                 if(result.message="Image Upload sucsses"){
-                    user = { ...user , image : result.public_id}
-                    signUpUser(user);
+
+                    user = { ...user , imageProfile : result.url}
+                    console.log(user)
+                    //user = { ...user , image : result.public_id}
+                     signUpUser(user);
                     setFileInputState('');
                     setPreviewSource('');
                     setSuccessMsg('Image uploaded successfully');
@@ -113,6 +121,10 @@ export default function SignUp() {
         }
     };
     const signUpUser = async (user) => {
+        const current = {
+            "email": user.email,
+            "password":user.password
+        }
         await fetch("http://localhost:3001/user/signup", {
             method: "POST",
             headers: {
@@ -125,11 +137,26 @@ export default function SignUp() {
             .then(function (user) {
                 if (user.message === "User created") {
                     alert("registarion succeeded");
-                    login(user.token, user.id);
-                    history.push('/home');
+                   // login(user.token, user.id);
+                    loginFunc(current);
                 } else
                     alert(user.message);
             });
+    }
+    const loginFunc =async (user) =>{
+        dispatch({type: "LOGIN_START"});
+        const callBackApiUser = await loginCall({
+            user,
+            dispatch
+        });
+        if(callBackApiUser.message === "Auth successful")
+        {
+            dispatch({ type: "LOGIN_SUCCESS", payload: callBackApiUser });
+            history.push('/home');
+        }
+        else{
+            alert("Auth faild")
+        }
     }
     const history = useHistory();
     const handleSubmit = async (event) => {
@@ -147,27 +174,39 @@ export default function SignUp() {
                 console.log('error')
                 alert('Everything has to be filled')
             } else {
-
-
-                const user = {
-                    "email": data.get('email'),
-                    "password": data.get('password'),
-                    "firstName": data.get('firstName'),
-                    "lastName": data.get('lastName'),
-                    "birth": birth.toString(),
-                    "sex": sex.toString(),
-                    "city":city.toString(),
-                    "imageProfile": 'AVATAR_lhyz0n'
-                }
-
-                if (selectedFile){
-                    reader.onloadend = () => {
-                        uploadImage(reader.result , user);
-                    };
+                if(selectedFile){
+                    const user = {
+                        "email": data.get('email'),
+                        "password": data.get('password'),
+                        "firstName": data.get('firstName'),
+                        "lastName": data.get('lastName'),
+                        "birth": birth.toString(),
+                        "sex": sex.toString(),
+                        "city":city.toString(),
+                    }
+                    if (selectedFile){
+                        reader.onloadend = () => {
+                            uploadImage(reader.result , user);
+                        };
+                    }
+                    else{
+                        signUpUser(user);
+                    }
                 }
                 else{
+                    const user = {
+                        "email": data.get('email'),
+                        "password": data.get('password'),
+                        "firstName": data.get('firstName'),
+                        "lastName": data.get('lastName'),
+                        "birth": birth.toString(),
+                        "sex": sex.toString(),
+                        "city":city.toString(),
+                        "imageProfile": 'AVATAR_lhyz0n'
+                    }
                     signUpUser(user);
                 }
+
 
                 reader.onerror = () => {
                     console.error('AHHHHHHHH!!');
@@ -315,7 +354,6 @@ export default function SignUp() {
 
 
                                         </FormControl>
-
                                     </Box>
 
                                 </Grid>

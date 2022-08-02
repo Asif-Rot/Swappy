@@ -22,7 +22,14 @@ import {useHistory} from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+<<<<<<< HEAD
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
+=======
+import { useContext, useRef ,useReducer} from "react";
+
+import { UserContext } from "../context/userContext";
+import { userReducer } from "../context/userReducer";
+>>>>>>> fbb93d58bf2b0d42d75afc2afb9f67c16d4b0f3e
     
 /**
  * Nav Bar
@@ -71,6 +78,8 @@ export default function PrimarySearchAppBar() {
     const history=useHistory();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+    const {isFetching, dispatch}= useContext(UserContext);
+    const {user} = useContext(UserContext);
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -93,12 +102,15 @@ export default function PrimarySearchAppBar() {
         setMobileMoreAnchorEl(event.currentTarget);
     };
     const handlelogoutClick=()=>{
-            logout();
+           // logout();
+            dispatch({type: "LOGOUT"})
             history.push('/login')
     }
     // after click on profile icon go to profile page
     const handleMyProfile=()=>{
-        if(isLogin){
+        if(user){
+            console.log(user)
+
             history.push('/profile')
         }
         else{

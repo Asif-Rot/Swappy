@@ -8,11 +8,15 @@ import {getId} from '../utils';
 import NewItem from './NewItem'
 import Card from '@mui/material/Card';
 import {useHistory} from 'react-router-dom';
+import { useContext} from "react";
+import { UserContext } from "../context/userContext";
 
 const theme = createTheme();
-const userID = getId();
+//const userID = getId();
 
 export default function MyItems(){
+    const {user} = useContext(UserContext);
+    const userID= user.id
     const [books, setBooks] = useState([]);
     const [games, setGames] = useState([]);
     const history=useHistory();

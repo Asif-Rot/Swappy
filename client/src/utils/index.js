@@ -5,8 +5,8 @@ const TOKEN_KEY = 'jwt';
  * @param mail
  */
 export const login = (token,id) => {
-    localStorage.setItem(TOKEN_KEY, token);
-    localStorage.setItem('id',id);
+    // localStorage.setItem(TOKEN_KEY, token);
+    // localStorage.setItem('id',id);
     return "LOGIN_SUCCESS"
 }
 

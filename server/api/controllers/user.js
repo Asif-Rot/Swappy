@@ -20,7 +20,6 @@ exports.user_signup = (req, res, next) => {
                     message: "Mail exists"
                 });
             } else {
-                console.log(req)
                 bcrypt.hash(req.body.password, 10, (err, hash) => {
                     if (err) {
                         return res.status(500).json({
@@ -35,7 +34,7 @@ exports.user_signup = (req, res, next) => {
                             lastName: req.body.lastName,
                             birth: req.body.birth,
                             sex: req.body.sex,
-                            imageProfile: req.body.image,
+                            imageProfile: req.body.imageProfile,
                             city : req.body.city,
                         });
                         user

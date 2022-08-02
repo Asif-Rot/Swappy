@@ -18,6 +18,10 @@ import {Route, useHistory} from 'react-router-dom';
 import App from '../App'
 import logo from '../swapy.jpeg'
 import { CardMedia } from '@mui/material';
+import { UserContext } from "../context/userContext";
+import { userReducer } from "../context/userReducer";
+import { useContext, useRef ,useReducer} from "react";
+import {loginCall} from '../apiCalls';
 const theme = createTheme();
 /**
  * User login page
@@ -25,7 +29,14 @@ const theme = createTheme();
  * @constructor
  */
 export default function SignIn() {
+    const email = useRef();
+    const password = useRef();
+    //const initVal= useContext(UserContext);
+   // const [isFetching, dispatch] = useReducer(userReducer, initVal)
+    const {isFetching, dispatch}= useContext(UserContext);
     const history=useHistory();
+
+
     // Withdrawing data from the database and moving to the home page via mail
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -37,23 +48,21 @@ export default function SignIn() {
                 "email": data.get('email'),
                 "password": data.get('password')
             }
-            return await fetch("http://localhost:3001/user/login", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(user)
-            }).then(function (response) {
-                return response.json();
-            })
-                .then(function (user) {
-                    if (user.message === "Auth successful" && user.token!==null) {
-                        console.log(login(user.token,user.id));
-                        history.push('/home');
-                    } else
-                        alert("Please check your login information.");
-                });
-        }
+            dispatch({type: "LOGIN_START"});
+            const callBackApiUser = await loginCall({
+                user,
+                dispatch
+            });
+            if(callBackApiUser.message === "Auth successful")
+            {
+                dispatch({ type: "LOGIN_SUCCESS", payload: callBackApiUser });
+                 history.push('/home');
+            }
+            else{
+                alert("Auth faild")
+            }
+
+         }
     };
 
     return (

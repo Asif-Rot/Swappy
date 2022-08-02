@@ -1,4 +1,4 @@
-import './App.css';
+import  './App.css';
 import Login from './routes/SignIn'
 import Register from "./routes/SignUp";
 import {Component} from 'react';
@@ -15,7 +15,8 @@ import Items from './routes/MyItems'
 import TradeDetails from './routes/TradeDetails'
 import ItemDetails from './routes/ItemDetails'
 import NewTrade from './routes/NewTrade'
-import Search from './routes/SearchPage'
+import { UserContext,UserContextProvider } from "./context/userContext";
+
 
 import { useState, createContext, useContext } from "react";
 /**
@@ -25,7 +26,8 @@ import { useState, createContext, useContext } from "react";
 class App extends Component {
     render() {
         return (
-            <Route>
+            <UserContextProvider>
+                <Route>
                 <Switch>
                     <PublicRoute component={Login} restricted={true}  path="/" exact />
                     <PublicRoute component={Login} restricted={true}  path="/login" exact />
@@ -43,7 +45,9 @@ class App extends Component {
                     <Route component={NotFound}/>
                 </Switch>
             </Route>
-        );
+                </UserContextProvider>
+
+                );
     }
 }
 
