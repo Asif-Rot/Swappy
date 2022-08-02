@@ -45,7 +45,6 @@ function LinkTab(props) {
     const [toRender, needRender] = useState(false);
     const {user} = useContext(UserContext);
     const userID= user.id
-    //const userID = getId();
     const history=useHistory();
 
     // to handle with tab change
@@ -112,7 +111,28 @@ function LinkTab(props) {
         getFunc()
     }, [value,toRender])
 
-
+    const newConversation =async () =>{
+        console.log("start")
+        const newConv = {
+           // senderId:trades[0].offered_by_id._id,
+            senderId:user.id,
+            receiverId:trades[0].offered_to_id._id
+        }
+        console.log(newConv)
+        await fetch("http://localhost:3001/conversations", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newConv),
+        }).then(function (response) {
+            return response.json();
+        })
+            .then(function (conv) {
+                console.log(conv)
+                console.log("end")
+            });
+    }
     return(
         <ThemeProvider theme={theme}>
             <NavBar/>
@@ -159,7 +179,7 @@ function LinkTab(props) {
                                 disabled={trade.status == 'הצעה חדשה'? false : true }
                                 onClick={handleDecline.bind(this,trade._id)}>סרב להצעה </Button>
                                 
-                                <Button size="small"> שלח הודעה </Button>
+                                <Button size="small" onClick={newConversation}> שלח הודעה </Button>
                             </CardActions>
                         </Card>
                     </Grid>
