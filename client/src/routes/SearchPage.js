@@ -87,8 +87,12 @@ export default function SearchPage(){
     const onTypeChange = (event, value, reason) => {
         if(reason === "clear")
             setType('') 
-        else
-            setType(value)
+        else 
+            if(value == "ספר")
+                    setType("book")
+                else
+                    setType("video game")
+           
        };
 
 
