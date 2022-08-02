@@ -1,14 +1,35 @@
 import "./message.css";
 import {format} from "timeago.js";
+import {useEffect, useState} from "react";
+
 
 export default function Message({message, own}) {
-
+    const [currentUser , setCurrentUser] = useState()
+    useEffect(() => {
+        const getUser = async () => {
+            try {
+                await fetch('http://localhost:3001/user/' + message.sender, {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                    .then((res) => res.json())
+                    .then((json) => {
+                        setCurrentUser(json)
+                    })
+            } catch (err) {
+                console.log(err)
+            }
+        };
+        getUser();
+    }, [currentUser])
     return (
         <div className={own ? "message own" : "message"}>
             <div className="messageTop">
                 <img
                     className="messageImg"
-                    src="https://res.cloudinary.com/dt9z5k8rs/image/upload/v1658043749/t1jyv0ewhbviwcirxzwa.jpg"
+                    src={currentUser?.sendUser["imageProfile"]}
                     alt=""
                 />
                 <p className="messageText">

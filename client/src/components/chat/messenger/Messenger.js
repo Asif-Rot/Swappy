@@ -31,6 +31,20 @@ export default function Messenger() {
     }, []);
 
 
+    useEffect(() => {
+        arrivalMessage &&
+        currentChat?.members.includes(arrivalMessage.sender) &&
+        setMessages((prev) => [...prev, arrivalMessage]);
+    }, [arrivalMessage, currentChat]);
+
+    useEffect(()=>{
+        socket.current.emit("addUser",user.id);
+        socket.current.on("getUsers",users=>{
+            //console.log(users)
+        })
+    },[user])
+
+
     /**
      * Get converstions
      */
@@ -88,15 +102,15 @@ export default function Messenger() {
             conversationId: currentChat._id,
         };
 
-        // const receiverId = currentChat.members.find(
-        //     (member) => member !== user.id
-        // );
-
-        // socket.current.emit("sendMessage", {
-        //     senderId: user._id,
-        //     receiverId,
-        //     text: newMessage,
-        // });
+        const receiverId = currentChat.members.find(
+            (member) => member !== user.id
+        );
+        // send our msg
+        socket.current.emit("sendMessage", {
+            senderId: user.id,
+            receiverId,
+            text: newMessage,
+        });
 
         try {
             await fetch('http://localhost:3001/messages' , {
@@ -120,6 +134,7 @@ export default function Messenger() {
      * use Effect for scroll down view auto of chat
      *
      */
+
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
@@ -132,11 +147,12 @@ export default function Messenger() {
 
             <div className="chatMenu">
                 <div className="chatMenuWrapper">
-                    <input placeholder="Search for friends" className="chatMenuInput"/>
+                    <input placeholder="Search for friends" className="chatMenuInput" />
                     {conversations.map((c) => (
-                        <div onClick={() => setCurrentChat(c)}>
-                            <Conversation conversation={c} currentUser={user}/>
-                        </div>
+                            <div onClick={() => setCurrentChat(c)}>
+                                <Conversation conversation={c} currentUser={user} />
+                            </div>
+
                     ))}
                 </div>
             </div>
@@ -186,7 +202,8 @@ export default function Messenger() {
 
             <div className="chatOnline">
                 <div className="chatOnlineWrapper">
-                    <ChatOnline/>
+                    <ChatOnline onlineUsers={onlineUsers} currentId={user.id}
+                    setCurrentChat={currentChat}/>
                     <ChatOnline/>
                 </div>
             </div>

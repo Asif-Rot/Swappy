@@ -5,7 +5,7 @@ export default function Conversation({conversation, currentUser}) {
 
     const [user, setUser] = useState(null)
     useEffect(() => {
-        const friendId = conversation.members.find((m) => m !== currentUser._id);
+        const friendId = conversation.members.find((m) => m !== currentUser.id);
         const getUser = async () => {
             try {
                 await fetch('http://localhost:3001/user/' + friendId, {
