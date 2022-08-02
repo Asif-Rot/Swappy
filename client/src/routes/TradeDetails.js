@@ -14,24 +14,39 @@ const theme = createTheme();
 
 export default function TradeDetails(props){
     const trade = props.location.state.trade
-    const [name, setName] = useState('');
-    const [value, setValue] = useState('');
+    const [choosenitem, setChoosenItem] = useState('');
     const history=useHistory();
 
-    const handleApprove =  (tradeID) => {
-        fetch('http://localhost:3001/trade/approve/' + tradeID,{
+    const handleApprove = async () => {
+        await fetch('http://localhost:3001/trade/approve/' + trade._id,{
         method: "PUT",
         headers: {
             'Content-Type': 'application/json',
         }
     })
+        // afterApproved()
         history.push('/mytrades')
     };
 
+    const afterApproved = async () => {
+        await fetch('http://localhost:3001/item/' + trade.item_id._id,{
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+
+        await fetch('http://localhost:3001/item/' + choosenitem,{
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+    }
+
     const handleChange = (e) => {
-        const { name, value } = e.target
-        setName(name) 
-        setValue(value)
+        const { _ , choosenitem } = e.target
+        setChoosenItem(choosenitem)
     }
 
 
@@ -57,13 +72,13 @@ export default function TradeDetails(props){
                                 },
                             }}
                             >
-                            <img src="https://www.e-vrit.co.il/Images/Products/YediotMasters/HarryPottter2_Master.jpg"
+                            <img src={trade.item_id.image}
                                 width="200" 
                                 height="250" /> 
                         </Box>
                         
                         <Typography variant="body2" color="text.secondary">
-                            <b>שם הפריט:</b> {trade._id.name}
+                            <b>שם הפריט:</b> {trade.item_id.name}
                         </Typography>
                     </Grid>
                     
@@ -82,31 +97,32 @@ export default function TradeDetails(props){
                                 },
                             }}
                             >
-                                {console.log(trade)}
                             {trade.items_to_trade.map((item) => (
                              <Paper elevation={3} key={item._id}>
                                 <Typography variant="h6" color="bold" textAlign={'center'}>
                                     {item.name}   
                                 </Typography>  
-                                    <div className="radio-buttons" >
-                                        <input
-                                        id={item._id}
-                                        value={item._id}
-                                        name="item_id"
-                                        type="radio"
-                                        style={{ marginBottom:"5px"}}
-                                        onChange={handleChange}
-                                        />
-                                    </div>
+                                <div className="radio-buttons" >
+                                    <input
+                                    id={item._id}
+                                    choosenitem={item._id}
+                                    name="item_id"
+                                    type="radio"
+                                    style={{ marginBottom:"5px"}}
+                                    onChange={handleChange}
+                                    />
+                                    <img src={item.image}
+                                        width="200" 
+                                        height="250" /> 
+                                </div>
                             </Paper>
                                    
                             ))}
                             
                             </Box>
                     </Grid>
-                    <Button variant="contained" onClick={handleApprove.bind(this,trade._id)}
+                    <Button variant="contained" onClick={handleApprove}
                      style={{marginRight:"84px"}}>אשר החלפה </Button>
-
               </Container>
           </ThemeProvider>
       </div>

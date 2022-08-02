@@ -22,8 +22,8 @@ import {useHistory} from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import { useContext, useRef ,useReducer} from "react";
-
 import { UserContext } from "../context/userContext";
 import { userReducer } from "../context/userReducer";
     
@@ -132,6 +132,9 @@ export default function PrimarySearchAppBar() {
         history.push('/settings')
     }
 
+    const handelSearch = ()=> {
+        history.push('/search')
+    }
 
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
@@ -220,21 +223,19 @@ export default function PrimarySearchAppBar() {
                     >
                         Swapy
                     </Typography>
-                    <Search>
-                        <SearchIconWrapper >
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase 
-                            placeholder="חיפוש..."
-                            inputProps={{ 'aria-label': 'search' ,style: {marginRight: '5ch'}}}
-                        />
-                    </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <IconButton size="large" color="inherit" onClick={handelHome}>
                             <Badge  color="error">
                                 <Tooltip title="עמוד הבית">
                                     <HomeIcon />
+                                </Tooltip>
+                            </Badge>
+                        </IconButton>
+                        <IconButton size="large" color="inherit" onClick={handelSearch}>
+                            <Badge  color="error">
+                                <Tooltip title="חפש פריטים">
+                                    <ManageSearchIcon />
                                 </Tooltip>
                             </Badge>
                         </IconButton>

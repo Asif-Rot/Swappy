@@ -16,6 +16,7 @@ import TradeDetails from './routes/TradeDetails'
 import ItemDetails from './routes/ItemDetails'
 import NewTrade from './routes/NewTrade'
 import { UserContext,UserContextProvider } from "./context/userContext";
+import Search from './routes/SearchPage'
 
 
 import { useState, createContext, useContext } from "react";
@@ -41,6 +42,7 @@ class App extends Component {
                     <PrivateRoute component={ItemDetails} path="/itemdetails/:id" exact/>
                     <PrivateRoute component={Items} path="/myitems" exact/>
                     <PrivateRoute component={NewTrade} path="/newTrade" exact/>
+                    <PrivateRoute component={Search} path="/search" exact/>
                     <Route component={NotFound}/>
                 </Switch>
             </Route>
