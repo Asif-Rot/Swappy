@@ -9,10 +9,15 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import {useHistory} from 'react-router-dom';
-import {getId} from '../utils';
 import TextField from '@mui/material/TextField';
 import { useContext} from "react";
 import { UserContext } from "../context/userContext";
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContentText from '@mui/material/DialogContentText';
+
 
 //imports for RTL
 import {prefixer} from 'stylis';
@@ -98,8 +103,7 @@ export default function TradeDetails(props){
         history.push('/myitems')
       };
 
-    const validItems = () =>{
-        if (MyItems.length == 0) {
+    const nonItems = () =>{
             return( 
             <Dialog
                 open={true}
@@ -120,7 +124,7 @@ export default function TradeDetails(props){
                   <Button onClick={handleClose}>אישור</Button>
                 </DialogActions>
               </Dialog>)
-        }
+        
     } 
 
     const getUserItems = async () => {
@@ -136,13 +140,15 @@ export default function TradeDetails(props){
         getUserItems()
     }, []);
 
+    if(MyItems.length == 0)
+        nonItems()
+    else  
     return(
     <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
             <NavBar/>
             <Container component="main" maxWidth="xs">
               <CssBaseline/>
-              {validItems()}
               <h1 style={{textAlign: 'center'}}>הצעה חדשה</h1>
                 <Grid  >
                     <Typography gutterBottom variant="h6" component="div" marginTop={2} >
@@ -217,5 +223,5 @@ export default function TradeDetails(props){
             </Container>
         </ThemeProvider>
     </CacheProvider>
-    );
+    ) ;
 }

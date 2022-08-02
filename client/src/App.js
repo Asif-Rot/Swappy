@@ -16,6 +16,7 @@ import TradeDetails from './routes/TradeDetails'
 import ItemDetails from './routes/ItemDetails'
 import NewTrade from './routes/NewTrade'
 import { UserContext,UserContextProvider } from "./context/userContext";
+import Search from './routes/SearchPage'
 
 
 import { useState, createContext, useContext } from "react";

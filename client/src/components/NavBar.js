@@ -22,14 +22,10 @@ import {useHistory} from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-<<<<<<< HEAD
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
-=======
 import { useContext, useRef ,useReducer} from "react";
-
 import { UserContext } from "../context/userContext";
 import { userReducer } from "../context/userReducer";
->>>>>>> fbb93d58bf2b0d42d75afc2afb9f67c16d4b0f3e
     
 /**
  * Nav Bar
