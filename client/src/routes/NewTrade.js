@@ -11,6 +11,11 @@ import Button from '@mui/material/Button';
 import {useHistory} from 'react-router-dom';
 import {getId} from '../utils';
 import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 //imports for RTL
 import {prefixer} from 'stylis';
@@ -18,7 +23,6 @@ import rtlPlugin from 'stylis-plugin-rtl';
 import {CacheProvider} from '@emotion/react';
 import createCache from '@emotion/cache';
 
-// const theme = createTheme();
 const userID = getId();
 
 // Create rtl cache
@@ -33,11 +37,12 @@ const theme = createTheme({
 
 
 
-export default function TradeDetails(props){
+export default function NewTrade(props){
     const item = props.location.state.item
     const history=useHistory();
     const [MyItems, setItems] = useState([]);
     const [details, setDetails] = useState('');
+    const [isEmpty, setEmpty] = useState(false);
 
     // Pass the checkbox name to the function
     function getCheckedBoxes(chkboxName) {
@@ -64,7 +69,7 @@ export default function TradeDetails(props){
         })
             .then(function (trade) {
                 if (trade.message === "new trade created") {
-                    alert("Your trade request sent successfully!");
+                    alert("הבקשה נשלחה בהצלחה!");
                     history.push('/home');
                 } else
                     alert(trade.message);
@@ -88,12 +93,42 @@ export default function TradeDetails(props){
         setDetails(e.target.value);
     }
 
+    const handleClose = () => {
+        history.push('/myitems')
+      };
+
+    const validItems = () =>{
+        if (MyItems.length == 0) {
+            return( 
+            <Dialog
+                open={true}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                  {"אין אפשרות לבצע החלפה!"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    לא נמצאו פריטים בספריה.<br></br>
+                    על מנת לבצע החלפה ראשית יש להעלות פריט לספריה שלי. 
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose}>אישור</Button>
+                </DialogActions>
+              </Dialog>)
+        }
+    } 
+
     const getUserItems = async () => {
         await fetch('http://localhost:3001/item/getitembyuser/' + userID)
             .then((res) => res.json())
             .then((json) => {
                 setItems(json)
         })
+
     }
 
     useEffect(() => {
@@ -104,8 +139,9 @@ export default function TradeDetails(props){
     <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
             <NavBar/>
-            <Container component="main" maxWidth="xs" >
+            <Container component="main" maxWidth="xs">
               <CssBaseline/>
+              {validItems()}
               <h1 style={{textAlign: 'center'}}>הצעה חדשה</h1>
                 <Grid  >
                     <Typography gutterBottom variant="h6" component="div" marginTop={2} >
@@ -145,27 +181,25 @@ export default function TradeDetails(props){
                         }}
                         >
                         {MyItems.map((item) => (
-                            <Paper elevation={3} key={item._id}>
-                                <Typography variant="h6" color="bold" textAlign={'center'}>
-                                    {item.name}   
-                                </Typography>  
-                                <div className="radio-buttons" >
-                                    <input
-                                    id={item._id}
-                                    value={item._id}
-                                    name="item_id"
-                                    type="Checkbox"
-                                    readOnly
-                                    className='checkbox'
-                                    />
-                                    <img src={item.image}
-                                        width="200" 
-                                        height="250" /> 
-                                </div>
-                            </Paper>
-                                
-                        ))}
-                        
+                                    <Paper elevation={3} key={item._id}>
+                                        <Typography variant="h6" color="bold" textAlign={'center'}>
+                                            {item.name}   
+                                        </Typography>  
+                                        <div className="radio-buttons" >
+                                            <input
+                                            id={item._id}
+                                            value={item._id}
+                                            name="item_id"
+                                            type="Checkbox"
+                                            readOnly
+                                            className='checkbox'
+                                            />
+                                            <img src={item.image}
+                                                width="200" 
+                                                height="250" /> 
+                                        </div>
+                                    </Paper>        
+                                ))}
                         </Box>
                         <TextField  
                         style={{marginTop:"10px",marginBottom:"20px"}} 
