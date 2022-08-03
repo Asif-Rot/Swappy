@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import {styled, alpha} from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -17,20 +17,20 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
-import {logout,isLogin} from '../utils'
+import {logout, isLogin} from '../utils'
 import {useHistory} from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
-import { useContext, useRef ,useReducer} from "react";
-import { UserContext } from "../context/userContext";
-import { userReducer } from "../context/userReducer";
-    
+import {useContext, useRef, useReducer} from "react";
+import {UserContext} from "../context/userContext";
+import {userReducer} from "../context/userReducer";
+
 /**
  * Nav Bar
  */
-const Search = styled('div')(({ theme }) => ({
+const Search = styled('div')(({theme}) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -46,7 +46,7 @@ const Search = styled('div')(({ theme }) => ({
     },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled('div')(({theme}) => ({
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -56,7 +56,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     justifyContent: 'center',
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+const StyledInputBase = styled(InputBase)(({theme}) => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
@@ -71,10 +71,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar() {
-    const history=useHistory();
+    const history = useHistory();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-    const {isFetching, dispatch}= useContext(UserContext);
+    const {isFetching, dispatch} = useContext(UserContext);
     const {user} = useContext(UserContext);
 
     const isMenuOpen = Boolean(anchorEl);
@@ -97,42 +97,39 @@ export default function PrimarySearchAppBar() {
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
-    const handlelogoutClick=()=>{
-           // logout();
-            dispatch({type: "LOGOUT"})
-            history.push('/login')
+    const handlelogoutClick = () => {
+        // logout();
+        dispatch({type: "LOGOUT"})
+        history.push('/login')
     }
     // after click on profile icon go to profile page
-    const handleMyProfile=()=>{
-        if(user){
-            console.log(user)
-
+    const handleMyProfile = () => {
+        if (user) {
             history.push('/profile')
-        }
-        else{
+        } else {
             console.log('no')
         }
     }
 
     // after click on icon go to... functions
-    const handelHome=()=>{
+    const handelHome = () => {
 
         history.push('/home')
     }
-    const handleMsg=()=>{
+    const handleMsg = () => {
         history.push('/message')
     }
-    const handleTrades=()=>{
+    const handleTrades = () => {
         history.push('/mytrades')
     }
-    const handleItems=()=>{
+    const handleItems = () => {
         history.push('/myitems')
     }
-    const handleSettings=()=>{
+    const handleSettings = () => {
         history.push('/settings')
     }
 
-    const handelSearch = ()=> {
+    const handelSearch = () => {
         history.push('/search')
     }
 
@@ -178,7 +175,7 @@ export default function PrimarySearchAppBar() {
             <MenuItem>
                 <IconButton size="large" aria-label="show 4 new mails" color="inherit">
                     <Badge badgeContent={4} color="error">
-                        <MailIcon />
+                        <MailIcon/>
                     </Badge>
                 </IconButton>
                 <p>Messages</p>
@@ -191,7 +188,7 @@ export default function PrimarySearchAppBar() {
                     color="inherit"
                 >
                     <Badge badgeContent={17} color="error">
-                        <NotificationsIcon />
+                        <NotificationsIcon/>
                     </Badge>
                 </IconButton>
                 <p>Notifications</p>
@@ -204,7 +201,7 @@ export default function PrimarySearchAppBar() {
                     aria-haspopup="true"
                     color="inherit"
                 >
-                    <AccountCircle />
+                    <AccountCircle/>
                 </IconButton>
                 <p>Profile</p>
             </MenuItem>
@@ -212,51 +209,51 @@ export default function PrimarySearchAppBar() {
     );
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{flexGrow: 1}}>
             <AppBar position="static">
                 <Toolbar>
                     <Typography
                         variant="h6"
                         noWrap
                         component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}
+                        sx={{display: {xs: 'none', sm: 'block'}}}
                     >
                         Swapy
                     </Typography>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{flexGrow: 1}}/>
+                    <Box sx={{display: {xs: 'none', md: 'flex'}}}>
                         <IconButton size="large" color="inherit" onClick={handelHome}>
-                            <Badge  color="error">
+                            <Badge color="error">
                                 <Tooltip title="עמוד הבית">
-                                    <HomeIcon />
+                                    <HomeIcon/>
                                 </Tooltip>
                             </Badge>
                         </IconButton>
                         <IconButton size="large" color="inherit" onClick={handelSearch}>
-                            <Badge  color="error">
+                            <Badge color="error">
                                 <Tooltip title="חפש פריטים">
-                                    <ManageSearchIcon />
+                                    <ManageSearchIcon/>
                                 </Tooltip>
                             </Badge>
                         </IconButton>
                         <IconButton size="large" color="inherit" onClick={handleTrades}>
-                            <Badge  color="error">
+                            <Badge color="error">
                                 <Tooltip title="החלפות">
-                                    <CompareArrowsIcon />
+                                    <CompareArrowsIcon/>
                                 </Tooltip>
                             </Badge>
                         </IconButton>
                         <IconButton size="large" color="inherit" onClick={handleItems}>
-                            <Badge  color="error">
+                            <Badge color="error">
                                 <Tooltip title="הספריה שלי">
-                                    <LibraryBooksIcon />
+                                    <LibraryBooksIcon/>
                                 </Tooltip>
                             </Badge>
                         </IconButton>
                         <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={handleMsg}>
-                                <Tooltip title="הודעות">
-                                    <MailIcon />
-                                </Tooltip>
+                            <Tooltip title="הודעות">
+                                <MailIcon/>
+                            </Tooltip>
                         </IconButton>
                         <Tooltip title="המשתמש שלי">
                             <IconButton
@@ -268,7 +265,7 @@ export default function PrimarySearchAppBar() {
                                 color="inherit"
                                 onClick={handleMyProfile}
                             >
-                                <AccountCircle />
+                                <AccountCircle/>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="הגדרות">
@@ -297,7 +294,7 @@ export default function PrimarySearchAppBar() {
                             </Tooltip>
                         </IconButton>
                     </Box>
-                    <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+                    <Box sx={{display: {xs: 'flex', md: 'none'}}}>
                         <IconButton
                             size="large"
                             aria-label="show more"
@@ -306,7 +303,7 @@ export default function PrimarySearchAppBar() {
                             onClick={handleMobileMenuOpen}
                             color="inherit"
                         >
-                            <MoreIcon />
+                            <MoreIcon/>
                         </IconButton>
                     </Box>
                 </Toolbar>

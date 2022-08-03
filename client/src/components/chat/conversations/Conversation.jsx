@@ -24,12 +24,19 @@ export default function Conversation({conversation, currentUser}) {
         };
         getUser();
     }, [currentUser, conversation])
-
+    const setImgProfile = () => {
+        if(user?.sendUser["imageProfile"] === null){
+            return user.sendUser["imageProfile"];
+        }
+        else{
+            return "https://res.cloudinary.com/dt9z5k8rs/image/upload/v1658258491/AVATAR_lhyz0n.webp"
+        }
+    }
     return (
         <div className="conversation">
             <img className="conversationImg"
                  src={
-                    user?.sendUser["imageProfile"]
+                   setImgProfile()
                  }
                  alt=""
             />

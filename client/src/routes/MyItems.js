@@ -10,6 +10,7 @@ import Card from '@mui/material/Card';
 import {useHistory} from 'react-router-dom';
 import { useContext} from "react";
 import { UserContext } from "../context/userContext";
+import CssBaseline from '@mui/material/CssBaseline';
 
 const theme = createTheme();
 //const userID = getId();
@@ -62,6 +63,7 @@ export default function MyItems(){
 
     return(
         <div style={{fontFamily: 'Tahoma'}}>
+            <CssBaseline/>
             <ThemeProvider theme={theme}>
                 <NavBar/>
                 <br/><br/>

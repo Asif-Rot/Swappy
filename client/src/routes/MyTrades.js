@@ -112,13 +112,10 @@ function LinkTab(props) {
     }, [value,toRender])
 
     const newConversation =async () =>{
-        console.log("start")
         const newConv = {
-           // senderId:trades[0].offered_by_id._id,
-            senderId:user.id,
+            senderID:trades[0].offered_by_id._id,
             receiverId:trades[0].offered_to_id._id
         }
-        console.log(newConv)
         await fetch("http://localhost:3001/conversations", {
             method: "POST",
             headers: {
@@ -130,7 +127,6 @@ function LinkTab(props) {
         })
             .then(function (conv) {
                 console.log(conv)
-                console.log("end")
             });
     }
     return(
