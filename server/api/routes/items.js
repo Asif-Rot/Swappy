@@ -5,7 +5,7 @@ const itemsController = require('../controllers/items');
 
 router.post("/additem/:userId", itemsController.add_newItem);
 
-router.post("/updateitem/:itemId", itemsController.update_item);
+router.put("/updateitem/:itemId", itemsController.update_item);
 
 router.get("/allitem", itemsController.all_item);
 

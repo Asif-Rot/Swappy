@@ -107,8 +107,22 @@ export default function ItemDetails(props) {
                       <b>מצב המוצר: </b>
                       {(oneItem.item_condition === "as new") ? "כמו חדש" :
                           (oneItem.item_condition === "used") ? "משומש" : "לא טוב"}<br/><br/>
-                      <b>מחבר: </b> { oneItem.author }<br/><br/>
-                      <b>ז'אנר: </b> {(oneItem.genre > 0) ? oneItem.genre.join(', ') : ""}<br/><br/>
+
+                      {(oneItem.item_type === "book") ? <b>מחבר: </b> : null }
+                      {(oneItem.item_type === "book") ? oneItem.author : null}
+                      {(oneItem.item_type === "book") ? <br/> : null}
+                      {(oneItem.item_type === "book") ? <br/> : null}
+
+                      {(oneItem.item_type === "book") ? <b>ז'אנר: </b>  : null}
+                      {(oneItem.item_type === "book") ? oneItem.genre.join(', ') : null}
+                      {(oneItem.item_type === "book") ? <br/> : null}
+                      {(oneItem.item_type === "book") ? <br/> : null}
+
+                      {(oneItem.item_type === "video game") ? <b>קונסולה: </b> : null }
+                      {(oneItem.item_type === "video game") ? oneItem.console : null}
+                      {(oneItem.item_type === "video game") ? <br/> : null}
+                      {(oneItem.item_type === "video game") ? <br/> : null}
+
                       <b>פרטים נוספים: </b> {(oneItem.description)}<br/><br/>
                   </Typography>
                   <Button

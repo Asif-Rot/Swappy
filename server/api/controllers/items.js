@@ -129,9 +129,11 @@ exports.add_newItem = (req, res, next) => {
                         item_condition: req.body.item_condition,
                         author: req.body.author,
                         genre: req.body.genre,
+                        console: req.body.console,
                         description: req.body.description,
                         image: req.body.image,
-                        image_public_id: req.body.image_public_id
+                        image_public_id: req.body.image_public_id,
+                        trade_completed: false
                     }
                 );
                 newItem.save().then(result => {

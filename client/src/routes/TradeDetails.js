@@ -24,32 +24,37 @@ export default function TradeDetails(props){
             'Content-Type': 'application/json',
         }
     })
-        // afterApproved()
+        afterApproved()
         history.push('/mytrades')
     };
 
     const afterApproved = async () => {
-        await fetch('http://localhost:3001/item/' + trade.item_id._id,{
-            method: "DELETE",
+        await fetch('http://localhost:3001/item/updateitem/' + trade.item_id._id,{
+            method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            body:JSON.stringify({
+                trade_completed : true
+            })
         })
 
-        await fetch('http://localhost:3001/item/' + choosenitem,{
-            method: "DELETE",
+        await fetch('http://localhost:3001/item/updateitem/' + choosenitem,{
+            method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            body:JSON.stringify({
+                trade_completed : true
+            })
         })
     }
 
     const handleChange = (e) => {
-        const { _ , choosenitem } = e.target
-        setChoosenItem(choosenitem)
+        setChoosenItem(e.target.id)
     }
 
-
+    {console.log(trade)}
     return(
       <div>
           <ThemeProvider theme={theme}>

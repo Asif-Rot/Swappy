@@ -26,7 +26,6 @@ export default function MyItems(){
         await fetch('http://localhost:3001/item/getitembyuser/' + userID + '/book')
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
                 setBooks(json)
             })
     }
@@ -34,7 +33,6 @@ export default function MyItems(){
         await fetch('http://localhost:3001/item/getitembyuser/' + userID + '/video game')
             .then((res) => res.json())
             .then((json) => {
-                // console.log(json)
                 setGames(json)
             })
     }
@@ -47,9 +45,9 @@ export default function MyItems(){
             }
         })
             .then((res) => res.json())
-            .then((json) => {
-                // console.log(json)
-            })
+            // .then((json) => {
+            //     console.log(json)
+            // })
         history.push('/itemdetails/'+itemID,{
             item: itemID
         })
@@ -92,13 +90,15 @@ export default function MyItems(){
                             books.map((book, i) => (
                         <Grid item mx={1} key={i}>
                             <Card>
-                                <Button
-                                    onClick={handleDetails.bind(this,book._id)}>
-                                <img src={book.image}
-                                     alt='item_img'
-                                     width={200}
-                                />
+                                {!book.trade_completed ?
+                                <Button onClick={handleDetails.bind(this,book._id)}>
+                                    <img src={book.image}
+                                         alt='item_img'
+                                         width={200}
+                                         // style={ { display: (book.trade_complete === true) ? 'block' : 'none' } }
+                            />
                                 </Button>
+                                    : undefined}
                             </Card>
                         </Grid>
                             )) : <p><br/>אין ספרים עדיין...</p>}
@@ -128,13 +128,16 @@ export default function MyItems(){
                             games.map((game, j) => (
                                 <Grid item mx={1} key={j}>
                                     <Card>
+                                        {!game.trade_completed ?
                                         <Button
                                             onClick={handleDetails.bind(this,game._id)}>
-                                        <img src={game.image}
-                                             alt='item_img'
-                                             width={200}
-                                        />
+
+                                                <img src={game.image}
+                                                     alt='item_img'
+                                                     width={200}
+                                                />
                                         </Button>
+                                            : undefined}
                                     </Card>
                                 </Grid>
                             )) : <p><br/>אין משחקי וידאו עדיין...</p>}

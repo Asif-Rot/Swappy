@@ -104,7 +104,7 @@ export default function TradeDetails(props){
       };
 
     const nonItems = () =>{
-            return( 
+        return( 
             <Dialog
                 open={true}
                 onClose={handleClose}
@@ -123,8 +123,7 @@ export default function TradeDetails(props){
                 <DialogActions>
                   <Button onClick={handleClose}>אישור</Button>
                 </DialogActions>
-              </Dialog>)
-        
+            </Dialog>);       
     } 
 
     const getUserItems = async () => {
@@ -140,88 +139,89 @@ export default function TradeDetails(props){
         getUserItems()
     }, []);
 
-    if(MyItems.length == 0)
-        nonItems()
+    if(MyItems.length == 0){
+        return nonItems()  
+    }         
     else  
-    return(
-    <CacheProvider value={cacheRtl}>
-        <ThemeProvider theme={theme}>
-            <NavBar/>
-            <Container component="main" maxWidth="xs">
-              <CssBaseline/>
-              <h1 style={{textAlign: 'center'}}>הצעה חדשה</h1>
-                <Grid  >
-                    <Typography gutterBottom variant="h6" component="div" marginTop={2} >
-                       הפריט המבוקש: {item.name}
-                    </Typography>
-                    <h2 style={{textAlign: 'center'}}></h2>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            '& > :not(style)': {
-                            m: 3,
-                            width: 250,
-                            height: 300,
-                            },
-                        }}
-                        >
-                        <img src={item.image}
-                            width="200" 
-                            height="250" /> 
-                    </Box>
-                </Grid>
-                
-                <Grid>
-                    <Typography gutterBottom variant="h5" component="div" marginTop={10} >
-                        בחר פריט/ים להחלפה:
-                    </Typography>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            '& > :not(style)': {
-                            m: 3,
-                            width: 250,
-                            height: 300,
-                            },
-                        }}
-                        >
-                        {MyItems.map((item) => (
-                                    <Paper elevation={3} key={item._id}>
-                                        <Typography variant="h6" color="bold" textAlign={'center'}>
-                                            {item.name}   
-                                        </Typography>  
-                                        <div className="radio-buttons" >
-                                            <input
-                                            id={item._id}
-                                            value={item._id}
-                                            name="item_id"
-                                            type="Checkbox"
-                                            readOnly
-                                            className='checkbox'
-                                            />
-                                            <img src={item.image}
-                                                width="200" 
-                                                height="250" /> 
-                                        </div>
-                                    </Paper>        
-                                ))}
+        return(
+        <CacheProvider value={cacheRtl}>
+            <ThemeProvider theme={theme}>
+                <NavBar/>
+                <Container component="main" maxWidth="xs">
+                <CssBaseline/>
+                <h1 style={{textAlign: 'center'}}>הצעה חדשה</h1>
+                    <Grid  >
+                        <Typography gutterBottom variant="h6" component="div" marginTop={2} >
+                        הפריט המבוקש: {item.name}
+                        </Typography>
+                        <h2 style={{textAlign: 'center'}}></h2>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                '& > :not(style)': {
+                                m: 3,
+                                width: 250,
+                                height: 300,
+                                },
+                            }}
+                            >
+                            <img src={item.image}
+                                width="200" 
+                                height="250" /> 
                         </Box>
-                        <TextField  
-                        style={{marginTop:"10px",marginBottom:"20px"}} 
-                        fullWidth 
-                        label="פרטים נוספים" 
-                        onChange={handleDetails}
-                        id="details" />
                     </Grid>
-                    <Button 
-                        onClick={handleSubmit}
-                        variant="contained" 
-                        type="submit"
-                        style={{marginRight:"84px"}} >הצע החלפה </Button>
-            </Container>
-        </ThemeProvider>
-    </CacheProvider>
-    ) ;
+                    
+                    <Grid>
+                        <Typography gutterBottom variant="h5" component="div" marginTop={10} >
+                            בחר פריט/ים להחלפה:
+                        </Typography>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                '& > :not(style)': {
+                                m: 3,
+                                width: 250,
+                                height: 300,
+                                },
+                            }}
+                            >
+                            {MyItems.map((item) => (
+                                        <Paper elevation={3} key={item._id}>
+                                            <Typography variant="h6" color="bold" textAlign={'center'}>
+                                                {item.name}   
+                                            </Typography>  
+                                            <div className="radio-buttons" >
+                                                <input
+                                                id={item._id}
+                                                value={item._id}
+                                                name="item_id"
+                                                type="Checkbox"
+                                                readOnly
+                                                className='checkbox'
+                                                />
+                                                <img src={item.image}
+                                                    width="200" 
+                                                    height="250" /> 
+                                            </div>
+                                        </Paper>        
+                                    ))}
+                            </Box>
+                            <TextField  
+                            style={{marginTop:"10px",marginBottom:"20px"}} 
+                            fullWidth 
+                            label="פרטים נוספים" 
+                            onChange={handleDetails}
+                            id="details" />
+                        </Grid>
+                        <Button 
+                            onClick={handleSubmit}
+                            variant="contained" 
+                            type="submit"
+                            style={{marginRight:"84px"}} >הצע החלפה </Button>
+                </Container>
+            </ThemeProvider>
+        </CacheProvider>
+        ) ;
 }
