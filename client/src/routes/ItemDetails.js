@@ -83,7 +83,6 @@ export default function ItemDetails(props) {
 
     useEffect(() => {
         getOneItem();
-        debugger;
     },[]);
 
     return (
