@@ -158,7 +158,6 @@ export default function Messenger() {
 
             {/*------------------------------------------------------------------------------------------------------------*/}
 
-
             <div className="chatBox">
                 <div className="chatBoxWrapper">
                     {
@@ -170,11 +169,8 @@ export default function Messenger() {
                                             <Message  message={m} own={m.sender === user.id}/>
                                         </div>
                                     ))}
-
                                 </div>
                                 <div className="chatBoxBottom">
-
-
                                     <textarea className="chatMessageInput"
                                               placeholder="כתוב כאן....."
                                               onChange={(e) => setNewMessage(e.target.value)}
