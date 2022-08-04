@@ -15,7 +15,6 @@ exports.new_conv = async (req, res) => {
     });
     try {
         const savedConversation = await newConversation.save();
-        console.log(savedConversation)
         res.status(200).json(savedConversation);
     } catch (err) {
         res.status(500).json(err);
@@ -30,7 +29,6 @@ exports.getConvUser = async (req, res) => {
         const conversation = await Conversation.find({
             members: { $in: [req.params.userId] },
         });
-        console.log(conversation)
 
         res.status(200).json(conversation);
     } catch (err) {
