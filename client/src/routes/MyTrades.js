@@ -15,14 +15,14 @@ import {useHistory} from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import {UserContext} from "../context/userContext";
+import { UserContext } from "../context/userContext";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import FormControl, {useFormControl} from '@mui/material/FormControl';
+import FormControl, { useFormControl } from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormHelperText from '@mui/material/FormHelperText';
 
@@ -31,15 +31,15 @@ const theme = createTheme();
 
 function LinkTab(props) {
     return (
-        <Tab
-            component="a"
-            onClick={(event) => {
-                event.preventDefault();
-            }}
-            {...props}
-        />
+      <Tab
+        component="a"
+        onClick={(event) => {
+          event.preventDefault();
+        }}
+        {...props}
+      />
     );
-}
+  }
 
 
 /**
@@ -47,65 +47,65 @@ function LinkTab(props) {
  * @returns {JSX.Element}
  * @constructor
  */
-export default function MyTrades() {
+ export default function MyTrades(){
 
     const [trades, setTrades] = useState([]);
     const [myTrade, setTrade] = useState([]);
     const [value, setValue] = useState(0);
     const [toRender, needRender] = useState(false);
     const {user} = useContext(UserContext);
-    const userID = user.id
-    const history = useHistory();
-    const [msg, setMsg] = useState('')
+    const userID= user.id
+    const history=useHistory();
+    const [msg,setMsg]=useState('')
     const [conversation, setConversation] = useState(null);
 
     // to handle with tab change
     const handleChange = (event, newValue) => {
-        setValue(newValue);
+      setValue(newValue);
     };
 
-    const handleDecline = (tradeID) => {
+    const handleDecline =  (tradeID) => {
         needRender(!toRender)
-        fetch('http://localhost:3001/trade/decline/' + tradeID, {
+         fetch('http://localhost:3001/trade/decline/' + tradeID,{
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
             }
         })
-    };
+      };
 
-    const handleDetails = (tradeID) => {
+    const handleDetails =  (tradeID) => {
         setTrade(tradeID)
-        history.push('/tradedetails', {
+        history.push('/tradedetails',{
             trade: tradeID
         })
     }
     const getAllTrades = async () => {
-        await fetch('http://localhost:3001/trade/userTrade/' + userID)
-            .then((res) => res.json())
-            .then((json) => {
-                setTrades(json)
-            })
+        await fetch('http://localhost:3001/trade/userTrade/' + userID )
+        .then((res) => res.json())
+        .then((json) => {
+          setTrades(json)
+        })
     }
 
     const getSendTrades = async () => {
         await fetch('http://localhost:3001/trade/userSendTrade/' + userID)
-            .then((res) => res.json())
-            .then((json) => {
-                setTrades(json)
-            })
+        .then((res) => res.json())
+        .then((json) => {
+          setTrades(json)
+        })
     }
 
     const getGotTrades = async () => {
         await fetch('http://localhost:3001/trade/userGotTrade/' + userID)
-            .then((res) => res.json())
-            .then((json) => {
-                setTrades(json)
-            })
+        .then((res) => res.json())
+        .then((json) => {
+          setTrades(json)
+        })
     }
 
     const getFunc = () => {
-        switch (value) {
+        switch(value) {
             case 0:
                 getGotTrades()
                 break;
@@ -121,7 +121,7 @@ export default function MyTrades() {
     }
     useEffect(() => {
         getFunc()
-    }, [value, toRender])
+    }, [value,toRender])
 
     const [open, setOpen] = React.useState(false);
 
@@ -139,11 +139,12 @@ export default function MyTrades() {
         sendMessage()
     };
 
-    const sendMessage = async (data) => {
-        if (msg) {
+    const sendMessage =async (data) =>{
+        if(msg){
             createConversation()
             setOpen(false);
-        } else {
+        }
+        else{
             alert("need fill message")
             setMsg('')
         }
@@ -161,21 +162,22 @@ export default function MyTrades() {
                 .then((res) => res.json())
                 .then((json) => {
                     var flage = false;
-                    var currentChat = ''
-                    json.map((c) => {
-                        c.members.filter((x) => {
+                    var currentChat=''
+                        json.map((c)=>{
+                            c.members.filter((x)=>{
                                 if (x === trades[0].offered_to_id._id) {
 
-                                    flage = true;
-                                    currentChat = c._id
+                                    flage=true;
+                                    currentChat=c._id
                                 }
                             }
-                        )
-                    })
-                    if (flage) {
+                            )
+                        })
+                    if(flage){
                         console.log("yesssss")
                         createMessage(currentChat)
-                    } else {
+                    }
+                    else{
                         console.log("nooooo")
                         createNewConversation()
                     }
@@ -185,32 +187,32 @@ export default function MyTrades() {
         }
 
     }
-    const createNewConversation = async () => {
+    const createNewConversation =async () => {
         const newConv = {
-            senderID: trades[0].offered_by_id._id,
-            receiverId: trades[0].offered_to_id._id
-        }
+                           senderID:trades[0].offered_by_id._id,
+                           receiverId:trades[0].offered_to_id._id
+                       }
         await fetch("http://localhost:3001/conversations", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newConv),
-        }).then(function (response) {
-            return response.json();
-        })
-            .then(function (conv) {
-                createMessage(conv._id)
-            });
+                           method: "POST",
+                           headers: {
+                               'Content-Type': 'application/json',
+                           },
+                           body: JSON.stringify(newConv),
+                       }).then(function (response) {
+                           return response.json();
+                       })
+                           .then(function (conv) {
+                               createMessage(conv._id)
+                           });
 
     }
     const createMessage = async (conv) => {
         const newMessage = {
-            sender: userID,
-            text: msg,
-            conversationId: conv,
+                sender: userID,
+                text: msg,
+                conversationId: conv,
         }
-        await fetch('http://localhost:3001/messages', {
+        await  fetch('http://localhost:3001/messages', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -219,9 +221,10 @@ export default function MyTrades() {
         })
             .then((res) => res.json())
             .then((json) => {
-                if (json._message === 'Message validation failed') {
+                if(json._message === 'Message validation failed'){
                     console.log("no")
-                } else {
+                }
+                else{
                     alert("הודעה נשלחה בהצלחה ")
                 }
 
@@ -232,88 +235,86 @@ export default function MyTrades() {
     const fillMsg = (event) => {
         setMsg(event.target.value)
     }
-    return (
+    return(
         <ThemeProvider theme={theme}>
             <NavBar/>
-            <Container component="main" maxWidth="xs">
-                <Box sx={{width: '100%'}}>
+            <Container component="main" maxWidth="xs"  >
+                <Box sx={{ width: '100%' }} >
                     <Tabs value={value} onChange={handleChange} aria-label="nav tabs example">
-                        <LinkTab label="הצעות שהתקבלו"/>
-                        <LinkTab label="הצעות שנשלחו"/>
-                        <LinkTab label="היסטוריית הצעות"/>
+                        <LinkTab label="הצעות שהתקבלו" />
+                        <LinkTab label="הצעות שנשלחו"  />
+                        <LinkTab label="היסטוריית הצעות" />
                     </Tabs>
                 </Box>
                 <CssBaseline/>
                 <Grid container spacing={5} paddingBottom='50px' paddingTop='10px'>
-                    {trades.length ?
-                        trades.map((trade) => (
-                            <Grid item xs={6} sm={12} key={trade._id}>
-                                <Card sx={{maxWidth: 400}}
-                                      style={{
-                                          minWidth: 275,
-                                          border: "1px solid",
-                                          padding: "10px",
-                                          boxShadow: "5px 10px grey"
-                                      }}>
-                                    <CardMedia
-                                        component="img"
-                                        height="140"
-                                        image={trade.item_id.image}
-                                    />
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            {trade.item_id.name}
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            <b>המבקש:</b> {trade.offered_by_id.firstName} {trade.offered_by_id.lastName}<br/>
-                                            <b>סטטוס:</b> {trade.status}<br/>
-                                            <b>פרטים נוספים:</b> {trade.details}
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button size="small"
-                                                disabled={(trade.status == 'הצעה חדשה') &&
-                                                (trade.offered_by_id._id != userID) ? false : true}
-                                                onClick={handleDetails.bind(this, trade)}>פרטי ההצעה</Button>
+                {trades.length?
+                  trades.map((trade) => (
+                    <Grid item xs={6} sm={12} key={trade._id}>
+                        <Card sx={{ maxWidth: 400 }}
+                        style={{  minWidth: 275,
+                            border: "1px solid",
+                            padding: "10px",
+                            boxShadow: "5px 10px grey"}} >
+                            <CardMedia
+                                component="img"
+                                height="140"
+                                image={trade.item_id.image}
+                            />
+                            <CardContent>
+                                <Typography gutterBottom variant="h5" component="div">
+                                   {trade.item_id.name}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                    <b>המבקש:</b> { trade.offered_by_id.firstName} { trade.offered_by_id.lastName}<br/>
+                                    <b>סטטוס:</b> { trade.status}<br/>
+                                    <b>פרטים נוספים:</b> { trade.details }
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <Button size="small"
+                                disabled={(trade.status == 'הצעה חדשה') &&
+                                          (trade.offered_by_id._id != userID)? false : true }
+                                onClick={handleDetails.bind(this,trade)}>פרטי ההצעה</Button>
 
-                                        <Button size="small"
-                                                disabled={trade.status == 'הצעה חדשה' ? false : true}
-                                                onClick={handleDecline.bind(this, trade._id)}>סרב להצעה </Button>
+                                <Button size="small"
+                                disabled={trade.status == 'הצעה חדשה'? false : true }
+                                onClick={handleDecline.bind(this,trade._id)}>סרב להצעה </Button>
 
-                                        <Button size="small" onClick={handleClickOpen}> שלח הודעה </Button>
-                                        <Dialog
-                                            open={open}
-                                            onClose={handleClose}
-                                            aria-labelledby="alert-dialog-title"
-                                            aria-describedby="alert-dialog-description"
+                                <Button size="small" onClick={handleClickOpen}> שלח הודעה </Button>
+                                <Dialog
+                                    open={open}
+                                    onClose={handleClose}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {"כתוב הודעה "}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                            <TextField
+                                                fullWidth
+                                                sx={{width:'40ch'}}
+                                                id="message"
+                                                multiline
+                                                rows={4}
+                                                name="msgSend"
+                                                onChange={fillMsg}
+                                            />
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleClose}>בטל </Button>
+                                        <Button onClick={handleSend} autoFocus
+                                            type="submit"
                                         >
-                                            <DialogTitle id="alert-dialog-title">
-                                                {"כתוב הודעה "}
-                                            </DialogTitle>
-                                            <DialogContent>
-                                                <TextField
-                                                    fullWidth
-                                                    sx={{width: '40ch'}}
-                                                    id="message"
-                                                    multiline
-                                                    rows={4}
-                                                    name="msgSend"
-                                                    onChange={fillMsg}
-                                                />
-                                            </DialogContent>
-                                            <DialogActions>
-                                                <Button onClick={handleClose}>בטל </Button>
-                                                <Button onClick={handleSend} autoFocus
-                                                        type="submit"
-                                                >
-                                                    שלח
-                                                </Button>
-                                            </DialogActions>
-                                        </Dialog>
-                                    </CardActions>
-                                </Card>
-                            </Grid>
-                        )) : <p><br/>אין הצעות נוספות..</p>}
+                                            שלח
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                ))  : <p><br/>אין הצעות נוספות..</p>}
                 </Grid>
             </Container>
         </ThemeProvider>
