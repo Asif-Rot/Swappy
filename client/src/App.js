@@ -8,7 +8,6 @@ import NotFound from './routes/NotFound'
 import PrivateRoute from './routes/PrivateRoute';
 import PublicRoute from './routes/PublicRoute';
 import Profile from './routes/Profile'
-import Settings from './routes/Settings'
 import Message from './routes/Message'
 import Trades from './routes/MyTrades'
 import Items from './routes/MyItems'
@@ -35,7 +34,6 @@ class App extends Component {
                     <PrivateRoute component={Home} path="/home" exact />
                     <PrivateRoute component={Profile} path="/profile" exact/>
                     <PublicRoute restricted={true} component={Register} path="/signup" exact />
-                    <PrivateRoute component={Settings} path="/settings" exact/>
                     <PrivateRoute component={Message} path="/message" exact/>
                     <PrivateRoute component={Trades} path="/mytrades" exact/>
                     <PrivateRoute component={TradeDetails} path="/tradedetails" exact/>

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import  {useState, useEffect} from 'react'
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -9,14 +10,12 @@ import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
 import LogoutIcon from '@mui/icons-material/Logout';
-import SettingsIcon from '@mui/icons-material/Settings';
 import {logout,isLogin} from '../utils'
 import {useHistory} from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
@@ -76,9 +75,10 @@ export default function PrimarySearchAppBar() {
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const {isFetching, dispatch}= useContext(UserContext);
     const {user} = useContext(UserContext);
-
+    const [trades, setTrades] = useState([]);
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const userID= user.id
 
 //my propile
     const handleProfileMenuOpen = (event) => {
@@ -211,6 +211,18 @@ export default function PrimarySearchAppBar() {
         </Menu>
     );
 
+    const getGotTrades = async () => {
+        await fetch('http://localhost:3001/trade/userGotTrade/' + userID)
+        .then((res) => res.json())
+        .then((json) => {
+          setTrades(json)
+        })
+    }
+
+    useEffect(() => {
+        getGotTrades()
+    }, [])
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -247,7 +259,7 @@ export default function PrimarySearchAppBar() {
                             </Badge>
                         </IconButton>
                         <IconButton size="large" color="inherit" onClick={handleTrades}>
-                            <Badge color="error">
+                            <Badge badgeContent={trades.length} color="error">
                                 <Tooltip title="החלפות">
                                     <CompareArrowsIcon />
                                 </Tooltip>
@@ -276,19 +288,6 @@ export default function PrimarySearchAppBar() {
                                 onClick={handleMyProfile}
                             >
                                 <AccountCircle />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="הגדרות">
-                            <IconButton
-                                size="large"
-                                edge="end"
-                                aria-label="account of current user"
-                                aria-controls={menuId}
-                                aria-haspopup="true"
-                                color="inherit"
-                                onClick={handleSettings}
-                            >
-                                <SettingsIcon/>
                             </IconButton>
                         </Tooltip>
                         <IconButton

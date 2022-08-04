@@ -86,7 +86,7 @@ export default function SpringCarousel() {
                     items.map((item, i) => (
                 <Grid item mx={1} key={i}>                
                     <Card sx={{display: "flex",flexDirection: "column", boxShadow:2, height:400}}>
-                    <Typography  variant="inherit" textAlign={'center'} maxHeight={25} >{item.name}</Typography>
+                    <Typography  variant="inherit" textAlign={'center'} maxHeight={25} marginTop={1.5}>{item.name}</Typography>
                         <Button onClick={handleDetails.bind(this,item._id)} sx={{height:320}}>
                         <img src={item.image}
                              alt='item_img'
