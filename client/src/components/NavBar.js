@@ -218,8 +218,15 @@ export default function PrimarySearchAppBar() {
                     <Typography
                         variant="h6"
                         noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}
+                        component="a"
+                        href="/"
+                        sx={{
+                        mr: 2,
+                        display: { xs: 'none', md: 'flex' },
+                        fontWeight: 300,
+                        color: 'inherit',
+                        textDecoration: 'none',
+                        }}
                     >
                         Swapy
                     </Typography>
@@ -240,7 +247,7 @@ export default function PrimarySearchAppBar() {
                             </Badge>
                         </IconButton>
                         <IconButton size="large" color="inherit" onClick={handleTrades}>
-                            <Badge  color="error">
+                            <Badge color="error">
                                 <Tooltip title="החלפות">
                                     <CompareArrowsIcon />
                                 </Tooltip>

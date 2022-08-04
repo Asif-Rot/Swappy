@@ -45,7 +45,6 @@ function LinkTab(props) {
     const [toRender, needRender] = useState(false);
     const {user} = useContext(UserContext);
     const userID= user.id
-    //const userID = getId();
     const history=useHistory();
 
     // to handle with tab change
