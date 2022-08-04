@@ -12,6 +12,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 import {useHistory} from 'react-router-dom';
 import Button from "@mui/material/Button";
+import { Typography } from '@mui/material';
 
 export default function SpringCarousel() {
 
@@ -39,10 +40,18 @@ export default function SpringCarousel() {
         })
     }
 
+    const getType = (type) => {
+        if(type == "book")
+            return "ספר"
+        else
+            return "משחק וידיאו"
+    }
+
     const getAllItems = async () => {
             await fetch('http://localhost:3001/item/allitem')
                 .then((res) => res.json())
                 .then((json) => {
+                    json = json.slice(json.length-5,json.length)
                     setItems(json)
                 })
     }
@@ -52,16 +61,9 @@ export default function SpringCarousel() {
     }, [])
 
     return (
-        <Grid container>
-            {/* load spinner */}
-            <Backdrop
-                sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
-                open={isLoading}
-            >
-                <CircularProgress color="inherit"/>
-            </Backdrop>
+        <Grid container> 
             <Box style={{marginRight: 80, marginBlockEnd: -80, marginTop: 50,}}>
-                <h2>פריטים החדשים באתר :</h2>
+                <h2>הפריטים החדשים באתר :</h2>
             </Box>
             <Box
                 sx={{
@@ -72,7 +74,7 @@ export default function SpringCarousel() {
                     // bgcolor:  'black',
                     overflow: 'auto',
                     borderRadius: '16px',
-                    boxShadow: 1,
+                    boxShadow: 15,
                     fontWeight: 'bold',
                     m: 10,
                     justifyContent: 'flex-start',
@@ -82,14 +84,16 @@ export default function SpringCarousel() {
             >
                 {items.length?
                     items.map((item, i) => (
-                <Grid item mx={1} key={i}>
-                    <Card>
-                        <Button onClick={handleDetails.bind(this,item._id)}>
+                <Grid item mx={1} key={i}>                
+                    <Card sx={{display: "flex",flexDirection: "column", boxShadow:2, height:400}}>
+                    <Typography  variant="inherit" textAlign={'center'} maxHeight={25} marginTop={1.5}>{item.name}</Typography>
+                        <Button onClick={handleDetails.bind(this,item._id)} sx={{height:320}}>
                         <img src={item.image}
                              alt='item_img'
                              width={200}
                         />
                         </Button>
+                        <Typography   textAlign={'center'} > <b><u>קטגוריה</u>:</b> {getType(item.item_type)}</Typography>
                     </Card>
                 </Grid>
                     )) : <p><br/>אין פריטים עדיין...</p>}
@@ -112,7 +116,7 @@ export default function SpringCarousel() {
                     // bgcolor:  'black',
                     overflow: 'auto',
                     borderRadius: '16px',
-                    boxShadow: 1,
+                    boxShadow: 15,
                     fontWeight: 'bold',
                     m: 10,
                     justifyContent: 'flex-start',

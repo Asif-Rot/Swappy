@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {styled, alpha} from '@mui/material/styles';
+import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,7 +9,6 @@ import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -17,7 +16,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import Tooltip from '@mui/material/Tooltip';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
-import {logout, isLogin} from '../utils'
+import {logout,isLogin} from '../utils'
 import {useHistory} from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
@@ -76,9 +75,10 @@ export default function PrimarySearchAppBar() {
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const {isFetching, dispatch} = useContext(UserContext);
     const {user} = useContext(UserContext);
-
+    const [trades, setTrades] = useState([]);
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    const userID= user.id
 
 //my propile
     const handleProfileMenuOpen = (event) => {
@@ -208,6 +208,18 @@ export default function PrimarySearchAppBar() {
         </Menu>
     );
 
+    const getGotTrades = async () => {
+        await fetch('http://localhost:3001/trade/userGotTrade/' + userID)
+        .then((res) => res.json())
+        .then((json) => {
+          setTrades(json)
+        })
+    }
+
+    useEffect(() => {
+        getGotTrades()
+    }, [])
+
     return (
         <Box sx={{flexGrow: 1}}>
             <AppBar position="static">
@@ -216,7 +228,7 @@ export default function PrimarySearchAppBar() {
                         variant="h6"
                         noWrap
                         component="div"
-                        sx={{display: {xs: 'none', sm: 'block'}}}
+                        sx={{ display: { xs: 'none', sm: 'block' } }}
                     >
                         Swapy
                     </Typography>
@@ -237,7 +249,7 @@ export default function PrimarySearchAppBar() {
                             </Badge>
                         </IconButton>
                         <IconButton size="large" color="inherit" onClick={handleTrades}>
-                            <Badge color="error">
+                            <Badge  color="error">
                                 <Tooltip title="החלפות">
                                     <CompareArrowsIcon/>
                                 </Tooltip>
@@ -265,7 +277,7 @@ export default function PrimarySearchAppBar() {
                                 color="inherit"
                                 onClick={handleMyProfile}
                             >
-                                <AccountCircle/>
+                                <AccountCircle />
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="הגדרות">

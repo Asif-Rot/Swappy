@@ -130,7 +130,8 @@ export default function SearchPage(){
                             <Card>
                             <Typography  variant="inherit" textAlign={'center'}>{item.name}</Typography>
                                 <Button
-                                    onClick={handleDetails.bind(this,item._id)}>
+                                    onClick={handleDetails.bind(this,item._id)}
+                                    sx={{height:330}}>
                                 <img src={item.image}
                                     alt='item_img'
                                     width={200}
