@@ -176,13 +176,13 @@ export default function Messenger() {
 
 
                                     <textarea className="chatMessageInput"
-                                              placeholder="write something..."
+                                              placeholder="כתוב כאן....."
                                               onChange={(e) => setNewMessage(e.target.value)}
                                               value={newMessage}
                                     >
                         </textarea>
                                     <button className="chatSubmitButton" onClick={handleSubmit}>
-                                        Send
+                                        שלח
                                     </button>
                                 </div>
                             </>
@@ -199,13 +199,13 @@ export default function Messenger() {
             {/*------------------------------------------------------------------------------------------------------------*/}
 
 
-            <div className="chatOnline">
-                <div className="chatOnlineWrapper">
-                    <ChatOnline onlineUsers={onlineUsers} currentId={user.id}
-                    setCurrentChat={currentChat}/>
-                    <ChatOnline/>
-                </div>
-            </div>
+            {/*<div className="chatOnline">*/}
+            {/*    <div className="chatOnlineWrapper">*/}
+            {/*        <ChatOnline onlineUsers={onlineUsers} currentId={user.id}*/}
+            {/*        setCurrentChat={currentChat}/>*/}
+            {/*        <ChatOnline/>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
         </div>
     );
 }
