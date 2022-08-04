@@ -1,4 +1,5 @@
 import * as React from 'react';
+import  {useState, useEffect} from 'react'
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -278,19 +279,6 @@ export default function PrimarySearchAppBar() {
                                 onClick={handleMyProfile}
                             >
                                 <AccountCircle />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="הגדרות">
-                            <IconButton
-                                size="large"
-                                edge="end"
-                                aria-label="account of current user"
-                                aria-controls={menuId}
-                                aria-haspopup="true"
-                                color="inherit"
-                                onClick={handleSettings}
-                            >
-                                <SettingsIcon/>
                             </IconButton>
                         </Tooltip>
                         <IconButton
