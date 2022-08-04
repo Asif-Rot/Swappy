@@ -5,25 +5,25 @@ import {useEffect, useState} from "react";
 
 export default function Message({message, own}) {
     const [currentUser , setCurrentUser] = useState()
-    useEffect(() => {
-        const getUser = async () => {
-            try {
-                await fetch('http://localhost:3001/user/' + message.sender, {
-                    method: "GET",
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
+    const getUser = async () => {
+        try {
+            await fetch('http://localhost:3001/user/' + message.sender, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then((res) => res.json())
+                .then((json) => {
+                    setCurrentUser(json)
                 })
-                    .then((res) => res.json())
-                    .then((json) => {
-                        setCurrentUser(json)
-                    })
-            } catch (err) {
-                console.log(err)
-            }
-        };
+        } catch (err) {
+            console.log(err)
+        }
+    };
+    useEffect(() => {
         getUser();
-    }, [currentUser])
+    }, [])
     return (
         <div className={own ? "message own" : "message"}>
             <div className="messageTop">

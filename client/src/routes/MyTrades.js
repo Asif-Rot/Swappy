@@ -16,6 +16,16 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { UserContext } from "../context/userContext";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import FormControl, { useFormControl } from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import FormHelperText from '@mui/material/FormHelperText';
+
 
 const theme = createTheme();
 
@@ -46,6 +56,8 @@ function LinkTab(props) {
     const {user} = useContext(UserContext);
     const userID= user.id
     const history=useHistory();
+    const [msg,setMsg]=useState('')
+    const [conversation, setConversation] = useState(null);
 
     // to handle with tab change
     const handleChange = (event, newValue) => {
@@ -111,23 +123,97 @@ function LinkTab(props) {
         getFunc()
     }, [value,toRender])
 
-    const newConversation =async () =>{
-        const newConv = {
-            senderID:trades[0].offered_by_id._id,
-            receiverId:trades[0].offered_to_id._id
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setMsg("")
+        setOpen(false);
+    };
+
+    const handleSend = (event) => {
+        event.preventDefault();
+        sendMessage()
+    };
+
+    const sendMessage =async (data) =>{
+        if(msg){
+            createConversation()
+            setOpen(false);
         }
+        else{
+            alert("need fill message")
+            setMsg('')
+        }
+
+
+    }
+    const createConversation = async () => {
+        try {
+            await fetch('http://localhost:3001/conversations/' + user.id, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then((res) => res.json())
+                .then((json) => {
+                        json[0].members.filter((x) => {
+                            if (x === trades[0].offered_to_id._id) {
+                                createMessage(json)
+                            }
+                        })
+                        createNewConversation()
+                })
+        } catch (err) {
+            console.log(err)
+        }
+
+    }
+    const createNewConversation =async () => {
+        const newConv = {
+                           senderID:trades[0].offered_by_id._id,
+                           receiverId:trades[0].offered_to_id._id
+                       }
         await fetch("http://localhost:3001/conversations", {
+                           method: "POST",
+                           headers: {
+                               'Content-Type': 'application/json',
+                           },
+                           body: JSON.stringify(newConv),
+                       }).then(function (response) {
+                           return response.json();
+                       })
+                           .then(function (conv) {
+                               createMessage(conv._id)
+                           });
+
+    }
+    const createMessage = async (conv) => {
+        const newMessage = {
+                sender: userID,
+                text: msg,
+                conversationId: conv,
+        }
+        await  fetch('http://localhost:3001/messages', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(newConv),
-        }).then(function (response) {
-            return response.json();
+            body: JSON.stringify(newMessage)
         })
-            .then(function (conv) {
-                console.log(conv)
-            });
+            .then((res) => res.json())
+            .then((json) => {
+                return;
+            })
+    }
+
+
+    const fillMsg = (event) => {
+        setMsg(event.target.value)
     }
     return(
         <ThemeProvider theme={theme}>
@@ -175,7 +261,36 @@ function LinkTab(props) {
                                 disabled={trade.status == 'הצעה חדשה'? false : true }
                                 onClick={handleDecline.bind(this,trade._id)}>סרב להצעה </Button>
                                 
-                                <Button size="small" onClick={newConversation}> שלח הודעה </Button>
+                                <Button size="small" onClick={handleClickOpen}> שלח הודעה </Button>
+                                <Dialog
+                                    open={open}
+                                    onClose={handleClose}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                        {"כתוב הודעה "}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                            <TextField
+                                                fullWidth
+                                                sx={{width:'40ch'}}
+                                                id="message"
+                                                multiline
+                                                rows={4}
+                                                name="msgSend"
+                                                onChange={fillMsg}
+                                            />
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleClose}>בטל </Button>
+                                        <Button onClick={handleSend} autoFocus
+                                            type="submit"
+                                        >
+                                            שלח
+                                        </Button>
+                                    </DialogActions>
+                                </Dialog>
                             </CardActions>
                         </Card>
                     </Grid>
