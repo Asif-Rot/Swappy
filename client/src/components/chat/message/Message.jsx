@@ -22,7 +22,7 @@ export default function Message({message, own}) {
         }
     };
     useEffect(() => {
-        getUser();
+            getUser();
     }, [])
     return (
         <div className={own ? "message own" : "message"}>

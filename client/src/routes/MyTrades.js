@@ -63,7 +63,7 @@ function LinkTab(props) {
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
-   
+
     const handleDecline =  (tradeID) => {
         needRender(!toRender)
          fetch('http://localhost:3001/trade/decline/' + tradeID,{
@@ -117,7 +117,7 @@ function LinkTab(props) {
                 break;
             default:
         }
-          
+
     }
     useEffect(() => {
         getFunc()
@@ -161,12 +161,26 @@ function LinkTab(props) {
             })
                 .then((res) => res.json())
                 .then((json) => {
-                        json[0]?.members.filter((x) => {
-                            if (x === trades[0].offered_to_id._id) {
-                                createMessage(json)
+                    var flage = false;
+                    var currentChat=''
+                        json.map((c)=>{
+                            c.members.filter((x)=>{
+                                if (x === trades[0].offered_to_id._id) {
+
+                                    flage=true;
+                                    currentChat=c._id
+                                }
                             }
+                            )
                         })
+                    if(flage){
+                        console.log("yesssss")
+                        createMessage(currentChat)
+                    }
+                    else{
+                        console.log("nooooo")
                         createNewConversation()
+                    }
                 })
         } catch (err) {
             console.log(err)
@@ -207,7 +221,13 @@ function LinkTab(props) {
         })
             .then((res) => res.json())
             .then((json) => {
-                return;
+                if(json._message === 'Message validation failed'){
+                    console.log("no")
+                }
+                else{
+                    alert("הודעה נשלחה בהצלחה ")
+                }
+
             })
     }
 
@@ -228,10 +248,10 @@ function LinkTab(props) {
                 </Box>
                 <CssBaseline/>
                 <Grid container spacing={5} paddingBottom='50px' paddingTop='10px'>
-                {trades.length? 
+                {trades.length?
                   trades.map((trade) => (
                     <Grid item xs={6} sm={12} key={trade._id}>
-                        <Card sx={{ maxWidth: 400 }} 
+                        <Card sx={{ maxWidth: 400 }}
                         style={{  minWidth: 275,
                             border: "1px solid",
                             padding: "10px",
@@ -246,13 +266,13 @@ function LinkTab(props) {
                                    {trade.item_id.name}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    <b>המבקש:</b> { trade.offered_by_id.firstName} { trade.offered_by_id.lastName}<br/> 
+                                    <b>המבקש:</b> { trade.offered_by_id.firstName} { trade.offered_by_id.lastName}<br/>
                                     <b>סטטוס:</b> { trade.status}<br/>
-                                    <b>פרטים נוספים:</b> { trade.details } 
+                                    <b>פרטים נוספים:</b> { trade.details }
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small" 
+                                <Button size="small"
                                 disabled={(trade.status == 'הצעה חדשה') &&
                                           (trade.offered_by_id._id != userID)? false : true }
                                 onClick={handleDetails.bind(this,trade)}>פרטי ההצעה</Button>
@@ -260,7 +280,7 @@ function LinkTab(props) {
                                 <Button size="small"
                                 disabled={trade.status == 'הצעה חדשה'? false : true }
                                 onClick={handleDecline.bind(this,trade._id)}>סרב להצעה </Button>
-                                
+
                                 <Button size="small" onClick={handleClickOpen}> שלח הודעה </Button>
                                 <Dialog
                                     open={open}
@@ -294,7 +314,7 @@ function LinkTab(props) {
                             </CardActions>
                         </Card>
                     </Grid>
-                ))  : <p><br/>אין הצעות נוספות..</p>}             
+                ))  : <p><br/>אין הצעות נוספות..</p>}
                 </Grid>
             </Container>
         </ThemeProvider>

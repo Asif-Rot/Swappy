@@ -1,10 +1,10 @@
 import "./messenger.css";
-import { useContext, useEffect, useRef, useState } from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import Conversation from '../conversations/Conversation';
 import Message from '../message/Message';
 import ChatOnline from '../chatOnline/ChatOnline';
 import {UserContext} from '../../../context/userContext'
-import { io } from "socket.io-client";
+import {io} from "socket.io-client";
 
 export default function Messenger() {
     const [conversations, setConversations] = useState([])
@@ -16,6 +16,7 @@ export default function Messenger() {
     const socket = useRef();
     const {user} = useContext(UserContext)
     const scrollRef = useRef();
+
     /**
      * Socket IO for chat
      */
@@ -30,18 +31,17 @@ export default function Messenger() {
         });
     }, []);
 
-
     useEffect(() => {
         arrivalMessage &&
         currentChat?.members.includes(arrivalMessage.sender) &&
         setMessages((prev) => [...prev, arrivalMessage]);
     }, [arrivalMessage, currentChat]);
 
-    useEffect(()=>{
-        socket.current.emit("addUser",user.id);
-        socket.current.on("getUsers",users=>{
+    useEffect(() => {
+        socket.current.emit("addUser", user.id);
+        socket.current.on("getUsers", users => {
         })
-    },[user])
+    }, [user])
 
 
     /**
@@ -112,7 +112,7 @@ export default function Messenger() {
         });
 
         try {
-            await fetch('http://localhost:3001/messages' , {
+            await fetch('http://localhost:3001/messages', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ export default function Messenger() {
             })
                 .then((res) => res.json())
                 .then((json) => {
-                    setMessages([...messages,json]);
+                    setMessages([...messages, json]);
                     setNewMessage("");
                 })
         } catch (err) {
@@ -135,7 +135,7 @@ export default function Messenger() {
      */
 
     useEffect(() => {
-        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+        scrollRef.current?.scrollIntoView({behavior: "smooth"});
     }, [messages]);
 
 
@@ -146,18 +146,16 @@ export default function Messenger() {
 
             <div className="chatMenu">
                 <div className="chatMenuWrapper">
-                    <input placeholder="Search for friends" className="chatMenuInput" />
+                    <input placeholder="Search for friends" className="chatMenuInput"/>
                     {conversations.map((c) => (
-                            <div onClick={() => setCurrentChat(c)}>
-                                <Conversation conversation={c} currentUser={user} />
-                            </div>
-
+                        <div key={c._id} onClick={() => setCurrentChat(c)}>
+                            <Conversation conversation={c} currentUser={user}/>
+                        </div>
                     ))}
                 </div>
             </div>
 
             {/*------------------------------------------------------------------------------------------------------------*/}
-
 
             <div className="chatBox">
                 <div className="chatBoxWrapper">
@@ -166,23 +164,20 @@ export default function Messenger() {
                             <>
                                 <div className="chatBoxTop">
                                     {messages.map((m) => (
-                                        <div ref={scrollRef}>
-                                            <Message message={m} own={m.sender === user.id}/>
+                                        <div key={m._id} ref={scrollRef}>
+                                            <Message  message={m} own={m.sender === user.id}/>
                                         </div>
                                     ))}
-
                                 </div>
                                 <div className="chatBoxBottom">
-
-
                                     <textarea className="chatMessageInput"
-                                              placeholder="write something..."
+                                              placeholder="כתוב כאן....."
                                               onChange={(e) => setNewMessage(e.target.value)}
                                               value={newMessage}
                                     >
                         </textarea>
                                     <button className="chatSubmitButton" onClick={handleSubmit}>
-                                        Send
+                                        שלח
                                     </button>
                                 </div>
                             </>
@@ -192,18 +187,6 @@ export default function Messenger() {
                             </span>
                         )
                     }
-                </div>
-            </div>
-
-
-            {/*------------------------------------------------------------------------------------------------------------*/}
-
-
-            <div className="chatOnline">
-                <div className="chatOnlineWrapper">
-                    <ChatOnline onlineUsers={onlineUsers} currentId={user.id}
-                    setCurrentChat={currentChat}/>
-                    <ChatOnline/>
                 </div>
             </div>
         </div>
