@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Items = require("../models/items");
 
 exports.all_item =  (req, res) => {
-    Items.find()
+    Items.find({trade_completed : false})
         .then(items => {
             res.status(200).json(items);
         }).catch(error => {
@@ -30,7 +30,8 @@ exports.one_item = (req, res) => {
 
 exports.item_bytype = (req, res) => {
     const itemType = req.params.itemType;
-    Items.find({item_type: itemType}).then((itembytype) => {
+    Items.find({$and: [{item_type : itemType},{trade_completed : false}]})
+        .then((itembytype) => {
         res.status(200).json(itembytype);
     }).catch(error => {
         res.status(500).json({
@@ -41,7 +42,8 @@ exports.item_bytype = (req, res) => {
 
 exports.item_byuser = (req, res) => {
     const userId = req.params.userId;
-    Items.find({user_id: userId}).then((itembyuser) => {
+    Items.find({$and: [{user_id : userId},{trade_completed : false}]})
+        .then((itembyuser) => {
         res.status(200).json(itembyuser);
     }).catch(error => {
         res.status(500).json({
@@ -53,7 +55,8 @@ exports.item_byuser = (req, res) => {
 exports.item_byusertype = (req, res) => {
     const userId = req.params.userId;
     const itemType = req.params.itemType;
-    Items.find({$and : [{user_id : userId},{item_type :itemType}]}).then((itembyusertype) => {
+    Items.find({$and : [{user_id : userId},{item_type :itemType}, {trade_completed : false}]})
+        .then((itembyusertype) => {
         res.status(200).json(itembyusertype);
     }).catch(error => {
         res.status(500).json({

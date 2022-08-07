@@ -90,15 +90,12 @@ export default function MyItems(){
                             books.map((book, i) => (
                         <Grid item mx={1} key={i}>
                             <Card>
-                                {!book.trade_completed ?
                                 <Button onClick={handleDetails.bind(this,book._id)}>
                                     <img src={book.image}
                                          alt='item_img'
                                          width={200}
-                                         // style={ { display: (book.trade_complete === true) ? 'block' : 'none' } }
-                            />
+                                    />
                                 </Button>
-                                    : undefined}
                             </Card>
                         </Grid>
                             )) : <p><br/>אין ספרים עדיין...</p>}
@@ -128,7 +125,6 @@ export default function MyItems(){
                             games.map((game, j) => (
                                 <Grid item mx={1} key={j}>
                                     <Card>
-                                        {!game.trade_completed ?
                                         <Button
                                             onClick={handleDetails.bind(this,game._id)}>
 
@@ -137,7 +133,6 @@ export default function MyItems(){
                                                      width={200}
                                                 />
                                         </Button>
-                                            : undefined}
                                     </Card>
                                 </Grid>
                             )) : <p><br/>אין משחקי וידאו עדיין...</p>}

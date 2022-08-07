@@ -126,7 +126,6 @@ export default function SearchPage(){
                     {items.length?
                         search().map((item, i) => (
                         <div className="col-sm-3" key={item._id}>
-                            {!item.trade_completed? 
                             <Card>
                             <Typography  variant="inherit" textAlign={'center'}>{item.name}</Typography>
                                 <Button
@@ -138,7 +137,6 @@ export default function SearchPage(){
                                 />
                                 </Button>
                             </Card>
-                            : undefined}
                         </div>
                         )) : <p><br/>אין פריטים עדיין...</p>}
                     </Grid>
