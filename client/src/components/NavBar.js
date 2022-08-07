@@ -250,7 +250,7 @@ export default function PrimarySearchAppBar() {
                             </Badge>
                         </IconButton>
                         <IconButton size="large" color="inherit" onClick={handleTrades}>
-                            <Badge  color="error">
+                            <Badge badgeContent={trades.length} color="error">
                                 <Tooltip title="החלפות">
                                     <CompareArrowsIcon/>
                                 </Tooltip>

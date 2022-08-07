@@ -161,7 +161,7 @@ function LinkTab(props) {
             })
                 .then((res) => res.json())
                 .then((json) => {
-                        json[0].members.filter((x) => {
+                        json[0]?.members.filter((x) => {
                             if (x === trades[0].offered_to_id._id) {
                                 createMessage(json)
                             }

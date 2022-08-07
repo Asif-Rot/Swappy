@@ -51,7 +51,6 @@ export default function SpringCarousel() {
             await fetch('http://localhost:3001/item/allitem')
                 .then((res) => res.json())
                 .then((json) => {
-                    json = json.slice(json.length-5,json.length)
                     setItems(json)
                 })
     }
@@ -83,7 +82,7 @@ export default function SpringCarousel() {
                 }}
             >
                 {items.length?
-                    items.map((item, i) => (
+                    items.slice(items.length-5,items.length).map((item, i) => (
                 <Grid item mx={1} key={i}>                
                     <Card sx={{display: "flex",flexDirection: "column", boxShadow:2, height:400}}>
                     <Typography  variant="inherit" textAlign={'center'} maxHeight={25} marginTop={1.5}>{item.name}</Typography>
@@ -124,54 +123,21 @@ export default function SpringCarousel() {
 
                 }}
             >
-                <Grid item mx={1}>
-                    <Card>
-                        <img alt="harry poter"
-                             src="https://www.e-vrit.co.il/Images/Products/YediotMasters/HarryPottter2_Master.jpg"
+                {items.length?
+                    items.map((item, i) => (
+                <Grid item mx={1} key={i}>                
+                    <Card sx={{display: "flex",flexDirection: "column", boxShadow:2, height:400}}>
+                    <Typography  variant="inherit" textAlign={'center'} maxHeight={25} marginTop={1.5}>{item.name}</Typography>
+                        <Button onClick={handleDetails.bind(this,item._id)} sx={{height:320}}>
+                        <img src={item.image}
+                             alt='item_img'
                              width={200}
                         />
+                        </Button>
+                        <Typography   textAlign={'center'} > <b><u>קטגוריה</u>:</b> {getType(item.item_type)}</Typography>
                     </Card>
                 </Grid>
-                <Grid item mx={1}>
-                    <Card>
-                        <img alt="harry poter"
-                             src="https://www.e-vrit.co.il/Images/Products/YediotMasters/HarryPottter2_Master.jpg"
-                             width={200}
-                        />
-                    </Card>
-                </Grid>
-                <Grid item mx={1}>
-                    <Card>
-                        <img alt="harry poter"
-                             src="https://www.e-vrit.co.il/Images/Products/YediotMasters/HarryPottter2_Master.jpg"
-                             width={200}
-                        />
-                    </Card>
-                </Grid>
-                <Grid item mx={1}>
-                    <Card>
-                        <img alt="harry poter"
-                             src="https://www.e-vrit.co.il/Images/Products/YediotMasters/HarryPottter2_Master.jpg"
-                             width={200}
-                        />
-                    </Card>
-                </Grid>
-                <Grid item mx={1}>
-                    <Card>
-                        <img alt="harry poter"
-                             src="https://www.e-vrit.co.il/Images/Products/YediotMasters/HarryPottter2_Master.jpg"
-                             width={200}
-                        />
-                    </Card>
-                </Grid>
-                <Grid item mx={1}>
-                    <Card>
-                        <img alt="harry poter"
-                             src="https://www.e-vrit.co.il/Images/Products/YediotMasters/HarryPottter2_Master.jpg"
-                             width={200}
-                        />
-                    </Card>
-                </Grid>
+                    )) : <p><br/>אין פריטים עדיין...</p>}
             </Box>
         </Grid>
 
