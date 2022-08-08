@@ -210,7 +210,7 @@ function LinkTab(props) {
                     var currentChat=''
                         json.map((c)=>{
                             c.members.filter((x)=>{
-                                if (x === trades[0].offered_to_id._id) {
+                                if (x === tradeToReview.offered_to_id["_id"]) {
                                     flage=true;
                                     currentChat=c._id
                                 }
@@ -231,8 +231,8 @@ function LinkTab(props) {
     }
     const createNewConversation =async () => {
         const newConv = {
-                           senderID:trades[0].offered_by_id._id,
-                           receiverId:trades[0].offered_to_id._id
+                           senderID:tradeToReview.offered_by_id._id,
+                           receiverId:tradeToReview.offered_to_id._id
                        }
         await fetch("http://localhost:3001/conversations", {
                            method: "POST",
@@ -324,8 +324,8 @@ function LinkTab(props) {
                                 onClick={handleDecline.bind(this,trade._id)}>
                                     {(trade.offered_by_id._id != userID)? "סרב להצעה" : "בטל הצעה"} </Button>
 
-                                <Button size="small" onClick={handleClickOpen} > שלח הודעה </Button>
-
+                                {/*<Button size="small" onClick={handleClickOpen} > שלח הודעה </Button>*/}
+                                <Button size="small" onClick={(e)=>{setOpen(true); setTradeToReview(trade); }} > שלח הודעה </Button>
                                 {value == 2? <Button size="small" onClick={(e) => {setReview(true);setTradeToReview(trade);}} > דרג משתמש </Button>
                                 :undefined}
 
