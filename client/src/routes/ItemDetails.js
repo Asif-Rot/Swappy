@@ -9,6 +9,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Typography from "@mui/material/Typography";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import Avatar from '@mui/material/Avatar';
 import {useHistory} from 'react-router-dom';
 import { useContext} from "react";
 import { UserContext } from "../context/userContext";
@@ -21,10 +25,16 @@ const theme = createTheme();
 export default function ItemDetails(props) {
 
     const {user} = useContext(UserContext);
-    const userID= user.id
+    const userID= user.id;
 
-    const item = props.location.state.item
+    const item = props.location.state.item;
     const [oneItem, setOneItem] = useState([]);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [birth, setBirth] = useState('');
+    const [city, setCity] = useState('');
+    const [email, setEmail] = useState('');
+    const [imgProfile, setImgProfile] = useState('');
     const [openDel, setopenDel] = useState(false);
     const history=useHistory();
 
@@ -46,6 +56,27 @@ export default function ItemDetails(props) {
             .then((res) => res.json())
             .then((json) => {
                 setOneItem(json)
+                fetch("http://localhost:3001/user/" + json.user_id, {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }).then(function (response) {
+                    return response.json();
+                }).then(function (user) {
+                    if (user) {
+                        // debugger;
+                        setEmail(user['sendUser'].email)
+                        setFirstName(user['sendUser'].firstName)
+                        setLastName(user['sendUser'].lastName)
+                        setImgProfile(user['sendUser'].imageProfile)
+                        setCity(user['sendUser'].city)
+                        return;
+
+                    } else {
+                        console.log('no user');
+                    }
+                });
             })
     };
 
@@ -88,8 +119,25 @@ export default function ItemDetails(props) {
     return (
           <ThemeProvider theme={theme}>
               <NavBar/>
+              <Grid
+                  container
+                  spacing={0}
+                  direction="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  style={{ minHeight: '100vh' }}
+              >
+
+                  <Grid item xs={3}>
               <div style={{fontFamily: 'Tahoma'}}>
-                  <h1>{oneItem.name}</h1>
+                  <Grid
+                      container
+                      spacing={0}
+                      direction="column"
+                      alignItems="center"
+                      justifyContent="center"
+                  >
+                      <h1>{oneItem.name}</h1>
                   <img src={oneItem.image}
                        alt='item_img'
                        width={200}
@@ -101,9 +149,11 @@ export default function ItemDetails(props) {
                       // disabled={(oneItem.user_id !== userID) ? true : false }
                       onClick={handleMakeTrade.bind(this,item)}
                    >הצע החלפה</Button>
-
+                  <br/><br/>
+                <Card sx={{ width: 350 }} variant="outlined">
+                    <CardContent>
                   <Typography variant="body2" color="text.secondary">
-                      <b><br/> סוג המוצר:</b> {(oneItem.item_type === "book") ? "ספר" : "משחק וידאו"}<br/><br/>
+                      <b> סוג המוצר:</b> {(oneItem.item_type === "book") ? "ספר" : "משחק וידאו"}<br/><br/>
                       <b>מצב המוצר: </b>
                       {(oneItem.item_condition === "as new") ? "כמו חדש" :
                           (oneItem.item_condition === "used") ? "משומש" : "לא טוב"}<br/><br/>
@@ -123,8 +173,40 @@ export default function ItemDetails(props) {
                       {(oneItem.item_type === "video game") ? <br/> : null}
                       {(oneItem.item_type === "video game") ? <br/> : null}
 
-                      <b>פרטים נוספים: </b> {(oneItem.description)}<br/><br/>
+                      <b>פרטים נוספים: </b> {(oneItem.description)}
                   </Typography>
+                    </CardContent>
+                </Card><br/><br/>
+                  <Card sx={{ width: 350 }} variant="outlined">
+                      <CardContent>
+                          <Grid
+                              container
+                              spacing={0}
+                              direction="column"
+                              alignItems="center"
+                              justifyContent="center"
+                          >
+                          <h3>פרטי המוכר:</h3>
+                          <Avatar
+                              alt="Remy Sharp"
+                              src={imgProfile}
+                              sx={{width: 80, height: 80}}/>
+                          </Grid>
+                          <Typography variant="body2" color="text.secondary">
+                              <b><br/> שם המוכר:</b> {firstName + " " + lastName} <br/><br/>
+                              <b>מיקום: </b> {city} <br/><br/>
+                              <b>דרכי התקשרות: </b> {email}
+                          </Typography>
+                      </CardContent>
+                  </Card><br/><br/>
+                  </Grid>
+                  <Grid
+                      container
+                      spacing={0}
+                      direction="column"
+                      alignItems="center"
+                      justifyContent="center"
+                  >
                   <Button
                       style={{ display: (oneItem.user_id !== userID) ? 'none' : undefined }}
                       variant="contained"
@@ -133,6 +215,7 @@ export default function ItemDetails(props) {
                       onClick={handleClickOpenDelete}>
                       מחיקת פריט
                   </Button>
+                  </Grid>
                   <Dialog
                       open={openDel}
                       onClose={handleCloseDelete}
@@ -155,6 +238,8 @@ export default function ItemDetails(props) {
                       </DialogActions>
                   </Dialog>
               </div>
+                  </Grid>
+              </Grid>
           </ThemeProvider>
 
     )
