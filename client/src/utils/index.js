@@ -22,10 +22,6 @@ export const isLogin = () => {
     return false;
 }
 
-export const getId = ()=>{
-    return localStorage.getItem('id');
-}
-
 export const getNumOfTrades = ()=>{
     return localStorage.getItem('id');
 }

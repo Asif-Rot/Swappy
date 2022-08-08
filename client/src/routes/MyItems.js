@@ -13,7 +13,6 @@ import { UserContext } from "../context/userContext";
 import CssBaseline from '@mui/material/CssBaseline';
 
 const theme = createTheme();
-//const userID = getId();
 
 export default function MyItems(){
     const {user} = useContext(UserContext);
@@ -127,7 +126,6 @@ export default function MyItems(){
                                     <Card>
                                         <Button
                                             onClick={handleDetails.bind(this,game._id)}>
-
                                                 <img src={game.image}
                                                      alt='item_img'
                                                      width={200}

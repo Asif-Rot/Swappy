@@ -1,7 +1,5 @@
 import React from 'react'
 import {useState, useEffect} from 'react'
-
-//import {getId} from '../utils';
 import Avatar from '@mui/material/Avatar';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';

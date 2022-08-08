@@ -1,5 +1,4 @@
 import {useEffect, useState} from "react";
-import {getId} from '../utils';
 import NavBar from '../components/NavBar'
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import Button from "@mui/material/Button";
@@ -16,10 +15,10 @@ import Avatar from '@mui/material/Avatar';
 import {useHistory} from 'react-router-dom';
 import { useContext} from "react";
 import { UserContext } from "../context/userContext";
+import Rating from '@mui/material/Rating';
+import IconButton from '@mui/material/IconButton';
 
 
-
-//const userID = getId();
 const theme = createTheme();
 
 export default function ItemDetails(props) {
@@ -37,6 +36,8 @@ export default function ItemDetails(props) {
     const [imgProfile, setImgProfile] = useState('');
     const [openDel, setopenDel] = useState(false);
     const history=useHistory();
+    const [rating, setRating] = useState(0);
+    const [numOfRating, setNumOfRating] = useState(0);
 
     const handleClickOpenDelete = () => {
         setopenDel(true);
@@ -45,6 +46,13 @@ export default function ItemDetails(props) {
     const handleCloseDelete = () => {
         setopenDel(false);
     };
+
+    const handleUser =  (userID) => {
+        console.log('pressed')
+        history.push('/userProfile',{
+            user: userID
+        })
+    }
 
     const getOneItem = async () => {
         await fetch('http://localhost:3001/item/'+ item,{
@@ -65,12 +73,13 @@ export default function ItemDetails(props) {
                     return response.json();
                 }).then(function (user) {
                     if (user) {
-                        // debugger;
                         setEmail(user['sendUser'].email)
                         setFirstName(user['sendUser'].firstName)
                         setLastName(user['sendUser'].lastName)
                         setImgProfile(user['sendUser'].imageProfile)
                         setCity(user['sendUser'].city)
+                        setRating(user['sendUser'].rating)
+                        setNumOfRating(user['sendUser'].numOfRating)
                         return;
 
                     } else {
@@ -187,10 +196,14 @@ export default function ItemDetails(props) {
                               justifyContent="center"
                           >
                           <h3>פרטי המוכר:</h3>
-                          <Avatar
-                              alt="Remy Sharp"
-                              src={imgProfile}
-                              sx={{width: 80, height: 80}}/>
+                            <IconButton onClick={handleUser.bind(this,oneItem.user_id)}>
+                                <Avatar
+                                    alt="Remy Sharp"
+                                    src={imgProfile}
+                                    sx={{width: 80, height: 80}}/>
+                            </IconButton>
+
+                            <Rating name="rating" value={rating/numOfRating} precision={0.5} dir={"ltr"} readOnly />
                           </Grid>
                           <Typography variant="body2" color="text.secondary">
                               <b><br/> שם המוכר:</b> {firstName + " " + lastName} <br/><br/>
