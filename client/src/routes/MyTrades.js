@@ -25,6 +25,7 @@ import TextField from '@mui/material/TextField';
 import FormControl, { useFormControl } from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormHelperText from '@mui/material/FormHelperText';
+import Rating from '@mui/material/Rating';
 
 
 const theme = createTheme();
@@ -58,6 +59,11 @@ function LinkTab(props) {
     const history=useHistory();
     const [msg,setMsg]=useState('')
     const [conversation, setConversation] = useState(null);
+    const [review, setReview] = useState(false);
+    const [score, setScore] = useState(0);
+    const [sentReview, setSentReview] = useState(false)
+    const [tradeToReview, setTradeToReview] = useState([])
+    
 
     // to handle with tab change
     const handleChange = (event, newValue) => {
@@ -139,6 +145,45 @@ function LinkTab(props) {
         sendMessage()
     };
 
+    const handleChangeRating = async () => {
+        if(tradeToReview.offered_by_id != userID)
+            var toBeReview = tradeToReview.offered_by_id._id
+        else
+            var toBeReview = tradeToReview.offered_to_id._id
+
+        var rating, numOfRating
+
+        await fetch("http://localhost:3001/user/" + toBeReview, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (user) {
+            if (user) {
+                rating = user['sendUser'].rating
+                numOfRating = user['sendUser'].numOfRating
+                return;
+            } else {
+                console.log('no user');
+            }
+        });
+
+        await fetch('http://localhost:3001/user/' + toBeReview,{
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify({
+                rating : rating + score,
+                numOfRating : numOfRating+1
+            })
+        })
+        setSentReview(true)
+        setReview(false)
+    }
+
     const sendMessage =async (data) =>{
         if(msg){
             createConversation()
@@ -166,7 +211,6 @@ function LinkTab(props) {
                         json.map((c)=>{
                             c.members.filter((x)=>{
                                 if (x === trades[0].offered_to_id._id) {
-
                                     flage=true;
                                     currentChat=c._id
                                 }
@@ -174,11 +218,9 @@ function LinkTab(props) {
                             )
                         })
                     if(flage){
-                        console.log("yesssss")
                         createMessage(currentChat)
                     }
                     else{
-                        console.log("nooooo")
                         createNewConversation()
                     }
                 })
@@ -231,7 +273,6 @@ function LinkTab(props) {
             })
     }
 
-
     const fillMsg = (event) => {
         setMsg(event.target.value)
     }
@@ -249,7 +290,7 @@ function LinkTab(props) {
                 <CssBaseline/>
                 <Grid container spacing={5} paddingBottom='50px' paddingTop='10px'>
                 {trades.length?
-                  trades.map((trade) => (
+                  trades.map((trade) => ( 
                     <Grid item xs={6} sm={12} key={trade._id}>
                         <Card sx={{ maxWidth: 400 }}
                         style={{  minWidth: 275,
@@ -266,7 +307,8 @@ function LinkTab(props) {
                                    {trade.item_id.name}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    <b>המבקש:</b> { trade.offered_by_id.firstName} { trade.offered_by_id.lastName}<br/>
+                                    <b>שולח הבקשה:</b> { trade.offered_by_id.firstName} { trade.offered_by_id.lastName}<br/>
+                                    <b>מקבל הבקשה:</b> { trade.offered_to_id.firstName} { trade.offered_to_id.lastName}<br/>
                                     <b>סטטוס:</b> { trade.status}<br/>
                                     <b>פרטים נוספים:</b> { trade.details }
                                 </Typography>
@@ -279,9 +321,14 @@ function LinkTab(props) {
 
                                 <Button size="small"
                                 disabled={trade.status == 'הצעה חדשה'? false : true }
-                                onClick={handleDecline.bind(this,trade._id)}>סרב להצעה </Button>
+                                onClick={handleDecline.bind(this,trade._id)}>
+                                    {(trade.offered_by_id._id != userID)? "סרב להצעה" : "בטל הצעה"} </Button>
 
-                                <Button size="small" onClick={handleClickOpen}> שלח הודעה </Button>
+                                <Button size="small" onClick={handleClickOpen} > שלח הודעה </Button>
+
+                                {value == 2? <Button size="small" onClick={(e) => {setReview(true);setTradeToReview(trade);}} > דרג משתמש </Button>
+                                :undefined}
+
                                 <Dialog
                                     open={open}
                                     onClose={handleClose}
@@ -309,6 +356,26 @@ function LinkTab(props) {
                                         >
                                             שלח
                                         </Button>
+                                    </DialogActions>
+                                </Dialog>
+
+                                {/* review user dialog*/}
+                                <Dialog
+                                    open={review}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">
+                                    {"דרג את המשתמש.."}
+                                    </DialogTitle>
+                                    <DialogContent>
+                                    <DialogContentText id="alert-dialog-description">
+                                        <Rating name="rating" defaultValue={1}  
+                                            onChange={(e) => setScore(Number(e.target.defaultValue))} dir={"ltr"} />
+                                    </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+                                    <Button onClick={handleChangeRating} >אישור</Button>
                                     </DialogActions>
                                 </Dialog>
                             </CardActions>

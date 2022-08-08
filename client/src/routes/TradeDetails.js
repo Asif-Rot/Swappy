@@ -54,7 +54,6 @@ export default function TradeDetails(props){
         setChoosenItem(e.target.id)
     }
 
-    {console.log(trade)}
     return(
       <div>
           <ThemeProvider theme={theme}>

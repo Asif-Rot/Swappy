@@ -36,6 +36,8 @@ exports.user_signup = (req, res, next) => {
                             sex: req.body.sex,
                             imageProfile: req.body.imageProfile,
                             city : req.body.city,
+                            numOfRating : 0,
+                            rating : 0
                         });
                         user
                             .save()
@@ -166,6 +168,8 @@ exports.user_getUser = (req, res) => {
                     "birth": user[0].birth,
                     "imageProfile": user[0].imageProfile,
                     "city": user[0].city,
+                    "numOfRating": user[0].numOfRating,
+                    "rating": user[0].rating,
                 }
                 return res.status(200).json({
                     sendUser
@@ -191,4 +195,29 @@ exports.user_getUser = (req, res) => {
             error
         })
     });
+};
+
+
+exports.updateUser = (req, res) => {
+    if (!req.body) {
+        return res.status(400).send({
+            message: "Data to update can not be empty!"
+        });
+    }
+
+    const userID = req.params.userId;
+
+    User.findByIdAndUpdate(userID, req.body, { useFindAndModify: false })
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: `Cannot update user with id=${userID}. Maybe user was not found!`
+                });
+            } else res.send({ message: "user was updated successfully." });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error updating user with id=" + userID
+            });
+        });
 };

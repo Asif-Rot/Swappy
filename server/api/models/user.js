@@ -37,6 +37,14 @@ const userSchema = mongoose.Schema({
     city: {
         type: String,
         required: true
+    },
+    numOfRating: {
+        type: Number,
+        required: true
+    },
+    rating: {
+        type: Number,
+        required: true
     }
 });
 

@@ -17,6 +17,8 @@ import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import { useContext} from "react";
 import { UserContext } from "../context/userContext";
+import Rating from '@mui/material/Rating';
+
 const theme = createTheme();
 
 
@@ -34,12 +36,12 @@ export default function Profile() {
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState('');
     const [city, setCity] = useState('');
+    const [rating, setRating] = useState(0);
+    const [numOfRating, setNumOfRating] = useState(0);
     const {user} = useContext(UserContext);
 
 
-    //
     const getUser = async () => {
-        //const id = getId();
         const id = user.id;
         await fetch("http://localhost:3001/user/" + id, {
             method: "GET",
@@ -58,6 +60,8 @@ export default function Profile() {
                 setImgProfile(user['sendUser'].imageProfile)
                 setIsLoading(false);
                 setCity(user['sendUser'].city)
+                setRating(user['sendUser'].rating)
+                setNumOfRating(user['sendUser'].numOfRating)
                 return;
 
             } else {
@@ -85,6 +89,7 @@ export default function Profile() {
     const getUrl =()=>{
         return imgProfile.toString()
     }
+
     return (
 
         <ThemeProvider theme={theme}>
@@ -113,6 +118,7 @@ export default function Profile() {
                             src={imgProfile}
                             sx={{width: 80, height: 80}}
                         />
+                        <Rating name="rating" value={rating/numOfRating} precision={0.5} dir={"ltr"} readOnly />
                         <Box component="form"
                              sx={{
                                  marginTop: 4,
