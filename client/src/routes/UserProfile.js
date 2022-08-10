@@ -28,10 +28,7 @@ export default function UserProfile(props) {
     const [email, setEmail] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [birth, setBirth] = useState('');
     const [imgProfile, setImgProfile] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
-    const [profile, setProfile] = useState('');
     const [city, setCity] = useState('');
     const [rating, setRating] = useState(0);
     const [numOfRating, setNumOfRating] = useState(0);
@@ -48,13 +45,10 @@ export default function UserProfile(props) {
             return response.json();
         }).then(function (user) {
             if (user) {
-                setProfile(user['sendUser']);
                 setEmail(user['sendUser'].email)
                 setFirstName(user['sendUser'].firstName)
                 setLastName(user['sendUser'].lastName)
-                setBirth(user['sendUser'].birth)
                 setImgProfile(user['sendUser'].imageProfile)
-                setIsLoading(false);
                 setCity(user['sendUser'].city)
                 setRating(user['sendUser'].rating)
                 setNumOfRating(user['sendUser'].numOfRating)
@@ -92,8 +86,6 @@ export default function UserProfile(props) {
         getUserItems()
     }, [])
 
-
-console.log(items)
     return (
         <ThemeProvider theme={theme}>
             <NavBar/>
