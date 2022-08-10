@@ -48,7 +48,6 @@ export default function ItemDetails(props) {
     };
 
     const handleUser =  (userID) => {
-        console.log('pressed')
         history.push('/userProfile',{
             user: userID
         })

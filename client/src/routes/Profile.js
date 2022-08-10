@@ -16,8 +16,21 @@ import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import { useContext} from "react";
 import { UserContext } from "../context/userContext";
 import Rating from '@mui/material/Rating';
+//imports for RTL
+import {prefixer} from 'stylis';
+import rtlPlugin from 'stylis-plugin-rtl';
+import {CacheProvider} from '@emotion/react';
+import createCache from '@emotion/cache';
 
-const theme = createTheme();
+// Create rtl cache
+const cacheRtl = createCache({
+    key: 'muirtl',
+    stylisPlugins: [prefixer, rtlPlugin],
+});
+
+const theme = createTheme({
+    direction: 'rtl',
+});
 
 
 /**
@@ -89,7 +102,7 @@ export default function Profile() {
     }
 
     return (
-
+        <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
 
             <NavBar/>
@@ -173,7 +186,8 @@ export default function Profile() {
                     </Box>
                 </div>
             </Container>
-        </ThemeProvider>
+         </ThemeProvider>
+        </CacheProvider>
     );
 }
 

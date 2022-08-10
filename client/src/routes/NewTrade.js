@@ -84,15 +84,21 @@ export default function TradeDetails(props){
 
     const handleSubmit = async () => {
         const toTrade = getCheckedBoxes("checkbox")
-        let bodyjson = {
-            offered_by_id: userID,
-            offered_to_id: item.user_id,
-            item_id: item._id,
-            items_to_trade : toTrade,
-            status:'הצעה חדשה',
-            details:details
-        }    
-        sendTrade(bodyjson)
+        if(toTrade){
+            let bodyjson = {
+                offered_by_id: userID,
+                offered_to_id: item.user_id,
+                item_id: item._id,
+                items_to_trade : toTrade,
+                status:'הצעה חדשה',
+                details:details
+            }    
+            sendTrade(bodyjson)
+        }
+        else{
+            alert("לא בחרת פריטים להחלפה");
+        }
+
     };
 
     const handleDetails = (e) => {

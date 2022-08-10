@@ -223,13 +223,11 @@ export default function AddNewItem() {
             return false;
         }
         if (jsonreq.name === "") {
-            console.log('empty name');
             setInputInvalidname("דרוש שם");
             setInputerrorname(true);
             return false;
         }
         if (jsonreq.item_condition === "") {
-            console.log('empty item_condition');
             setInputInvalidcond("דרוש מצב מוצר");
             setInputerrorcond(true);
             return false;
@@ -253,7 +251,6 @@ export default function AddNewItem() {
         let flag = validation(bodyjson);
         if (flag) {
             if (!selectedFile) {
-                console.log('empty item_image');
                 setInputInvalidimg("דרוש להעלות תמונה");
                 setInputerrorimg(true);
                 return;
@@ -267,7 +264,7 @@ export default function AddNewItem() {
                 console.error('Failed upload an image to the cloud');
             };
         } else {
-            console.log('You have missing arguments!');
+            // console.log('You have missing arguments!');
         }
     }
 
