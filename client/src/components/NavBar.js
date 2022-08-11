@@ -70,7 +70,7 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar({notic}) {
     const history = useHistory();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -208,19 +208,58 @@ export default function PrimarySearchAppBar() {
             </MenuItem>
         </Menu>
     );
-
-    const getGotTrades = async () => {
-        await fetch('http://localhost:3001/trade/userGotTrade/' + userID)
-        .then((res) => res.json())
-        .then((json) => {
-          setTrades(json)
-        })
+    const [conversations, setConversations] = useState([])
+    const [count,setCount]=useState(0)
+    const getGotNewMsg = async () => {
+        var counter = 0 ;
+        try {
+            await fetch('http://localhost:3001/conversations/' + user.id, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then((res) => res.json())
+                .then((json) => {
+                    json.map((c)=>{
+                        if(c.members[0]===user.id){
+                            counter+=c.newMsgOne
+                        }else{
+                            counter+=c.newMsgTwo
+                        }
+                    })
+                    setCount(counter)
+                    setConversations(json)
+                })
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     useEffect(() => {
-        getGotTrades()
+        getGotNewMsg()
     }, [])
 
+    const getGotConv = async () => {
+        await fetch('http://localhost:3001/trade/userGotTrade/' + userID)
+            .then((res) => res.json())
+            .then((json) => {
+                setTrades(json)
+            })
+    }
+
+    useEffect(() => {
+        getGotConv()
+    }, [])
+
+    const refref = ()=>{
+        if(notic === 1 ){
+            return 0
+        }
+        else{
+            return count
+        }
+    }
     return (
         <Box sx={{flexGrow: 1}}>
             <AppBar position="static">
@@ -264,9 +303,11 @@ export default function PrimarySearchAppBar() {
                             </Badge>
                         </IconButton>
                         <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={handleMsg}>
+                            <Badge badgeContent={refref()} color="error">
                             <Tooltip title="הודעות">
                                 <MailIcon/>
                             </Tooltip>
+                            </Badge>
                         </IconButton>
                         <Tooltip title="המשתמש שלי">
                             <IconButton

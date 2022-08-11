@@ -9,7 +9,6 @@ const Message = require("../models/Message");
  */
 exports.new_message = async (req, res) => {
     const newMessage = new Message(req.body);
-    console.log(newMessage)
     try {
         const savedMessage = await newMessage.save();
         res.status(200).json(savedMessage);

@@ -16,7 +16,7 @@ export default function Message() {
 
         <ThemeProvider theme={theme}>
             <CssBaseline/>
-            <NavBar/>
+            {/*<NavBar/>*/}
             <Messenger/>
         </ThemeProvider>
 

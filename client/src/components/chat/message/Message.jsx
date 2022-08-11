@@ -26,7 +26,7 @@ export default function Message({message, own}) {
     }, [])
     return (
         <div className={own ? "message own" : "message"}>
-            <div className="messageTop">
+            <div  className="messageTop">
                 <img
                     className="messageImg"
                     src={currentUser?.sendUser["imageProfile"]}

@@ -1,7 +1,9 @@
 import {useEffect, useState} from "react";
 import "./conversation.css";
+import Badge from '@mui/material/Badge';
+import Notfic from '../conversations/Notfic';
 
-export default function Conversation({conversation, currentUser}) {
+export default function Conversation({conversation, currentUser,notic}) {
 
     const [user, setUser] = useState(null)
     useEffect(() => {
@@ -25,6 +27,7 @@ export default function Conversation({conversation, currentUser}) {
         };
         getUser();
     }, [currentUser, conversation])
+
     const setImgProfile = () => {
         if(user?.sendUser["imageProfile"] === null){
             return user.sendUser["imageProfile"];
@@ -33,8 +36,19 @@ export default function Conversation({conversation, currentUser}) {
             return "https://res.cloudinary.com/dt9z5k8rs/image/upload/v1658258491/AVATAR_lhyz0n.webp"
         }
     }
+
+    const badge=()=>{
+        if(conversation.members[0]===currentUser.id){
+            return conversation.newMsgOne
+        }
+        else{
+            return  conversation.newMsgTwo
+        }
+    }
+
     return (
         <div className="conversation">
+            <Notfic not={notic? 0 : badge()}/>
             <img className="conversationImg"
                  src={
                    setImgProfile()

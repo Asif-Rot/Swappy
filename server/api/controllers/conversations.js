@@ -23,7 +23,6 @@ exports.new_conv = async (req, res) => {
 
 
 //get conv of a user
-
 exports.getConvUser = async (req, res) => {
     try {
         const conversation = await Conversation.find({
@@ -46,4 +45,29 @@ exports.getConvUserOfTwo = async (req, res) => {
     } catch (err) {
         res.status(500).json(err);
     }
+};
+
+
+exports.update_conv= (req, res) => {
+    if (!req.body) {
+        console.log("not good")
+        return res.status(400).send({
+            message: "Data to update can not be empty!"
+        });
+    }
+
+    const convId = req.params.convId;
+    Conversation.findByIdAndUpdate(convId, req.body, { useFindAndModify: false })
+        .then(data => {
+            if (!data) {
+                res.status(404).send({
+                    message: `Cannot update Conversation with id=${convId}. Maybe Conversation was not found!`
+                });
+            } else res.send({ message: "Conversation was updated successfully." });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error updating Conversation with id=" + convId
+            });
+        });
 };

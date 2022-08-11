@@ -11,5 +11,6 @@ router.get("/:userId",  ConvController.getConvUser);
 
 router.get("/find/:firstUserId/:secondUserId",  ConvController.getConvUserOfTwo);
 
+router.put("/updateConve/:convId", ConvController.update_conv);
 
 module.exports = router;
