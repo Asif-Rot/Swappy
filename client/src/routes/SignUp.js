@@ -35,6 +35,7 @@ import { UserContext } from "../context/userContext";
 import { userReducer } from "../context/userReducer";
 import { useContext, useRef ,useReducer} from "react";
 import {loginCall} from '../apiCalls';
+import validator from 'validator'
 
 import Autocomplete from '@mui/material/Autocomplete';
 
@@ -228,7 +229,28 @@ export default function SignUp() {
 
     const [birth, setBirth] = React.useState(null);
 
+    const [emailError, setEmailError] = useState('')
+    const validateEmail = (e) => {
+        var email = e.target.value
 
+        if (validator.isEmail(email)) {
+            setEmailError(null);
+
+        } else {
+            setEmailError('אימייל לא חוקי !!!')
+        }
+    }
+    const [birthError, setBirthError] = useState('')
+    const validateBirth = (event) => {
+        const current = new Date();
+        if(current > event){
+            setBirthError(null)
+            setBirth(event);
+        }
+        else{
+            setBirthError("תאריך לא חוקי !!!")
+        }
+    };
     return (
         <CacheProvider value={cacheRtl}>
             <ThemeProvider theme={theme}>
@@ -285,6 +307,8 @@ export default function SignUp() {
                                         label="כתובת אימייל"
                                         name="email"
                                         autoComplete="email"
+                                        helperText={emailError}
+                                        onChange={(e) => validateEmail(e)}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -331,9 +355,10 @@ export default function SignUp() {
                                             label="תאריך לידה"
                                             value={birth}
                                             onChange={(newValue) => {
+                                                validateBirth(newValue)
                                                 setBirth(newValue);
                                             }}
-                                            renderInput={(params) => <TextField  required {...params} />}
+                                            renderInput={(params) => <TextField  required {...params}  helperText={birthError}/>}
                                         />
                                     </LocalizationProvider>
 

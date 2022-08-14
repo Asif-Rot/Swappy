@@ -35,9 +35,9 @@ exports.user_signup = (req, res, next) => {
                             birth: req.body.birth,
                             sex: req.body.sex,
                             imageProfile: req.body.imageProfile,
-                            city : req.body.city,
-                            numOfRating : 0,
-                            rating : 0
+                            city: req.body.city,
+                            numOfRating: 0,
+                            rating: 0
                         });
                         user
                             .save()
@@ -55,7 +55,7 @@ exports.user_signup = (req, res, next) => {
                                 res.status(201).json({
                                     message: "User created",
                                     token: token,
-                                    id:user._id
+                                    id: user._id
                                 });
                             })
                             .catch(err => {
@@ -105,7 +105,7 @@ exports.user_login = (req, res, next) => {
                     return res.status(200).json({
                         message: "Auth successful",
                         token: token,
-                        id:user[0]._id
+                        id: user[0]._id
                     });
                 }
                 res.status(401).json({
@@ -149,7 +149,6 @@ exports.user_delete = (req, res, next) => {
 };
 
 
-
 /**
  * Get user by Id/email to take info about user
  * @param req
@@ -159,7 +158,7 @@ exports.user_getUser = (req, res) => {
     const userId = req.params.userId;
     User.find({_id: userId}).exec().then(user => {
         if (user.length === 1) {
-            if(user[0].imageProfile != null ){
+            if (user[0].imageProfile != null) {
                 const sendUser = {
                     "id": user[0]._id.toString(),
                     "email": user[0].email,
@@ -174,8 +173,7 @@ exports.user_getUser = (req, res) => {
                 return res.status(200).json({
                     sendUser
                 })
-            }
-            else{
+            } else {
                 const sendUser = {
                     "id": user[0]._id.toString(),
                     "email": user[0].email,
@@ -204,16 +202,17 @@ exports.updateUser = (req, res) => {
             message: "Data to update can not be empty!"
         });
     }
-
     const userID = req.params.userId;
-
-    User.findByIdAndUpdate(userID, req.body, { useFindAndModify: false })
+    User.findByIdAndUpdate(userID, req.body, {useFindAndModify: false})
         .then(data => {
             if (!data) {
                 res.status(404).send({
                     message: `Cannot update user with id=${userID}. Maybe user was not found!`
                 });
-            } else res.send({ message: "user was updated successfully." });
+            } else {
+                res.send({message: "user was updated successfully."})
+            }
+            ;
         })
         .catch(err => {
             res.status(500).send({
