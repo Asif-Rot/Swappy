@@ -12,6 +12,8 @@ exports.new_conv = async (req, res) => {
 
     const newConversation = new Conversation({
         members: [req.body.senderID, req.body.receiverId],
+        newMsgOne:0,
+        newMsgTwo:0
     });
     try {
         const savedConversation = await newConversation.save();
