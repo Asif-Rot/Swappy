@@ -147,10 +147,12 @@ function LinkTab(props) {
     };
 
     const handleChangeRating = async () => {
-        if(tradeToReview.offered_by_id != userID)
+        if(tradeToReview.offered_by_id._id != userID){
             var toBeReview = tradeToReview.offered_by_id._id
-        else
+        }    
+        else{
             var toBeReview = tradeToReview.offered_to_id._id
+        }
 
         var rating, numOfRating
 
