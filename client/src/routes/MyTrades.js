@@ -63,7 +63,8 @@ function LinkTab(props) {
     const [score, setScore] = useState(0);
     const [sentReview, setSentReview] = useState(false)
     const [tradeToReview, setTradeToReview] = useState([])
-    
+    const [conversations, setConversations] = useState([])
+    // const [chat, setChat] = useState(null);
 
     // to handle with tab change
     const handleChange = (event, newValue) => {
@@ -207,18 +208,20 @@ function LinkTab(props) {
                 .then((res) => res.json())
                 .then((json) => {
                     var flage = false;
+                    var chat = null;
                     var currentChat=''
                         json.map((c)=>{
                             c.members.filter((x)=>{
                                 if (x === tradeToReview.offered_to_id["_id"]) {
                                     flage=true;
                                     currentChat=c._id
+                                    chat=c
                                 }
                             }
                             )
                         })
                     if(flage){
-                        createMessage(currentChat)
+                        createMessage(currentChat , )
                     }
                     else{
                         createNewConversation()
@@ -244,11 +247,11 @@ function LinkTab(props) {
                            return response.json();
                        })
                            .then(function (conv) {
-                               createMessage(conv._id)
+                               createMessage(conv._id , conv)
                            });
 
     }
-    const createMessage = async (conv) => {
+    const createMessage = async (conv, chat) => {
         const newMessage = {
                 sender: userID,
                 text: msg,
@@ -267,10 +270,36 @@ function LinkTab(props) {
                     console.log("no")
                 }
                 else{
+                    addNewNotifMsg(conv, chat)
                     alert("הודעה נשלחה בהצלחה ")
+
                 }
 
             })
+    }
+    const addNewNotifMsg = async (conversationId , chat) => {
+        var one = chat.members[0];
+        if (chat.members[0] === user.id) {
+            await fetch('http://localhost:3001/conversations/updateConve/' + conversationId, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    $inc: {'newMsgTwo': 1}
+                })
+            })
+        } else {
+            await fetch('http://localhost:3001/conversations/updateConve/' + conversationId, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    $inc: {'newMsgOne': 1}
+                })
+            })
+        }
     }
 
     const fillMsg = (event) => {
