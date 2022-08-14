@@ -174,14 +174,26 @@ export default function PrimarySearchAppBar({notic}) {
         >
 
             <MenuItem>
-                <IconButton size="large" aria-label="show 4 new mails" color="inherit" >
-                    <Badge badgeContent={0} color="error">
+                <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+                    <Badge badgeContent={4} color="error">
                         <MailIcon/>
                     </Badge>
                 </IconButton>
                 <p>Messages</p>
             </MenuItem>
 
+            <MenuItem>
+                <IconButton
+                    size="large"
+                    aria-label="show 17 new notifications"
+                    color="inherit"
+                >
+                    <Badge badgeContent={17} color="error">
+                        <NotificationsIcon/>
+                    </Badge>
+                </IconButton>
+                <p>Notifications</p>
+            </MenuItem>
             <MenuItem onClick={handleProfileMenuOpen}>
                 <IconButton
                     size="large"
@@ -290,7 +302,7 @@ export default function PrimarySearchAppBar({notic}) {
                                 </Tooltip>
                             </Badge>
                         </IconButton>
-                        <IconButton size="large"  color="inherit" onClick={handleMsg}>
+                        <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={handleMsg}>
                             <Badge badgeContent={refref()} color="error">
                             <Tooltip title="הודעות">
                                 <MailIcon/>
@@ -312,6 +324,7 @@ export default function PrimarySearchAppBar({notic}) {
                         </Tooltip>
                         <IconButton
                             size="large"
+                            aria-label="show 17 new notifications"
                             color="inherit"
                             onClick={handlelogoutClick}
                         >
