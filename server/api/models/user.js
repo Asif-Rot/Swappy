@@ -38,6 +38,14 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    genres: {
+        type: Array,
+        required: true
+    },
+    console: {
+        type: String,
+        required: true
+    },
     numOfRating: {
         type: Number,
         required: true

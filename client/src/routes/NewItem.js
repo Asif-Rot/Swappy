@@ -73,7 +73,7 @@ export default function AddNewItem() {
     const userID = user.id
 
     // Handling '+' button
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const handleClickOpen = () => {
         setOpen(true)
     };
@@ -150,7 +150,7 @@ export default function AddNewItem() {
             typeof value === 'string' ? value.split(',') : value,
         );
     }
-    const consoleUpdate = (event) => { // Dealing with author field changes to update our state
+    const consoleUpdate = (event) => { // Dealing with console field changes to update our state
         setconsole(event.target.value)
     }
     const descriptionUpdate = (event) => { // Dealing with description field changes to update our state
@@ -168,7 +168,6 @@ export default function AddNewItem() {
     const previewFile = (file) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        // console.log("reader: " , reader);
         reader.onloadend = () => {
             setPreviewSource(reader.result);
         };
@@ -187,8 +186,7 @@ export default function AddNewItem() {
             }).then(function (response) {
                 return response.json();
             }).then(function (result) {
-                if (result.message==="Image Upload success") {
-                    // console.log("Image here");
+                if (result.message === "Image Upload success") {
                     bodyjson = { ...bodyjson , image : result.url, image_public_id : result.public_id};
                     fetch('http://localhost:3001/item/additem/' + userID, {
                         method: 'POST',
@@ -197,11 +195,22 @@ export default function AddNewItem() {
                         },
                         body: JSON.stringify(bodyjson)
                     })
-                        .then(res => res.json())
-                        // .then(data => console.log(data))
-                        .then(() => {
+                        .then((res) => {
+                            if (res.status === 409) {
+                                alert('כבר קיים פריט כזה במערכת, אנא נסה להעלות פריט אחר');
+                                const onlyPublicId = String(bodyjson.image_public_id).replace("book_img/", "");
+                                fetch("http://localhost:3001/imageItem/deleteItem/"+onlyPublicId,{
+                                    method: "DELETE",
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    }
+                                })
+                            } else {
                                 // Once posted, the user will be notified
                                 alert('נוסף פריט חדש למערכת!');
+                            }
+                        })
+                        .then(() => {
                                 window.location.reload(false);
                             },
                             setOpen(false))
@@ -217,7 +226,6 @@ export default function AddNewItem() {
     // validate rquiered fields
     function validation(jsonreq) {
         if (jsonreq.item_type === "") {
-            console.log('empty item_type');
             setInputInvalidtype("דרוש סוג מוצר");
             setInputerrortype(true);
             return false;
@@ -237,7 +245,6 @@ export default function AddNewItem() {
     }
 
     const handleSubmit = async () => {
-        // debugger;
         let bodyjson = { // We should keep the fields consistent for managing this data later
             item_type: itemType,
             name: itemName,
@@ -296,7 +303,7 @@ export default function AddNewItem() {
                         <Select
                             labelId="itemtype-select-label"
                             id="itemtype-select"
-                            error={inputerrortype}
+                            error={"" ? inputerrortype : undefined}
                             value={itemType}
                             label="itemType"
                             onChange={typeUpdate}
@@ -321,7 +328,7 @@ export default function AddNewItem() {
                             id="itemCondition-select"
                             value={itemCondition}
                             label="itemCondition"
-                            error={inputerrorcond}
+                            error={"" ? inputerrorcond : undefined}
                             onChange={conditionUpdate}
                         >
                             <MenuItem value="as new">כמו חדש</MenuItem>
@@ -359,18 +366,33 @@ export default function AddNewItem() {
                                 </MenuItem>
                             ))}
                         </Select>
-                        <br/><br/>
                     </FormControl>
                     : null}
 
                     {(itemType === "video game") ?
-                        <TextField fullWidth id="console"
-                                   onChange={consoleUpdate}
-                                   label="קונסולה"
-                                   variant="outlined"/>
+                        <FormControl fullWidth>
+                            <InputLabel id="console-select-label">קונסולה</InputLabel>
+                            <Select
+                                labelId="console-select-label"
+                                id="console-select"
+                                value={console}
+                                label="console"
+                                onChange={consoleUpdate}
+                            >
+                                <MenuItem value="PC">PC</MenuItem>
+                                <MenuItem value="PS4">PS4</MenuItem>
+                                <MenuItem value="PS5">PS5</MenuItem>
+                                <MenuItem value="Xbox One">Xbox One</MenuItem>
+                                <MenuItem value="Xbox 360">Xbox 360</MenuItem>
+                                <MenuItem value="Xbox Series X/S">Xbox Series X/S</MenuItem>
+                                <MenuItem value="Nintendo Switch">Nintendo Switch</MenuItem>
+                                <MenuItem value="Wii">Wii</MenuItem>
+                            </Select>
+                        </FormControl>
                         : null }
-                    {(itemType === "video game") ? <br/> : null }
-                    {(itemType === "video game") ? <br/> : null }
+
+                    {(itemType !== "") ? <br/> : null }
+                    {(itemType !== "") ? <br/> : null }
 
                     <TextField fullWidth id="description"
                                onChange={descriptionUpdate}
@@ -383,7 +405,7 @@ export default function AddNewItem() {
                                 accept="image/*"
                                 id="contained-button-file"
                                 multiple type="file"
-                                error={inputerrorimg}
+                                error={"" ? inputerrorimg : undefined}
                                 value={fileInputState}
                                 onChange={handleFileInputChange}
                             />

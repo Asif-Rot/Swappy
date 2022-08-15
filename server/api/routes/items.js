@@ -13,7 +13,13 @@ router.get("/getitembytype/:itemType", itemsController.item_bytype);
 
 router.get("/getitembyuser/:userId", itemsController.item_byuser);
 
+router.get("/countitem", itemsController.count_item);
+
 router.get("/getitembyuser/:userId/:itemType", itemsController.item_byusertype);
+
+router.get("/getitembygenreconsole/:genre/:console", itemsController.item_bygenreconsole);
+
+router.get("/getitembyconsole/:console", itemsController.item_byconsole);
 
 router.get("/:itemId", itemsController.one_item);
 

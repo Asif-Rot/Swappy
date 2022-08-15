@@ -13,6 +13,17 @@ exports.all_item =  (req, res) => {
     });
 }
 
+exports.count_item =  (req, res) => {
+    Items.count({trade_completed : true})
+        .then(items => {
+            res.status(200).json(items);
+        }).catch(error => {
+        res.status(500).json({
+            error
+        });
+    });
+}
+
 exports.one_item = (req, res) => {
     const itemId = req.params.itemId;
     Items.findById(itemId)
@@ -65,6 +76,31 @@ exports.item_byusertype = (req, res) => {
     });
 }
 
+exports.item_bygenreconsole = (req, res) => {
+    const oneGenre = req.params.genre;
+    const oneConsole = req.params.console;
+    Items.find({$and : [{$or : [{genre :oneGenre}, {console: oneConsole}]}, {trade_completed : false}]}).limit(5)
+        .then((itembygenre) => {
+            res.status(200).json(itembygenre);
+        }).catch(error => {
+        res.status(500).json({
+            error
+        });
+    });
+}
+
+exports.item_byconsole = (req, res) => {
+    const oneConsole = req.params.console;
+    Items.find({$and : [{console :oneConsole}, {trade_completed : false}]}).limit(2)
+        .then((itembyconsole) => {
+            res.status(200).json(itembyconsole);
+        }).catch(error => {
+        res.status(500).json({
+            error
+        });
+    });
+}
+
 exports.update_item = (req, res) => {
     if (!req.body) {
         return res.status(400).send({
@@ -74,7 +110,7 @@ exports.update_item = (req, res) => {
 
     const itemId = req.params.itemId;
 
-    Items.findByIdAndUpdate(itemId, req.body, { useFindAndModify: false })
+    Items.כןמגfindByIdAndUpdate(itemId, req.body, { useFindAndModify: false })
         .then(data => {
             if (!data) {
                 res.status(404).send({

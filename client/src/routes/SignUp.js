@@ -36,7 +36,10 @@ import { userReducer } from "../context/userReducer";
 import { useContext, useRef ,useReducer} from "react";
 import {loginCall} from '../apiCalls';
 import validator from 'validator'
-
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
+import FormHelperText from '@mui/material/FormHelperText';
 import Autocomplete from '@mui/material/Autocomplete';
 
 // Create rtl cache
@@ -48,6 +51,32 @@ const cacheRtl = createCache({
 const theme = createTheme({
     direction: 'rtl',
 });
+
+// for genre field
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+const genres = [
+    'ילדים',
+    'רומן',
+    'מותחן',
+    'דרמה',
+    'מדע בדיוני',
+    'פנטזיה',
+    'קומדיה',
+    'ספרות בלשית',
+    'ספרות צבאית',
+    'קומיקס',
+    'ספרות זולה',
+    'צ\'ק ליט'
+];
 
 
 /**
@@ -62,6 +91,8 @@ export default function SignUp() {
     const [asset_id,setAsset] = useState('')
     const [cities,setCities] = useState([])
     const [city,setCity] = useState('')
+    const [genre, setgenre] = useState([]);
+    const [console, setconsole] = useState('');
     const {isFetching, dispatch}= useContext(UserContext);
 
 
@@ -170,7 +201,8 @@ export default function SignUp() {
             const data = new FormData(event.currentTarget);
             if (data.get('email') === '' || data.get('password') === '' || data.get('firstName') === '' ||
                 data.get('lastName') === '' || data.get('sex') === '' || data.get('birth') === ''
-                || city.toString() === '' || sex.toString() === '' || birth.toString() === ''
+                || data.get(genre) === '' || city.toString() === '' || sex.toString() === ''
+                || birth.toString() === '' || data.get(console) === ''
             ) {
                 console.log('error')
                 alert('Everything has to be filled')
@@ -184,6 +216,8 @@ export default function SignUp() {
                         "birth": birth.toString(),
                         "sex": sex.toString(),
                         "city":city.toString(),
+                        "genres":data.get(genre),
+                        "console":console.toString(),
                         "rating":0,
                         "numOfRating":0
                     }
@@ -205,6 +239,8 @@ export default function SignUp() {
                         "birth": birth.toString(),
                         "sex": sex.toString(),
                         "city":city.toString(),
+                        "genres": genre,
+                        "console":console.toString(),
                         "rating":0,
                         "numOfRating":0,
                         "imageProfile": 'http://res.cloudinary.com/dt9z5k8rs/image/upload/v1659029057/g1aplxrhw7showburfbe.jpg'
@@ -251,6 +287,30 @@ export default function SignUp() {
             setBirthError("תאריך לא חוקי !!!")
         }
     };
+
+    const [genreErrorinput, setGenreErrorinput] = useState()
+    const genreUpdate = (event) => { // Dealing with genre field changes to update our state
+        const {
+            target: {value},
+        } = event;
+        var size = event.target.value.length;
+
+        if (size !== 4) {
+            setGenreErrorinput(null);
+            setgenre(
+                // On autofill we get a stringified value.
+                typeof value === 'string' ? value.split(',') : value,
+            );
+        }
+        else {
+            setGenreErrorinput("נא לבחור 3 ז'אנרים בלבד");
+        }
+    }
+
+    const consoleUpdate = (event) => { // Dealing with console field changes to update our state
+        setconsole(event.target.value)
+    }
+
     return (
         <CacheProvider value={cacheRtl}>
             <ThemeProvider theme={theme}>
@@ -380,12 +440,60 @@ export default function SignUp() {
                                                 <MenuItem value={'woman'}>נקבה</MenuItem>
                                                 <MenuItem value={'other'}>אחר</MenuItem>
                                             </Select>
-
-
                                         </FormControl>
                                     </Box>
 
                                 </Grid>
+                                <Grid item xs={8}>
+                                    <Box>
+                                <FormControl fullWidth required>
+                                    <InputLabel id="genre-multiple-checkbox-label">ז'אנר מועדף</InputLabel>
+                                    <Select
+                                        labelId="genre-multiple-checkbox-label"
+                                        id="genre-multiple-checkbox"
+                                        multiple
+                                        value={genre}
+                                        hidden={true}
+                                        onChange={genreUpdate}
+                                        input={<OutlinedInput label="genre"/>}
+                                        renderValue={(selected) => selected.join(', ')}
+                                        MenuProps={MenuProps}
+                                    >
+                                        {genres.map((name) => (
+                                            <MenuItem key={name} value={name}>
+                                                <Checkbox checked={genre.indexOf(name) > -1}/>
+                                                <ListItemText primary={name}/>
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    <FormHelperText error>{genreErrorinput}</FormHelperText>
+                                </FormControl>
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={7}>
+                                    <Box>
+                                <FormControl fullWidth>
+                                    <InputLabel required id="console-select-label">קונסולה מועדפת</InputLabel>
+                                    <Select
+                                        labelId="console-select-label"
+                                        id="console-select"
+                                        value={console}
+                                        label="console"
+                                        onChange={consoleUpdate}
+                                    >
+                                        <MenuItem value="PC">PC</MenuItem>
+                                        <MenuItem value="PS4">PS4</MenuItem>
+                                        <MenuItem value="PS5">PS5</MenuItem>
+                                        <MenuItem value="Xbox One">Xbox One</MenuItem>
+                                        <MenuItem value="Xbox 360">Xbox 360</MenuItem>
+                                        <MenuItem value="Xbox Series X/S">Xbox Series X/S</MenuItem>
+                                        <MenuItem value="Nintendo Switch">Nintendo Switch</MenuItem>
+                                        <MenuItem value="Wii">Wii</MenuItem>
+                                    </Select>
+                                </FormControl>
+                                    </Box>
+                                </Grid>
+
                                 <Grid item xs={12}>
                                     <Box>
                                         <div>

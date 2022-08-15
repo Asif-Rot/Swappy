@@ -36,6 +36,8 @@ exports.user_signup = (req, res, next) => {
                             sex: req.body.sex,
                             imageProfile: req.body.imageProfile,
                             city: req.body.city,
+                            genres: req.body.genres,
+                            console: req.body.console,
                             numOfRating: 0,
                             rating: 0
                         });
@@ -167,6 +169,8 @@ exports.user_getUser = (req, res) => {
                     "birth": user[0].birth,
                     "imageProfile": user[0].imageProfile,
                     "city": user[0].city,
+                    "genres": user[0].genres,
+                    "console": user[0].console,
                     "numOfRating": user[0].numOfRating,
                     "rating": user[0].rating,
                 }
@@ -180,6 +184,8 @@ exports.user_getUser = (req, res) => {
                     "firstName": user[0].firstName,
                     "lastName": user[0].lastName,
                     "birth": user[0].birth,
+                    "genres": user[0].genres,
+                    "console": user[0].console,
                     "imageProfile": "AVATAR_lhyz0n",
                 }
                 return res.status(200).json({

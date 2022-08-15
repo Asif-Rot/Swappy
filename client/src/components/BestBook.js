@@ -7,7 +7,8 @@ import Paper from '@mui/material/Paper';
 import Card from '@mui/material/Card';
 import ListItem from '@mui/material/ListItem';
 import Stack from '@mui/material/Stack';
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
+import {UserContext} from "../context/userContext";
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 import {useHistory} from 'react-router-dom';
@@ -15,14 +16,12 @@ import Button from "@mui/material/Button";
 import { Typography } from '@mui/material';
 
 export default function SpringCarousel() {
-
-    // <ListItem alignItems={'center'}
-    //           style={{maxHeight: '100%', overflow: 'auto', maxWidth: '100%'}}
-    // >
     const [imgBook, setImgBook] = React.useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [items, setItems] = useState([]);
+    const [favorites, setFavorites] = useState([]);
     const history=useHistory();
+    const {user} = useContext(UserContext);
 
     const handleDetails =  async (itemID) => {
         await fetch('http://localhost:3001/item/' + itemID,{
@@ -55,11 +54,35 @@ export default function SpringCarousel() {
                 })
     }
 
+    const getItemByGenreConsole = async () => {
+        const id = user.id;
+        await fetch("http://localhost:3001/user/" + id, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (user) {
+            if (user) {
+                const rand = Math.floor(Math.random() * 3);
+                fetch('http://localhost:3001/item/getitembygenreconsole/' + (user['sendUser'].genres[rand]) + '/'
+                    + (user['sendUser'].console))
+                    .then((res) => res.json())
+                    .then((json) => {
+                        setFavorites(json);
+                    })
+            }
+        })
+    }
+
     useEffect(() => {
         getAllItems()
+        getItemByGenreConsole()
     }, [])
 
     return (
+        <div>
         <Grid container> 
             <Box style={{marginRight: 80, marginBlockEnd: -80, marginTop: 50,}}>
                 <h2>הפריטים החדשים באתר :</h2>
@@ -97,16 +120,17 @@ export default function SpringCarousel() {
                 </Grid>
                     )) : <p><br/>אין פריטים עדיין...</p>}
             </Box>
+        </Grid>
 
             {/**
                 The best five book in web
              */}
 
-
             <Box style={{marginRight: 80, marginBlockEnd: -80, marginTop: 50}}>
-                <h2>המומלצים ביותר :</h2>
+                <h2>המומלצים ביותר עבורך :</h2>
             </Box>
-            <Box
+            <Grid container>
+        <Box
                 sx={{
                     display: 'flex',
                     flexDirection: {md: 'row'},
@@ -123,8 +147,8 @@ export default function SpringCarousel() {
 
                 }}
             >
-                {items.length?
-                    items.map((item, i) => (
+                {favorites.length?
+                    favorites.map((item, i) => (
                 <Grid item mx={1} key={i}>                
                     <Card sx={{display: "flex",flexDirection: "column", boxShadow:2, height:400}}>
                     <Typography  variant="inherit" textAlign={'center'} maxHeight={25} marginTop={1.5}>{item.name}</Typography>
@@ -140,6 +164,7 @@ export default function SpringCarousel() {
                     )) : <p><br/>אין פריטים עדיין...</p>}
             </Box>
         </Grid>
+        </div>
 
     );
 }
