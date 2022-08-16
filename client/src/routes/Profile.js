@@ -254,8 +254,8 @@ export default function Profile() {
                                 src={imgProfile}
                                 sx={{width: 110, height: 110}}
                             />
-                            <Rating sx={{mt: 2}} name="rating" value={rating / numOfRating} precision={0.5} dir={"ltr"}
-                                    readOnly/>
+                            <Rating sx={{mt: 2}} name="rating" value={rating / numOfRating} 
+                                    precision={0.5} readOnly/>
                             <Box component="form"
                                  sx={{
                                      marginTop: 4,
