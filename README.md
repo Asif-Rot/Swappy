@@ -14,7 +14,17 @@ The user will upload the book / video game they wish to exchange and another use
 • Services Offered: uploading items online, searching items by fillters(names,genere,type), chat and more. <br/>
 • Utilized: NodeJS, React, Matriel UI, MongoDB.
 
-## How to use
+## Screenshots from the project
+#### Home page
+![image](https://user-images.githubusercontent.com/73186787/184829747-c801d479-7476-4d85-93ac-497af51be809.png)
+
+#### Serach page
+![image](https://user-images.githubusercontent.com/73186787/184830311-ce176f34-e96f-4d97-b57c-606ba56b97d3.png)
+
+#### Sign up
+![image](https://user-images.githubusercontent.com/73186787/184830829-cece9446-203c-4e0c-aa36-fd2bec200902.png)
+
+
 
 
 
