@@ -301,8 +301,7 @@ export default function SignUp() {
                 // On autofill we get a stringified value.
                 typeof value === 'string' ? value.split(',') : value,
             );
-        }
-        else {
+        } else {
             setGenreErrorinput("נא לבחור 3 ז'אנרים בלבד");
         }
     }

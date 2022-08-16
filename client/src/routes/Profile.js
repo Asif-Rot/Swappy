@@ -25,6 +25,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import validator from 'validator'
 import {alpha, styled} from '@mui/material/styles';
 import Autocomplete from '@mui/material/Autocomplete';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
+import FormHelperText from '@mui/material/FormHelperText';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
 
 //imports for RTL
 import {prefixer} from 'stylis';
@@ -42,6 +50,32 @@ const theme = createTheme({
     direction: 'rtl',
 });
 
+// for genre field
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+const genres = [
+    'ילדים',
+    'רומן',
+    'מותחן',
+    'דרמה',
+    'מדע בדיוני',
+    'פנטזיה',
+    'קומדיה',
+    'ספרות בלשית',
+    'ספרות צבאית',
+    'קומיקס',
+    'ספרות זולה',
+    'צ\'ק ליט'
+];
+
 
 /**
  * Profile page for show info about user
@@ -53,6 +87,8 @@ export default function Profile() {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [birth, setBirth] = React.useState('');
+    const [genre, setgenre] = useState([]);
+    const [console, setconsole] = useState('');
     const [imgProfile, setImgProfile] = React.useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState('');
@@ -82,6 +118,8 @@ export default function Profile() {
                 setImgProfile(user['sendUser'].imageProfile)
                 setIsLoading(false);
                 setCity(user['sendUser'].city)
+                setgenre(user['sendUser'].genres)
+                setconsole(user['sendUser'].console)
                 setRating(user['sendUser'].rating)
                 setNumOfRating(user['sendUser'].numOfRating)
                 return;
@@ -126,6 +164,27 @@ export default function Profile() {
             setBirthError("תאריך לא חוקי !!!")
         }
     };
+    const [genreErrorinput, setGenreErrorinput] = useState()
+    const genreUpdate = (event) => { // Dealing with genre field changes to update our state
+        const {
+            target: {value},
+        } = event;
+        var size = event.target.value.length;
+
+        if (size !== 4) {
+            setGenreErrorinput(null);
+            setgenre(
+                // On autofill we get a stringified value.
+                typeof value === 'string' ? value.split(',') : value,
+            );
+        } else {
+            setGenreErrorinput("נא לבחור 3 ז'אנרים בלבד");
+        }
+    }
+    const consoleUpdate = (event) => { // Dealing with console field changes to update our state
+        setconsole(event.target.value)
+    }
+
     const getUrl = () => {
         return imgProfile.toString()
     }
@@ -177,7 +236,9 @@ export default function Profile() {
                     firstName: firstName,
                     lastName: lastName,
                     city: city,
-                    birth: birth
+                    birth: birth,
+                    genres: genre,
+                    console: console,
                 })
             }).then(function (response){
                 return response.json()
@@ -346,8 +407,58 @@ export default function Profile() {
                                                 <TextField {...params} helperText={birthError}/>}
                                         />
                                     </LocalizationProvider>
-
                                 </Grid>
+                                <Grid item item xs={12} margin="normal"
+                                      sx={{width: 200, mt: 2}}>
+                                    <Box>
+                                <FormControl fullWidth>
+                                    <InputLabel id="genre-multiple-checkbox-label">ז'אנר מועדף</InputLabel>
+                                    <Select
+                                        labelId="genre-multiple-checkbox-label"
+                                        id="genre-multiple-checkbox"
+                                        multiple
+                                        value={genre}
+                                        hidden={true}
+                                        onChange={genreUpdate}
+                                        input={<OutlinedInput label="genre"/>}
+                                        renderValue={(selected) => selected.join(', ')}
+                                        MenuProps={MenuProps}
+                                    >
+                                        {genres.map((name) => (
+                                            <MenuItem key={name} value={name}>
+                                                <Checkbox checked={genre.indexOf(name) > -1}/>
+                                                <ListItemText primary={name}/>
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    <FormHelperText error>{genreErrorinput}</FormHelperText>
+                                </FormControl>
+                                    </Box>
+                                </Grid>
+                        <Grid item item xs={12} margin="normal"
+                              sx={{width: 180, mt: 2}}>
+                            <Box>
+                                <FormControl fullWidth>
+                                    <InputLabel id="console-select-label">קונסולה מועדפת</InputLabel>
+                                    <Select
+                                        labelId="console-select-label"
+                                        id="console-select"
+                                        value={console}
+                                        label="console"
+                                        onChange={consoleUpdate}
+                                    >
+                                        <MenuItem value="PC">PC</MenuItem>
+                                        <MenuItem value="PS4">PS4</MenuItem>
+                                        <MenuItem value="PS5">PS5</MenuItem>
+                                        <MenuItem value="Xbox One">Xbox One</MenuItem>
+                                        <MenuItem value="Xbox 360">Xbox 360</MenuItem>
+                                        <MenuItem value="Xbox Series X/S">Xbox Series X/S</MenuItem>
+                                        <MenuItem value="Nintendo Switch">Nintendo Switch</MenuItem>
+                                        <MenuItem value="Wii">Wii</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        </Grid>
                                 <Button sx={{mt: 2}} variant="outlined" size="large" color="inherit" onClick={(e) => {
                                     setOpen(true);
                                 }}>
