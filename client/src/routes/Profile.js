@@ -19,11 +19,8 @@ import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import validator from 'validator'
-import {alpha, styled} from '@mui/material/styles';
 import Autocomplete from '@mui/material/Autocomplete';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -91,7 +88,6 @@ export default function Profile() {
     const [consoles, setconsoles] = useState('');
     const [imgProfile, setImgProfile] = React.useState('');
     const [isLoading, setIsLoading] = useState(true);
-    const [profile, setProfile] = useState('');
     const [city, setCity] = useState('');
     const [rating, setRating] = useState(0);
     const [numOfRating, setNumOfRating] = useState(0);
@@ -110,7 +106,6 @@ export default function Profile() {
             return response.json();
         }).then(function (user) {
             if (user) {
-                setProfile(user['sendUser']);
                 setEmail(user['sendUser'].email)
                 setFirstName(user['sendUser'].firstName)
                 setLastName(user['sendUser'].lastName)
@@ -185,9 +180,9 @@ export default function Profile() {
         setconsoles(event.target.value)
     }
 
-    const getUrl = () => {
-        return imgProfile.toString()
-    }
+    // const getUrl = () => {
+    //     return imgProfile.toString()
+    // }
     useEffect(() => {
         //console.log(email)
     }, [email])
@@ -408,7 +403,7 @@ export default function Profile() {
                                         />
                                     </LocalizationProvider>
                                 </Grid>
-                                <Grid item item xs={12} margin="normal"
+                                <Grid item xs={12} margin="normal"
                                       sx={{width: 200, mt: 2}}>
                                     <Box>
                                 <FormControl fullWidth>
@@ -435,7 +430,7 @@ export default function Profile() {
                                 </FormControl>
                                     </Box>
                                 </Grid>
-                        <Grid item item xs={12} margin="normal"
+                        <Grid item xs={12} margin="normal"
                               sx={{width: 180, mt: 2}}>
                             <Box>
                                 <FormControl fullWidth>
