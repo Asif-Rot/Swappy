@@ -31,9 +31,9 @@ import {useEffect, useState} from 'react'
 import Upload from '../components/upload'
 import Profile from '../components/image'
 import Alert from '../components/Alert';
-import { UserContext } from "../context/userContext";
-import { userReducer } from "../context/userReducer";
-import { useContext, useRef ,useReducer} from "react";
+import {UserContext} from "../context/userContext";
+import {userReducer} from "../context/userReducer";
+import {useContext, useRef, useReducer} from "react";
 import {loginCall} from '../apiCalls';
 import validator from 'validator'
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -41,6 +41,9 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import FormHelperText from '@mui/material/FormHelperText';
 import Autocomplete from '@mui/material/Autocomplete';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 // Create rtl cache
 const cacheRtl = createCache({
@@ -88,15 +91,16 @@ export default function SignUp() {
     const [selectedFile, setSelectedFile] = useState();
     const [successMsg, setSuccessMsg] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [asset_id,setAsset] = useState('')
-    const [cities,setCities] = useState([])
-    const [city,setCity] = useState('')
+    const [asset_id, setAsset] = useState('')
+    const [cities, setCities] = useState([])
+    const [city, setCity] = useState('')
     const [genre, setgenre] = useState([]);
-    const [console, setconsole] = useState('');
-    const {isFetching, dispatch}= useContext(UserContext);
+    const [consoles, setConsoles] = useState('');
+    const {isFetching, dispatch} = useContext(UserContext);
+    const [isLoading, setIsLoading] = useState(false);
 
 
-    const  getCitiesList =  async () => {
+    const getCitiesList = async () => {
         await fetch('https://raw.githubusercontent.com/royts/israel-cities/master/israel-cities.json')
             .then((res) => res.json())
             .then((json) => {
@@ -122,7 +126,7 @@ export default function SignUp() {
         };
     };
 
-    const uploadImage = async (base64EncodedImage , user ) => {
+    const uploadImage = async (base64EncodedImage, user) => {
         try {
             const img = JSON.stringify({data: base64EncodedImage})
             await fetch("http://localhost:3001/image/upload", {
@@ -134,28 +138,26 @@ export default function SignUp() {
             }).then(function (response) {
                 return response.json();
             }).then(function (result) {
-                if(result.message="Image Upload sucsses"){
-
-                    user = { ...user , imageProfile : result.url}
-                    console.log(user)
+                if (result.message = "Image Upload sucsses") {
+                    user = {...user, imageProfile: result.url}
                     //user = { ...user , image : result.public_id}
-                     signUpUser(user);
+                    signUpUser(user);
                     setFileInputState('');
                     setPreviewSource('');
                     setSuccessMsg('Image uploaded successfully');
                 }
             });
-
-
         } catch (err) {
-            console.error(err);
+            setIsLoading(false)
+            console.log(err)
             setErrMsg('Something went wrong!');
+            alert('Something went wrong!')
         }
     };
     const signUpUser = async (user) => {
         const current = {
             "email": user.email,
-            "password":user.password
+            "password": user.password
         }
         await fetch("http://localhost:3001/user/signup", {
             method: "POST",
@@ -169,45 +171,47 @@ export default function SignUp() {
             .then(function (user) {
                 if (user.message === "User created") {
                     alert("registarion succeeded");
-                   // login(user.token, user.id);
+                    // login(user.token, user.id);
                     loginFunc(current);
                 } else
-                    alert(user.message);
+                    setIsLoading(false)
+                alert(user.message);
             });
     }
-    const loginFunc =async (user) =>{
+    const loginFunc = async (user) => {
         dispatch({type: "LOGIN_START"});
         const callBackApiUser = await loginCall({
             user,
             dispatch
         });
-        if(callBackApiUser.message === "Auth successful")
-        {
-            dispatch({ type: "LOGIN_SUCCESS", payload: callBackApiUser });
+        if (callBackApiUser.message === "Auth successful") {
+            dispatch({type: "LOGIN_SUCCESS", payload: callBackApiUser});
+            setIsLoading(false)
             history.push('/home');
-        }
-        else{
+        } else {
             alert("Auth faild")
         }
     }
     const history = useHistory();
     const handleSubmit = async (event) => {
+            setIsLoading(true)
             event.preventDefault();
             const reader = new FileReader();
-            if (selectedFile){
+            if (selectedFile) {
                 reader.readAsDataURL(selectedFile);
             }
 
             const data = new FormData(event.currentTarget);
+
             if (data.get('email') === '' || data.get('password') === '' || data.get('firstName') === '' ||
-                data.get('lastName') === '' || data.get('sex') === '' || data.get('birth') === ''
-                || data.get(genre) === '' || city.toString() === '' || sex.toString() === ''
-                || birth.toString() === '' || data.get(console) === ''
+                data.get('lastName') === '' || data.get(genre) === '' || city.toString() === '' || sex.toString() === ''
+                || birth.toString() === '' || data.get(consoles) === ''
             ) {
+                setIsLoading(false)
                 console.log('error')
                 alert('Everything has to be filled')
             } else {
-                if(selectedFile){
+                if (selectedFile) {
                     const user = {
                         "email": data.get('email'),
                         "password": data.get('password'),
@@ -215,22 +219,20 @@ export default function SignUp() {
                         "lastName": data.get('lastName'),
                         "birth": birth.toString(),
                         "sex": sex.toString(),
-                        "city":city.toString(),
-                        "genres":data.get(genre),
-                        "console":console.toString(),
-                        "rating":0,
-                        "numOfRating":0
+                        "city": city.toString(),
+                        "genres": genre,
+                        "console": consoles.toString(),
+                        "rating": 0,
+                        "numOfRating": 0
                     }
-                    if (selectedFile){
+                    if (selectedFile) {
                         reader.onloadend = () => {
-                            uploadImage(reader.result , user);
+                            uploadImage(reader.result, user);
                         };
-                    }
-                    else{
+                    } else {
                         signUpUser(user);
                     }
-                }
-                else{
+                } else {
                     const user = {
                         "email": data.get('email'),
                         "password": data.get('password'),
@@ -238,11 +240,11 @@ export default function SignUp() {
                         "lastName": data.get('lastName'),
                         "birth": birth.toString(),
                         "sex": sex.toString(),
-                        "city":city.toString(),
+                        "city": city.toString(),
                         "genres": genre,
-                        "console":console.toString(),
-                        "rating":0,
-                        "numOfRating":0,
+                        "console": consoles.toString(),
+                        "rating": 0,
+                        "numOfRating": 0,
                         "imageProfile": 'http://res.cloudinary.com/dt9z5k8rs/image/upload/v1659029057/g1aplxrhw7showburfbe.jpg'
                     }
                     signUpUser(user);
@@ -250,6 +252,7 @@ export default function SignUp() {
 
 
                 reader.onerror = () => {
+                    setIsLoading(false)
                     console.error('AHHHHHHHH!!');
                     setErrMsg('something went wrong!');
                 };
@@ -279,11 +282,10 @@ export default function SignUp() {
     const [birthError, setBirthError] = useState('')
     const validateBirth = (event) => {
         const current = new Date();
-        if(current > event){
+        if (current > event) {
             setBirthError(null)
             setBirth(event);
-        }
-        else{
+        } else {
             setBirthError("תאריך לא חוקי !!!")
         }
     };
@@ -307,7 +309,7 @@ export default function SignUp() {
     }
 
     const consoleUpdate = (event) => { // Dealing with console field changes to update our state
-        setconsole(event.target.value)
+        setConsoles(event.target.value)
     }
 
     return (
@@ -315,6 +317,12 @@ export default function SignUp() {
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline/>
+                    <Backdrop
+                        sx={{color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+                        open={isLoading}
+                    >
+                        <CircularProgress color="inherit"/>
+                    </Backdrop>
                     <Box
                         sx={{
                             marginTop: 2,
@@ -384,7 +392,7 @@ export default function SignUp() {
                                 <Grid item xs={12}>
                                     <Autocomplete
                                         id="city-select"
-                                        sx={{ width: 300 }}
+                                        sx={{width: 300}}
                                         options={cities}
                                         autoHighlight
                                         onChange={(event, value) => setCity(value.name)}
@@ -417,7 +425,8 @@ export default function SignUp() {
                                                 validateBirth(newValue)
                                                 setBirth(newValue);
                                             }}
-                                            renderInput={(params) => <TextField  required {...params}  helperText={birthError}/>}
+                                            renderInput={(params) => <TextField required {...params}
+                                                                                helperText={birthError}/>}
                                         />
                                     </LocalizationProvider>
 
@@ -425,7 +434,7 @@ export default function SignUp() {
 
                                 <Grid item xs={12} sm={4}>
                                     <Box>
-                                        <FormControl fullWidth  required>
+                                        <FormControl fullWidth required>
                                             <InputLabel id="select-label">מין</InputLabel>
                                             <Select
                                                 labelId="select-label"
@@ -445,51 +454,51 @@ export default function SignUp() {
                                 </Grid>
                                 <Grid item xs={8}>
                                     <Box>
-                                <FormControl fullWidth required>
-                                    <InputLabel id="genre-multiple-checkbox-label">ז'אנר מועדף</InputLabel>
-                                    <Select
-                                        labelId="genre-multiple-checkbox-label"
-                                        id="genre-multiple-checkbox"
-                                        multiple
-                                        value={genre}
-                                        hidden={true}
-                                        onChange={genreUpdate}
-                                        input={<OutlinedInput label="genre"/>}
-                                        renderValue={(selected) => selected.join(', ')}
-                                        MenuProps={MenuProps}
-                                    >
-                                        {genres.map((name) => (
-                                            <MenuItem key={name} value={name}>
-                                                <Checkbox checked={genre.indexOf(name) > -1}/>
-                                                <ListItemText primary={name}/>
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    <FormHelperText error>{genreErrorinput}</FormHelperText>
-                                </FormControl>
+                                        <FormControl fullWidth required>
+                                            <InputLabel id="genre-multiple-checkbox-label">ז'אנר מועדף</InputLabel>
+                                            <Select
+                                                labelId="genre-multiple-checkbox-label"
+                                                id="genre-multiple-checkbox"
+                                                multiple
+                                                value={genre}
+                                                hidden={true}
+                                                onChange={genreUpdate}
+                                                input={<OutlinedInput label="genre"/>}
+                                                renderValue={(selected) => selected.join(', ')}
+                                                MenuProps={MenuProps}
+                                            >
+                                                {genres.map((name) => (
+                                                    <MenuItem key={name} value={name}>
+                                                        <Checkbox checked={genre.indexOf(name) > -1}/>
+                                                        <ListItemText primary={name}/>
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                            <FormHelperText error>{genreErrorinput}</FormHelperText>
+                                        </FormControl>
                                     </Box>
                                 </Grid>
                                 <Grid item xs={7}>
                                     <Box>
-                                <FormControl fullWidth>
-                                    <InputLabel required id="console-select-label">קונסולה מועדפת</InputLabel>
-                                    <Select
-                                        labelId="console-select-label"
-                                        id="console-select"
-                                        value={console}
-                                        label="console"
-                                        onChange={consoleUpdate}
-                                    >
-                                        <MenuItem value="PC">PC</MenuItem>
-                                        <MenuItem value="PS4">PS4</MenuItem>
-                                        <MenuItem value="PS5">PS5</MenuItem>
-                                        <MenuItem value="Xbox One">Xbox One</MenuItem>
-                                        <MenuItem value="Xbox 360">Xbox 360</MenuItem>
-                                        <MenuItem value="Xbox Series X/S">Xbox Series X/S</MenuItem>
-                                        <MenuItem value="Nintendo Switch">Nintendo Switch</MenuItem>
-                                        <MenuItem value="Wii">Wii</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                        <FormControl fullWidth>
+                                            <InputLabel required id="console-select-label">קונסולה מועדפת</InputLabel>
+                                            <Select
+                                                labelId="console-select-label"
+                                                id="console-select"
+                                                value={consoles}
+                                                label="console"
+                                                onChange={consoleUpdate}
+                                            >
+                                                <MenuItem value="PC">PC</MenuItem>
+                                                <MenuItem value="PS4">PS4</MenuItem>
+                                                <MenuItem value="PS5">PS5</MenuItem>
+                                                <MenuItem value="Xbox One">Xbox One</MenuItem>
+                                                <MenuItem value="Xbox 360">Xbox 360</MenuItem>
+                                                <MenuItem value="Xbox Series X/S">Xbox Series X/S</MenuItem>
+                                                <MenuItem value="Nintendo Switch">Nintendo Switch</MenuItem>
+                                                <MenuItem value="Wii">Wii</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </Box>
                                 </Grid>
 
