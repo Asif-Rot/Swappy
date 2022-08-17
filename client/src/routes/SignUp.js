@@ -239,7 +239,7 @@ export default function SignUp() {
                         "console": consoles.toString(),
                         "rating": 0,
                         "numOfRating": 0,
-                        "imageProfile": 'http://res.cloudinary.com/dt9z5k8rs/image/upload/v1659029057/g1aplxrhw7showburfbe.jpg'
+                        "imageProfile": 'https://res.cloudinary.com/dt9z5k8rs/image/upload/v1658258491/AVATAR_lhyz0n.webp'
                     }
                     signUpUser(user);
                 }
