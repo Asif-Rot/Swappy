@@ -88,7 +88,7 @@ export default function Profile() {
     const [lastName, setLastName] = useState('');
     const [birth, setBirth] = React.useState('');
     const [genre, setgenre] = useState([]);
-    const [console, setconsole] = useState('');
+    const [consoles, setconsoles] = useState('');
     const [imgProfile, setImgProfile] = React.useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState('');
@@ -119,7 +119,7 @@ export default function Profile() {
                 setIsLoading(false);
                 setCity(user['sendUser'].city)
                 setgenre(user['sendUser'].genres)
-                setconsole(user['sendUser'].console)
+                setconsoles(user['sendUser'].console)
                 setRating(user['sendUser'].rating)
                 setNumOfRating(user['sendUser'].numOfRating)
                 return;
@@ -182,7 +182,7 @@ export default function Profile() {
         }
     }
     const consoleUpdate = (event) => { // Dealing with console field changes to update our state
-        setconsole(event.target.value)
+        setconsoles(event.target.value)
     }
 
     const getUrl = () => {
@@ -238,7 +238,7 @@ export default function Profile() {
                     city: city,
                     birth: birth,
                     genres: genre,
-                    console: console,
+                    console: consoles,
                 })
             }).then(function (response){
                 return response.json()
@@ -443,7 +443,7 @@ export default function Profile() {
                                     <Select
                                         labelId="console-select-label"
                                         id="console-select"
-                                        value={console}
+                                        value={consoles}
                                         label="console"
                                         onChange={consoleUpdate}
                                     >
