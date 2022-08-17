@@ -23,17 +23,11 @@ import rtlPlugin from 'stylis-plugin-rtl';
 import {CacheProvider} from '@emotion/react';
 import createCache from '@emotion/cache';
 import {prefixer} from 'stylis';
-import Input from '@mui/material/Input';
-import {login} from '../utils';
-import {Route, useHistory} from 'react-router-dom';
-import ImageUploading from 'react-images-uploading';
+import {useHistory} from 'react-router-dom';
 import {useEffect, useState} from 'react'
-import Upload from '../components/upload'
-import Profile from '../components/image'
 import Alert from '../components/Alert';
 import {UserContext} from "../context/userContext";
-import {userReducer} from "../context/userReducer";
-import {useContext, useRef, useReducer} from "react";
+import {useContext} from "react";
 import {loginCall} from '../apiCalls';
 import validator from 'validator'
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -91,12 +85,12 @@ export default function SignUp() {
     const [selectedFile, setSelectedFile] = useState();
     const [successMsg, setSuccessMsg] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [asset_id, setAsset] = useState('')
+    // const [asset_id, setAsset] = useState('')
     const [cities, setCities] = useState([])
     const [city, setCity] = useState('')
     const [genre, setgenre] = useState([]);
     const [consoles, setConsoles] = useState('');
-    const {isFetching, dispatch} = useContext(UserContext);
+    const {dispatch} = useContext(UserContext);
     const [isLoading, setIsLoading] = useState(false);
 
 
@@ -138,7 +132,7 @@ export default function SignUp() {
             }).then(function (response) {
                 return response.json();
             }).then(function (result) {
-                if (result.message = "Image Upload sucsses") {
+                if (result.message === "Image Upload sucsses") {
                     user = {...user, imageProfile: result.url}
                     //user = { ...user , image : result.public_id}
                     signUpUser(user);
