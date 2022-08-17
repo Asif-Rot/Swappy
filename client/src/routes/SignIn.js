@@ -127,11 +127,6 @@ export default function SignIn() {
                             התחבר
                         </Button>
                         <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    שכחת סיסמה?
-                                </Link>
-                            </Grid>
                             <Grid item>
                                 <Link href="/signup" variant="body2">
                                     {"אין לך משתמש? הירשם"}
