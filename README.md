@@ -12,7 +12,7 @@ The user will upload the book / video game they wish to exchange and another use
 ## Swapy - Web Application (B.Sc. Final Project)
 • Developed a platform that offers a convenient platform for exchanging items like books and video games between people. <br/>
 • Services Offered: uploading items online, searching items by fillters(names,genere,type), chat and more. <br/>
-• Utilized: NodeJS, React, Matriel UI, MongoDB.
+• Utilized: NodeJS, React, Matriel UI, MongoDB, Cloudinary.
 
 ## Screenshots from the project
 #### Home page
