@@ -494,10 +494,10 @@ export default function SignUp() {
                                     </Box>
                                 </Grid>
 
-                                <Grid item xs={12}>
+                                <Grid item xs={12} mt={-1}>
                                     <Box>
                                         <div>
-                                            <h1 className="title">Upload an Image</h1>
+                                            <h4 className="title">העלאה תמונת פרופיל</h4>
                                             <Alert msg={errMsg} type="danger"/>
                                             <Alert msg={successMsg} type="success"/>
                                             <div className="form">
